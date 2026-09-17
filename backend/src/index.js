@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const pool = require('./db/config');
+const { initDB } = require('./db/init');
 
 const authRoutes = require('./routes/auth');
 const profesionalesRoutes = require('./routes/profesionales');
@@ -27,13 +27,7 @@ app.use('/api/profesionales', profesionalesRoutes);
 app.use('/api/matches', matchesRoutes);
 app.use('/api/resenas', resenasRoutes);
 
-pool.query('SELECT NOW()', (err, result) => {
-  if (err) {
-    console.error('Error conectando a la BD:', err);
-  } else {
-    console.log('Conexión a BD exitosa:', result.rows[0]);
-  }
-});
+initDB();
 
 app.listen(PORT, () => {
   console.log(`Cleander backend escuchando en puerto ${PORT}`);

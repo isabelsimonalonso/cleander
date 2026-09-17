@@ -1,26 +1,21 @@
-const pool = require('../db/config');
+const db = require('../db/config');
 
 class Servicio {
-  static async obtenerTodos() {
-    const query = 'SELECT * FROM servicios ORDER BY nombre';
-    const result = await pool.query(query);
-    return result.rows;
+  static obtenerTodos() {
+    return db.prepare('SELECT * FROM servicios ORDER BY nombre').all();
   }
 
-  static async obtenerPorId(id) {
-    const query = 'SELECT * FROM servicios WHERE id = $1';
-    const result = await pool.query(query, [id]);
-    return result.rows[0];
+  static obtenerPorId(id) {
+    return db.prepare('SELECT * FROM servicios WHERE id = ?').get(id);
   }
 
-  static async crear(nombre, descripcion) {
-    const query = `
+  static crear(nombre, descripcion) {
+    const stmt = db.prepare(`
       INSERT INTO servicios (nombre, descripcion)
-      VALUES ($1, $2)
-      RETURNING *
-    `;
-    const result = await pool.query(query, [nombre, descripcion]);
-    return result.rows[0];
+      VALUES (?, ?)
+    `);
+    stmt.run(nombre, descripcion);
+    return db.prepare('SELECT * FROM servicios WHERE nombre = ?').get(nombre);
   }
 }
 

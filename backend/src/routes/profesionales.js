@@ -5,9 +5,9 @@ const { autenticar } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.get('/servicios', async (req, res) => {
+router.get('/servicios', (req, res) => {
   try {
-    const servicios = await Servicio.obtenerTodos();
+    const servicios = Servicio.obtenerTodos();
     res.json(servicios);
   } catch (err) {
     console.error(err);
@@ -15,7 +15,7 @@ router.get('/servicios', async (req, res) => {
   }
 });
 
-router.get('/buscar', async (req, res) => {
+router.get('/buscar', (req, res) => {
   try {
     const { servicioId, precioMin = 0, precioMax = 1000, kmMax = 100, offset = 0, limit = 20 } = req.query;
 
@@ -23,7 +23,7 @@ router.get('/buscar', async (req, res) => {
       return res.status(400).json({ error: 'servicioId requerido' });
     }
 
-    const profesionales = await Profesional.buscarPorServicio(servicioId, offset, limit);
+    const profesionales = Profesional.buscarPorServicio(parseInt(servicioId), parseInt(offset), parseInt(limit));
 
     const filtrados = profesionales.filter(p => {
       const precioOk = p.precio_por_hora >= precioMin && p.precio_por_hora <= precioMax;
@@ -37,16 +37,16 @@ router.get('/buscar', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', (req, res) => {
   try {
     const { id } = req.params;
-    const profesional = await Profesional.obtenerPorUsuarioId(id);
+    const profesional = Profesional.obtenerPorUsuarioId(id);
 
     if (!profesional) {
       return res.status(404).json({ error: 'Profesional no encontrado' });
     }
 
-    const servicios = await Profesional.obtenerServicios(profesional.id);
+    const servicios = Profesional.obtenerServicios(profesional.id);
 
     res.json({
       ...profesional,
@@ -60,17 +60,17 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/:id/servicios', autenticar, async (req, res) => {
+router.post('/:id/servicios', autenticar, (req, res) => {
   try {
     const { servicioId } = req.body;
     const { id } = req.params;
 
-    const profesional = await Profesional.obtenerPorUsuarioId(id);
+    const profesional = Profesional.obtenerPorUsuarioId(id);
     if (!profesional || profesional.usuario_id !== req.usuario.id) {
       return res.status(403).json({ error: 'No autorizado' });
     }
 
-    const resultado = await Profesional.agregarServicio(profesional.id, servicioId);
+    const resultado = Profesional.agregarServicio(profesional.id, servicioId);
     res.json(resultado);
   } catch (err) {
     console.error(err);

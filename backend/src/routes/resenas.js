@@ -4,7 +4,7 @@ const { autenticar } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.post('/', autenticar, async (req, res) => {
+router.post('/', autenticar, (req, res) => {
   try {
     const { profesionalId, puntuacion, comentario } = req.body;
     const clienteId = req.usuario.id;
@@ -17,12 +17,12 @@ router.post('/', autenticar, async (req, res) => {
       return res.status(400).json({ error: 'puntuacion debe ser entre 1 y 5' });
     }
 
-    const yaReseno = await Resena.verificarSiYaReseno(profesionalId, clienteId);
+    const yaReseno = Resena.verificarSiYaReseno(profesionalId, clienteId);
     if (yaReseno) {
       return res.status(400).json({ error: 'Ya has reseñado a este profesional' });
     }
 
-    const resena = await Resena.crear(profesionalId, clienteId, puntuacion, comentario);
+    const resena = Resena.crear(profesionalId, clienteId, puntuacion, comentario);
     res.status(201).json(resena);
   } catch (err) {
     console.error(err);
@@ -30,12 +30,12 @@ router.post('/', autenticar, async (req, res) => {
   }
 });
 
-router.get('/profesional/:profesionalId', async (req, res) => {
+router.get('/profesional/:profesionalId', (req, res) => {
   try {
     const { profesionalId } = req.params;
     const { offset = 0, limit = 10 } = req.query;
 
-    const resenas = await Resena.obtenerPorProfesional(profesionalId, offset, limit);
+    const resenas = Resena.obtenerPorProfesional(parseInt(profesionalId), parseInt(offset), parseInt(limit));
     res.json(resenas);
   } catch (err) {
     console.error(err);

@@ -6,7 +6,7 @@ const { generarToken, autenticar } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.post('/registro', async (req, res) => {
+router.post('/registro', (req, res) => {
   try {
     const { nombre, email, telefono, tipo, fotoPerfil, direccion, latitud, longitud, precioHora, nivelExperiencia, seDesplaza, rangoDesplazamiento } = req.body;
 
@@ -14,14 +14,14 @@ router.post('/registro', async (req, res) => {
       return res.status(400).json({ error: 'Campos obligatorios: nombre, email, teléfono, tipo, fotoPerfil' });
     }
 
-    const existente = await Usuario.obtenerPorEmail(email);
+    const existente = Usuario.obtenerPorEmail(email);
     if (existente) {
       return res.status(400).json({ error: 'El email ya está registrado' });
     }
 
-    const passwordHash = await bcrypt.hash('temporal123', 10);
+    const passwordHash = bcrypt.hashSync('temporal123', 10);
 
-    const usuario = await Usuario.crear({
+    const usuario = Usuario.crear({
       nombre,
       email,
       telefono,
@@ -34,7 +34,7 @@ router.post('/registro', async (req, res) => {
       if (!precioHora) {
         return res.status(400).json({ error: 'profesionales deben especificar precioHora' });
       }
-      const profesional = await Profesional.crear(usuario.id, {
+      Profesional.crear(usuario.id, {
         precioHora,
         nivelExperiencia: nivelExperiencia || 'PRINCIPIANTE',
         tieneCertificaciones: false,
@@ -50,7 +50,7 @@ router.post('/registro', async (req, res) => {
   }
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login', (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -58,12 +58,12 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Email y contraseña requeridos' });
     }
 
-    const usuario = await Usuario.obtenerPorEmail(email);
+    const usuario = Usuario.obtenerPorEmail(email);
     if (!usuario) {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
 
-    const valido = await bcrypt.compare(password, usuario.password_hash);
+    const valido = bcrypt.compareSync(password, usuario.password_hash);
     if (!valido) {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
@@ -76,9 +76,9 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/me', autenticar, async (req, res) => {
+router.get('/me', autenticar, (req, res) => {
   try {
-    const usuario = await Usuario.obtenerPorId(req.usuario.id);
+    const usuario = Usuario.obtenerPorId(req.usuario.id);
     res.json(usuario);
   } catch (err) {
     console.error(err);

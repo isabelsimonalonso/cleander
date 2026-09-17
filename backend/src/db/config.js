@@ -1,16 +1,10 @@
-const { Pool } = require('pg');
-require('dotenv').config();
+const Database = require('better-sqlite3');
+const path = require('path');
 
-const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-});
+const dbPath = path.join(__dirname, '../../cleander.db');
+const db = new Database(dbPath);
 
-pool.on('error', (err) => {
-  console.error('Error en el pool de conexión:', err);
-});
+db.pragma('journal_mode = WAL');
+db.pragma('foreign_keys = ON');
 
-module.exports = pool;
+module.exports = db;
