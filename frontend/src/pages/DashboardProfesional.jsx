@@ -5,7 +5,7 @@ import '../styles/dashboard.css'
 export default function DashboardProfesional() {
   const { usuario: usuarioAuth, logout } = useAuth()
   const [usuario, setUsuario] = useState(usuarioAuth)
-  const [clientes, setClientes] = useState([])
+  const [matches, setMatches] = useState([])
   const [editando, setEditando] = useState(false)
   const [formData, setFormData] = useState({
     nombre: usuario?.nombre || '',
@@ -15,34 +15,21 @@ export default function DashboardProfesional() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    cargarClientes()
+    cargarMatches()
   }, [])
 
-  const cargarClientes = async () => {
+  const cargarMatches = async () => {
     setLoading(true)
     try {
-      // En realidad deberíamos obtener clientes de un endpoint
-      // Por ahora mostramos datos demo
-      setClientes([
-        {
-          id: 2,
-          nombre: 'Test Cliente 1',
-          email: 'cliente@test.local',
-          telefono: '+34666000001',
-          tipo: 'CLIENTE',
-          foto_perfil_url: 'https://via.placeholder.com/150?text=Cliente1'
-        },
-        {
-          id: 4,
-          nombre: 'Test Cliente 2',
-          email: 'cliente2@test.local',
-          telefono: '+34666000002',
-          tipo: 'CLIENTE',
-          foto_perfil_url: 'https://via.placeholder.com/150?text=Cliente2'
-        }
-      ])
+      const res = await fetch('http://localhost:5000/api/matches', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setMatches(data)
+      }
     } catch (err) {
-      console.error('Error cargando clientes:', err)
+      console.error('Error cargando matches:', err)
     } finally {
       setLoading(false)
     }
@@ -76,23 +63,40 @@ export default function DashboardProfesional() {
     }
   }
 
-  const hacerMatch = async (clienteId) => {
+  const aceptarMatch = async (matchId) => {
     try {
-      const res = await fetch('http://localhost:5000/api/matches', {
-        method: 'POST',
+      const res = await fetch(`http://localhost:5000/api/matches/${matchId}`, {
+        method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ cliente_id: clienteId })
+        body: JSON.stringify({ estado: 'ACEPTADO' })
       })
-
       if (res.ok) {
-        alert('Match realizado!')
-        cargarClientes()
+        cargarMatches()
+        alert('✅ ¡Match aceptado! Ahora podéis contactaros')
       }
     } catch (err) {
-      console.error('Error en match:', err)
+      console.error('Error aceptando match:', err)
+    }
+  }
+
+  const rechazarMatch = async (matchId) => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/matches/${matchId}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ estado: 'RECHAZADO' })
+      })
+      if (res.ok) {
+        cargarMatches()
+      }
+    } catch (err) {
+      console.error('Error rechazando match:', err)
     }
   }
 
@@ -191,42 +195,60 @@ export default function DashboardProfesional() {
           </div>
         </div>
 
-        {/* LADO DERECHO - Clientes para Match */}
+        {/* LADO DERECHO - Solicitudes Pendientes */}
         <div className="profesional-clientes-main">
-          <h2>🔍 Clientes buscando</h2>
+          <h2>📨 Solicitudes de Match</h2>
 
           {loading ? (
-            <div className="loading">Cargando clientes...</div>
-          ) : clientes.length === 0 ? (
+            <div className="loading">Cargando solicitudes...</div>
+          ) : matches.length === 0 ? (
             <div className="empty-state">
-              <p>No hay clientes disponibles en este momento</p>
+              <p>No hay solicitudes de clientes en este momento</p>
             </div>
           ) : (
-            <div className="cards-container">
-              {clientes.map(cliente => (
-                <div key={cliente.id} className="cliente-card">
-                  <div className="card-header">
-                    <h3>{cliente.nombre}</h3>
-                    <span className="tag-busco">Busco</span>
+            <div className="matches-list">
+              {matches.map(match => (
+                <div key={match.id} className="match-card">
+                  <div className="match-info">
+                    <h3>{match.cliente_nombre}</h3>
+                    <p className="match-estado">
+                      {match.estado === 'PENDIENTE' && (
+                        <span className="estado-badge pendiente">⏳ Pendiente tu respuesta</span>
+                      )}
+                      {match.estado === 'ACEPTADO' && (
+                        <span className="estado-badge aceptado">✅ Match Aceptado</span>
+                      )}
+                      {match.estado === 'RECHAZADO' && (
+                        <span className="estado-badge rechazado">❌ Rechazado</span>
+                      )}
+                    </p>
+                    <p className="match-fecha">Desde: {new Date(match.creado_en).toLocaleDateString('es-ES')}</p>
                   </div>
 
-                  {cliente.foto_perfil_url && (
-                    <div className="card-foto">
-                      <img src={cliente.foto_perfil_url} alt={cliente.nombre} />
+                  {match.estado === 'PENDIENTE' && (
+                    <div className="match-actions">
+                      <button
+                        className="btn-aceptar"
+                        onClick={() => aceptarMatch(match.id)}
+                      >
+                        ✅ Aceptar
+                      </button>
+                      <button
+                        className="btn-rechazar"
+                        onClick={() => rechazarMatch(match.id)}
+                      >
+                        ❌ Rechazar
+                      </button>
                     </div>
                   )}
 
-                  <div className="card-info">
-                    <p className="email">📧 {cliente.email}</p>
-                    <p className="telefono">📱 {cliente.telefono}</p>
-                  </div>
-
-                  <button
-                    className="btn-match-cliente"
-                    onClick={() => hacerMatch(cliente.id)}
-                  >
-                    ✨ Contactar
-                  </button>
+                  {match.estado === 'ACEPTADO' && (
+                    <div className="match-contacto">
+                      <p className="label">📍 Datos de contacto:</p>
+                      <p>📞 {match.cliente_telefono}</p>
+                      <p>📧 {match.cliente_email}</p>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
