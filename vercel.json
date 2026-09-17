@@ -1,0 +1,9 @@
+{
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist",
+  "installCommand": "npm install --prefix frontend && npm install --prefix backend",
+  "env": {
+    "VITE_API_URL": "@api_url"
+  },
+  "regions": ["iad1"]
+}
