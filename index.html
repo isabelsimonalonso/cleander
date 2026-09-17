@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cleander - Match de Servicios</title>
-  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 280'><path d='M 50 130 L 120 60 L 190 130 L 190 200 Q 190 210 180 210 L 60 210 Q 50 210 50 200 Z' fill='none' stroke='%2317A2B8' stroke-width='8' stroke-linejoin='round'/><rect x='108' y='155' width='24' height='55' fill='none' stroke='%2317A2B8' stroke-width='6' stroke-linecap='round' rx='2'/><g transform='translate(75, 95)'><line x1='0' y1='5' x2='0' y2='45' stroke='%2317A2B8' stroke-width='7' stroke-linecap='round'/><rect x='-10' y='-5' width='20' height='12' rx='1' fill='%2317A2B8'/><path d='M -10 7 Q -14 12 -12 18' fill='none' stroke='%2317A2B8' stroke-width='5' stroke-linecap='round'/></g><g transform='translate(160, 90)'><line x1='0' y1='0' x2='0' y2='50' stroke='%2317A2B8' stroke-width='7' stroke-linecap='round'/><circle cx='0' cy='50' r='4' fill='%2317A2B8'/><path d='M -16 64 Q -10 72 0 70' fill='none' stroke='%2317A2B8' stroke-width='4' stroke-linecap='round'/><path d='M -8 68 Q -2 76 0 73' fill='none' stroke='%2317A2B8' stroke-width='4' stroke-linecap='round'/><path d='M 0 76' stroke='%2317A2B8' stroke-width='4' stroke-linecap='round'/><path d='M 8 68 Q 2 76 0 73' fill='none' stroke='%2317A2B8' stroke-width='4' stroke-linecap='round'/><path d='M 16 64 Q 10 72 0 70' fill='none' stroke='%2317A2B8' stroke-width='4' stroke-linecap='round'/></g></svg>"
   <style>
     * {
       margin: 0;
@@ -268,40 +268,38 @@
   <header>
     <div class="header-content">
       <div class="logo-container">
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <!-- Background circle with gradient effect -->
-          <defs>
-            <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:white;stop-opacity:0.15" />
-              <stop offset="100%" style="stop-color:white;stop-opacity:0.05" />
-            </linearGradient>
-          </defs>
-          <circle cx="100" cy="100" r="95" fill="white" opacity="0.2" stroke="white" stroke-width="1.5"/>
+        <svg viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
+          <!-- House outline -->
+          <path d="M 50 130 L 120 60 L 190 130 L 190 200 Q 190 210 180 210 L 60 210 Q 50 210 50 200 Z"
+                fill="none" stroke="white" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
 
-          <!-- Wrench (left) - improved -->
-          <g transform="translate(45, 65)">
-            <path d="M 8 20 L 8 60" stroke="white" stroke-width="6" stroke-linecap="round" fill="none"/>
-            <circle cx="8" cy="18" r="13" fill="white"/>
-            <path d="M -5 12 Q 8 8 20 12" stroke="white" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <!-- Door -->
+          <rect x="108" y="155" width="24" height="55" fill="none" stroke="white" stroke-width="6" stroke-linecap="round" rx="2"/>
+
+          <!-- Hammer -->
+          <g transform="translate(75, 95)">
+            <line x1="0" y1="5" x2="0" y2="45" stroke="white" stroke-width="7" stroke-linecap="round"/>
+            <rect x="-10" y="-5" width="20" height="12" rx="1" fill="white"/>
+            <path d="M -10 7 Q -14 12 -12 18" fill="none" stroke="white" stroke-width="5" stroke-linecap="round"/>
           </g>
 
-          <!-- Mop/Broom (right) - improved -->
-          <g transform="translate(105, 45)">
-            <path d="M 0 0 L 0 55" stroke="white" stroke-width="5" stroke-linecap="round" fill="none"/>
-            <circle cx="0" cy="55" r="4" fill="white"/>
-            <!-- Bristles -->
-            <path d="M -18 70 Q 0 68 0 75" stroke="white" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-            <path d="M -10 74 Q 0 72 0 78" stroke="white" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-            <path d="M 0 75" stroke="white" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-            <path d="M 10 74 Q 0 72 0 78" stroke="white" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-            <path d="M 18 70 Q 0 68 0 75" stroke="white" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+          <!-- Broom/Mop -->
+          <g transform="translate(160, 90)">
+            <line x1="0" y1="0" x2="0" y2="50" stroke="white" stroke-width="7" stroke-linecap="round"/>
+            <circle cx="0" cy="50" r="4" fill="white"/>
+            <path d="M -16 64 Q -10 72 0 70" fill="none" stroke="white" stroke-width="4" stroke-linecap="round"/>
+            <path d="M -8 68 Q -2 76 0 73" fill="none" stroke="white" stroke-width="4" stroke-linecap="round"/>
+            <path d="M 0 76" stroke="white" stroke-width="4" stroke-linecap="round"/>
+            <path d="M 8 68 Q 2 76 0 73" fill="none" stroke="white" stroke-width="4" stroke-linecap="round"/>
+            <path d="M 16 64 Q 10 72 0 70" fill="none" stroke="white" stroke-width="4" stroke-linecap="round"/>
           </g>
 
-          <!-- Match arrows in center -->
-          <g transform="translate(100, 100)">
-            <path d="M -15 0 L 15 0" stroke="white" stroke-width="3" stroke-linecap="round"/>
-            <path d="M -10 -5 L -15 0 L -10 5" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-            <path d="M 10 -5 L 15 0 L 10 5" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <!-- Handshake (match symbol) -->
+          <g transform="translate(120, 165)">
+            <path d="M -18 8 Q -8 0 0 5 Q 8 0 18 8" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="-12" cy="10" r="2.5" fill="white"/>
+            <circle cx="0" cy="6" r="2.5" fill="white"/>
+            <circle cx="12" cy="10" r="2.5" fill="white"/>
           </g>
         </svg>
       </div>
