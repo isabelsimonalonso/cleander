@@ -4,7 +4,10 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const { initDB } = require('./db/init');
+
+// Detectar si usamos PostgreSQL o SQLite
+const usePostgres = !!process.env.DATABASE_URL;
+const { initDB } = usePostgres ? require('./db/init-postgres') : require('./db/init');
 
 const authRoutes = require('./routes/auth');
 const perfilRoutes = require('./routes/perfil');
@@ -68,10 +71,19 @@ app.use('/api/resenas', resenasRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/admin', adminAdvancedRoutes);
 
-initDB();
+// Inicializar BD y luego iniciar servidor
+async function startServer() {
+  try {
+    await initDB();
+    app.listen(PORT, () => {
+      console.log(`Cleander backend escuchando en puerto ${PORT}`);
+    });
+  } catch (err) {
+    console.error('Error iniciando servidor:', err);
+    process.exit(1);
+  }
+}
 
-app.listen(PORT, () => {
-  console.log(`Cleander backend escuchando en puerto ${PORT}`);
-});
+startServer();
 
 module.exports = app;
