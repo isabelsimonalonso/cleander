@@ -1,6 +1,7 @@
 const express = require('express');
 const { autenticar } = require('../middleware/auth');
 const db = require('../db/config');
+const usePostgres = !!process.env.DATABASE_URL;
 
 const router = express.Router();
 
@@ -136,6 +137,23 @@ router.patch('/usuarios/:id/foto/rechazar', autenticar, soloAdmin, (req, res) =>
     const stmt = db.prepare('UPDATE usuarios SET foto_verificada = 0 WHERE id = ?');
     stmt.run(id);
     res.json({ success: true, message: 'Foto rechazada' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Endpoint temporal para inicializar BD (sin autenticación - solo para setup)
+router.post('/init-db', async (req, res) => {
+  try {
+    if (!usePostgres) {
+      return res.json({ status: 'ok', message: 'SQLite ya inicializado' });
+    }
+
+    // Ejecutar migraciones
+    const { initDB } = require('../db/init-postgres');
+    await initDB();
+
+    res.json({ status: 'ok', message: 'Base de datos inicializada' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

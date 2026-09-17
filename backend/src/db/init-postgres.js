@@ -30,11 +30,9 @@ async function initDB() {
 
     console.log('✅ Base de datos PostgreSQL inicializada');
   } catch (err) {
-    console.error('❌ Error inicializando BD PostgreSQL:', err.message);
-    // No hacer crash si la BD ya existe
-    if (!err.message.includes('already exists')) {
-      throw err;
-    }
+    console.warn('⚠️  No se pudo conectar a PostgreSQL:', err.message);
+    console.warn('(Las migraciones se ejecutarán cuando se reconecte)');
+    // No hacer crash, continuar sin BD
   }
 }
 
