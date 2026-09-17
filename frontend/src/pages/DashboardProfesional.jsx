@@ -3,68 +3,96 @@ import { useAuth } from '../context/AuthContext'
 import '../styles/dashboard.css'
 
 export default function DashboardProfesional() {
-  const { usuario, logout } = useAuth()
-  const [tab, setTab] = useState('perfil')
-  const [matches, setMatches] = useState([])
+  const { usuario: usuarioAuth, logout } = useAuth()
+  const [usuario, setUsuario] = useState(usuarioAuth)
+  const [clientes, setClientes] = useState([])
+  const [editando, setEditando] = useState(false)
+  const [formData, setFormData] = useState({
+    nombre: usuario?.nombre || '',
+    precio_por_hora: usuario?.precio_por_hora || '',
+    nivel_experiencia: usuario?.nivel_experiencia || 'PRINCIPIANTE'
+  })
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (tab === 'matches') {
-      cargarMatches()
-    }
-  }, [tab])
+    cargarClientes()
+  }, [])
 
-  const cargarMatches = async () => {
+  const cargarClientes = async () => {
     setLoading(true)
     try {
-      const res = await fetch('http://localhost:5000/api/matches', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      })
-      if (res.ok) {
-        const data = await res.json()
-        setMatches(data)
-      }
+      // En realidad deberíamos obtener clientes de un endpoint
+      // Por ahora mostramos datos demo
+      setClientes([
+        {
+          id: 2,
+          nombre: 'Test Cliente 1',
+          email: 'cliente@test.local',
+          telefono: '+34666000001',
+          tipo: 'CLIENTE',
+          foto_perfil_url: 'https://via.placeholder.com/150?text=Cliente1'
+        },
+        {
+          id: 4,
+          nombre: 'Test Cliente 2',
+          email: 'cliente2@test.local',
+          telefono: '+34666000002',
+          tipo: 'CLIENTE',
+          foto_perfil_url: 'https://via.placeholder.com/150?text=Cliente2'
+        }
+      ])
     } catch (err) {
-      console.error('Error cargando matches:', err)
+      console.error('Error cargando clientes:', err)
     } finally {
       setLoading(false)
     }
   }
 
-  const aceptarMatch = async (matchId) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const guardarPerfil = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/matches/${matchId}`, {
+      const res = await fetch('http://localhost:5000/api/perfil/me', {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ estado: 'ACEPTADO' })
+        body: JSON.stringify(formData)
       })
+
       if (res.ok) {
-        cargarMatches()
-        alert('Match aceptado!')
+        const data = await res.json()
+        setUsuario(data.usuario)
+        setEditando(false)
+        alert('Perfil actualizado!')
       }
     } catch (err) {
-      console.error('Error aceptando match:', err)
+      console.error('Error guardando perfil:', err)
+      alert('Error guardando perfil')
     }
   }
 
-  const rechazarMatch = async (matchId) => {
+  const hacerMatch = async (clienteId) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/matches/${matchId}`, {
-        method: 'PATCH',
+      const res = await fetch('http://localhost:5000/api/matches', {
+        method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ estado: 'RECHAZADO' })
+        body: JSON.stringify({ cliente_id: clienteId })
       })
+
       if (res.ok) {
-        cargarMatches()
+        alert('Match realizado!')
+        cargarClientes()
       }
     } catch (err) {
-      console.error('Error rechazando match:', err)
+      console.error('Error en match:', err)
     }
   }
 
@@ -78,119 +106,133 @@ export default function DashboardProfesional() {
         </div>
       </header>
 
-      <main className="dashboard-main">
-        <nav className="dashboard-tabs">
-          <button className={tab === 'perfil' ? 'active' : ''} onClick={() => setTab('perfil')}>
-            👨‍💼 Mi Perfil
-          </button>
-          <button className={tab === 'matches' ? 'active' : ''} onClick={() => setTab('matches')}>
-            💬 Mis Matches
-          </button>
-          <button className={tab === 'resenas' ? 'active' : ''} onClick={() => setTab('resenas')}>
-            ⭐ Mis Reseñas
-          </button>
-        </nav>
-
-        <div className="dashboard-content">
-          {/* Mi Perfil */}
-          {tab === 'perfil' && (
-            <div className="profesional-perfil">
-              <h2>👨‍💼 Mi Perfil Profesional</h2>
-
-              <div className="perfil-card">
-                <div className="perfil-foto">
-                  {usuario?.foto_perfil_url ? (
-                    <img src={usuario.foto_perfil_url} alt={usuario.nombre} />
-                  ) : (
-                    <div className="foto-placeholder">Sin foto</div>
-                  )}
-                  <span className={`badge-verificado ${usuario?.foto_verificada ? 'verificada' : 'pendiente'}`}>
-                    {usuario?.foto_verificada ? '✅ Verificada' : '⏳ Pendiente'}
-                  </span>
-                </div>
-
-                <div className="perfil-detalles">
-                  <h3>{usuario?.nombre}</h3>
-                  <p><strong>Email:</strong> {usuario?.email}</p>
-                  <p><strong>Teléfono:</strong> {usuario?.telefono}</p>
-                  <p><strong>Precio/hora:</strong> €{usuario?.precio_por_hora || 'No especificado'}</p>
-                  <p><strong>Experiencia:</strong> {usuario?.nivel_experiencia || 'No especificado'}</p>
-                  <p><strong>Rating:</strong> ⭐ {usuario?.valoracion_media?.toFixed(1) || 'Sin rating'}</p>
-                </div>
-              </div>
-
-              <button className="btn-editar-perfil">✏️ Editar Perfil</button>
-            </div>
-          )}
-
-          {/* Mis Matches */}
-          {tab === 'matches' && (
-            <div className="profesional-matches">
-              <h2>💬 Mis Matches</h2>
-
-              {loading ? (
-                <div className="loading">Cargando matches...</div>
-              ) : matches.length === 0 ? (
-                <div className="empty-state">
-                  <p>Aún no tienes matches. ¡Espera a que clientes te contacten!</p>
-                </div>
+      <div className="profesional-container">
+        {/* LADO IZQUIERDO - Perfil */}
+        <div className="profesional-perfil-sidebar">
+          <div className="perfil-card-compact">
+            <div className="perfil-foto-small">
+              {usuario?.foto_perfil_url ? (
+                <img src={usuario.foto_perfil_url} alt={usuario.nombre} />
               ) : (
-                <div className="matches-list">
-                  {matches.map(match => (
-                    <div key={match.id} className="match-card">
-                      <div className="match-info">
-                        <h3>{match.cliente_nombre}</h3>
-                        <p className="match-estado">
-                          <span className={`estado-badge ${match.estado.toLowerCase()}`}>
-                            {match.estado}
-                          </span>
-                        </p>
-                        <p className="match-fecha">Desde: {new Date(match.creado_en).toLocaleDateString('es-ES')}</p>
-                      </div>
-
-                      {match.estado === 'PENDIENTE' && (
-                        <div className="match-actions">
-                          <button
-                            className="btn-aceptar"
-                            onClick={() => aceptarMatch(match.id)}
-                          >
-                            ✅ Aceptar
-                          </button>
-                          <button
-                            className="btn-rechazar"
-                            onClick={() => rechazarMatch(match.id)}
-                          >
-                            ❌ Rechazar
-                          </button>
-                        </div>
-                      )}
-
-                      {match.estado === 'ACEPTADO' && (
-                        <div className="match-contacto">
-                          <p>📞 {match.cliente_telefono}</p>
-                          <p>📧 {match.cliente_email}</p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
+                <div className="foto-placeholder-small">Sin foto</div>
               )}
+              <span className={`badge-verificado-small ${usuario?.foto_verificada ? 'verificada' : 'pendiente'}`}>
+                {usuario?.foto_verificada ? '✅' : '⏳'}
+              </span>
             </div>
-          )}
 
-          {/* Mis Reseñas */}
-          {tab === 'resenas' && (
-            <div className="profesional-resenas">
-              <h2>⭐ Mis Reseñas</h2>
-              <div className="resenas-summary">
-                <div className="rating-big">⭐ {usuario?.valoracion_media?.toFixed(1) || 'N/A'}</div>
-                <p>{usuario?.total_resenas || 0} reseñas</p>
+            {editando ? (
+              <form className="form-editar">
+                <div className="form-group">
+                  <label>Nombre</label>
+                  <input
+                    type="text"
+                    name="nombre"
+                    value={formData.nombre}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Precio/hora (€)</label>
+                  <input
+                    type="number"
+                    name="precio_por_hora"
+                    value={formData.precio_por_hora}
+                    onChange={handleChange}
+                    step="0.01"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Experiencia</label>
+                  <select
+                    name="nivel_experiencia"
+                    value={formData.nivel_experiencia}
+                    onChange={handleChange}
+                  >
+                    <option value="PRINCIPIANTE">Principiante</option>
+                    <option value="INTERMEDIO">Intermedio</option>
+                    <option value="EXPERTO">Experto</option>
+                  </select>
+                </div>
+
+                <div className="form-actions">
+                  <button type="button" className="btn-guardar" onClick={guardarPerfil}>
+                    💾 Guardar
+                  </button>
+                  <button type="button" className="btn-cancelar" onClick={() => {
+                    setEditando(false)
+                    setFormData({
+                      nombre: usuario?.nombre || '',
+                      precio_por_hora: usuario?.precio_por_hora || '',
+                      nivel_experiencia: usuario?.nivel_experiencia || 'PRINCIPIANTE'
+                    })
+                  }}>
+                    ✕ Cancelar
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className="perfil-info-compact">
+                <h3>{usuario?.nombre}</h3>
+                <p className="precio">💰 €{usuario?.precio_por_hora}/h</p>
+                <p className="experiencia">📊 {usuario?.nivel_experiencia}</p>
+                <p className="rating">⭐ {usuario?.valoracion_media?.toFixed(1) || 'N/A'}</p>
+
+                <button
+                  className="btn-editar-compact"
+                  onClick={() => setEditando(true)}
+                >
+                  ✏️ Editar
+                </button>
               </div>
-              <p className="empty-state">Tus reseñas aparecerán aquí</p>
+            )}
+          </div>
+        </div>
+
+        {/* LADO DERECHO - Clientes para Match */}
+        <div className="profesional-clientes-main">
+          <h2>🔍 Clientes buscando</h2>
+
+          {loading ? (
+            <div className="loading">Cargando clientes...</div>
+          ) : clientes.length === 0 ? (
+            <div className="empty-state">
+              <p>No hay clientes disponibles en este momento</p>
+            </div>
+          ) : (
+            <div className="cards-container">
+              {clientes.map(cliente => (
+                <div key={cliente.id} className="cliente-card">
+                  <div className="card-header">
+                    <h3>{cliente.nombre}</h3>
+                    <span className="tag-busco">Busco</span>
+                  </div>
+
+                  {cliente.foto_perfil_url && (
+                    <div className="card-foto">
+                      <img src={cliente.foto_perfil_url} alt={cliente.nombre} />
+                    </div>
+                  )}
+
+                  <div className="card-info">
+                    <p className="email">📧 {cliente.email}</p>
+                    <p className="telefono">📱 {cliente.telefono}</p>
+                  </div>
+
+                  <button
+                    className="btn-match-cliente"
+                    onClick={() => hacerMatch(cliente.id)}
+                  >
+                    ✨ Contactar
+                  </button>
+                </div>
+              ))}
             </div>
           )}
         </div>
-      </main>
+      </div>
     </div>
   )
 }

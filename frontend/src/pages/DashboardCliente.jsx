@@ -4,12 +4,17 @@ import { profesionales } from '../services/api'
 import '../styles/dashboard.css'
 
 export default function DashboardCliente() {
-  const { usuario, logout } = useAuth()
+  const { usuario: usuarioAuth, logout } = useAuth()
+  const [usuario, setUsuario] = useState(usuarioAuth)
   const [servicios, setServicios] = useState([])
   const [profesionalesList, setProfesionalesList] = useState([])
   const [servicioSeleccionado, setServicioSeleccionado] = useState(null)
-  const [cargando, setCargando] = useState(true)
-  const [tab, setTab] = useState('buscar')
+  const [editando, setEditando] = useState(false)
+  const [formData, setFormData] = useState({
+    nombre: usuario?.nombre || '',
+    telefono: usuario?.telefono || ''
+  })
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     cargarServicios()
@@ -31,25 +36,53 @@ export default function DashboardCliente() {
     } catch (err) {
       console.error('Error cargando servicios:', err)
     } finally {
-      setCargando(false)
+      setLoading(false)
     }
   }
 
   const cargarProfesionales = async () => {
-    setCargando(true)
+    setLoading(true)
     try {
       const { data } = await profesionales.buscar({ servicioId: servicioSeleccionado })
       setProfesionalesList(data)
     } catch (err) {
       console.error('Error cargando profesionales:', err)
     } finally {
-      setCargando(false)
+      setLoading(false)
+    }
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const guardarPerfil = async () => {
+    try {
+      const res = await fetch('http://localhost:5000/api/perfil/me', {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+
+      if (res.ok) {
+        const data = await res.json()
+        setUsuario(data.usuario)
+        setEditando(false)
+        alert('Perfil actualizado!')
+      }
+    } catch (err) {
+      console.error('Error guardando perfil:', err)
+      alert('Error guardando perfil')
     }
   }
 
   const hacerMatch = async (profesionalId) => {
     try {
-      await fetch('http://localhost:5000/api/matches', {
+      const res = await fetch('http://localhost:5000/api/matches', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -57,8 +90,11 @@ export default function DashboardCliente() {
         },
         body: JSON.stringify({ profesional_id: profesionalId })
       })
-      alert('Match realizado!')
-      cargarProfesionales()
+
+      if (res.ok) {
+        alert('Match realizado!')
+        cargarProfesionales()
+      }
     } catch (err) {
       console.error('Error en match:', err)
     }
@@ -74,104 +110,128 @@ export default function DashboardCliente() {
         </div>
       </header>
 
-      <main className="dashboard-main">
-        <nav className="dashboard-tabs">
-          <button className={tab === 'buscar' ? 'active' : ''} onClick={() => setTab('buscar')}>
-            🔍 Buscar Profesionales
-          </button>
-          <button className={tab === 'matches' ? 'active' : ''} onClick={() => setTab('matches')}>
-            💬 Mis Matches
-          </button>
-          <button className={tab === 'perfil' ? 'active' : ''} onClick={() => setTab('perfil')}>
-            👤 Mi Perfil
-          </button>
-        </nav>
+      <div className="cliente-container">
+        {/* LADO IZQUIERDO - Perfil */}
+        <div className="cliente-perfil-sidebar">
+          <div className="perfil-card-compact">
+            <div className="perfil-foto-small">
+              {usuario?.foto_perfil_url ? (
+                <img src={usuario.foto_perfil_url} alt={usuario.nombre} />
+              ) : (
+                <div className="foto-placeholder-small">Sin foto</div>
+              )}
+            </div>
 
-        <div className="dashboard-content">
-          {/* Buscar Profesionales */}
-          {tab === 'buscar' && (
-            <div className="cliente-buscar">
-              <div className="filtros">
-                <h2>🔍 Buscar Profesionales</h2>
-                <div className="filtro-group">
-                  <label>Selecciona un servicio:</label>
-                  <select
-                    value={servicioSeleccionado || ''}
-                    onChange={(e) => setServicioSeleccionado(Number(e.target.value))}
-                  >
-                    {servicios.map(s => (
-                      <option key={s.id} value={s.id}>
-                        {s.nombre}
-                      </option>
-                    ))}
-                  </select>
+            {editando ? (
+              <form className="form-editar">
+                <div className="form-group">
+                  <label>Nombre</label>
+                  <input
+                    type="text"
+                    name="nombre"
+                    value={formData.nombre}
+                    onChange={handleChange}
+                  />
                 </div>
+
+                <div className="form-group">
+                  <label>Teléfono</label>
+                  <input
+                    type="tel"
+                    name="telefono"
+                    value={formData.telefono}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="form-actions">
+                  <button type="button" className="btn-guardar" onClick={guardarPerfil}>
+                    💾 Guardar
+                  </button>
+                  <button type="button" className="btn-cancelar" onClick={() => {
+                    setEditando(false)
+                    setFormData({
+                      nombre: usuario?.nombre || '',
+                      telefono: usuario?.telefono || ''
+                    })
+                  }}>
+                    ✕ Cancelar
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className="perfil-info-compact">
+                <h3>{usuario?.nombre}</h3>
+                <p className="email">📧 {usuario?.email}</p>
+                <p className="telefono">📱 {usuario?.telefono}</p>
+
+                <button
+                  className="btn-editar-compact"
+                  onClick={() => setEditando(true)}
+                >
+                  ✏️ Editar
+                </button>
               </div>
+            )}
+          </div>
+        </div>
 
-              <div className="contenido-principal">
-                {cargando ? (
-                  <div className="loading">Cargando profesionales...</div>
-                ) : profesionalesList.length === 0 ? (
-                  <div className="empty-state">
-                    <p>No hay profesionales disponibles en este servicio</p>
-                  </div>
-                ) : (
-                  <div className="cards-container">
-                    {profesionalesList.map(prof => (
-                      <div key={prof.id} className="prof-card">
-                        <div className="card-header">
-                          <h3>{prof.nombre}</h3>
-                          <span className="tag-ofrezo">Ofrezo</span>
-                        </div>
+        {/* LADO DERECHO - Profesionales */}
+        <div className="cliente-profesionales-main">
+          <div className="filtros-top">
+            <h2>🔍 Buscar Profesionales</h2>
+            <select
+              value={servicioSeleccionado || ''}
+              onChange={(e) => setServicioSeleccionado(Number(e.target.value))}
+              className="select-servicio"
+            >
+              {servicios.map(s => (
+                <option key={s.id} value={s.id}>
+                  {s.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
 
-                        {prof.foto_perfil_url && (
-                          <div className="card-foto">
-                            <img src={prof.foto_perfil_url} alt={prof.nombre} />
-                          </div>
-                        )}
-
-                        <div className="card-info">
-                          <p className="precio">💰 €{prof.precio_por_hora}/h</p>
-                          <p className="experiencia">📊 {prof.nivel_experiencia}</p>
-                          <p className="rating">⭐ {prof.valoracion_media?.toFixed(1) || 'Sin rating'}</p>
-                        </div>
-
-                        <button
-                          className="btn-match"
-                          onClick={() => hacerMatch(prof.id)}
-                        >
-                          ✨ Contactar
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+          {loading ? (
+            <div className="loading">Cargando profesionales...</div>
+          ) : profesionalesList.length === 0 ? (
+            <div className="empty-state">
+              <p>No hay profesionales disponibles en este servicio</p>
             </div>
-          )}
+          ) : (
+            <div className="cards-container">
+              {profesionalesList.map(prof => (
+                <div key={prof.id} className="prof-card">
+                  <div className="card-header">
+                    <h3>{prof.nombre}</h3>
+                    <span className="tag-ofrezo">Ofrezo</span>
+                  </div>
 
-          {/* Mis Matches */}
-          {tab === 'matches' && (
-            <div className="cliente-matches">
-              <h2>💬 Mis Matches</h2>
-              <p>Tus matches aparecerán aquí</p>
-            </div>
-          )}
+                  {prof.foto_perfil_url && (
+                    <div className="card-foto">
+                      <img src={prof.foto_perfil_url} alt={prof.nombre} />
+                    </div>
+                  )}
 
-          {/* Mi Perfil */}
-          {tab === 'perfil' && (
-            <div className="cliente-perfil">
-              <h2>👤 Mi Perfil</h2>
-              <div className="perfil-info">
-                <p><strong>Nombre:</strong> {usuario?.nombre}</p>
-                <p><strong>Email:</strong> {usuario?.email}</p>
-                <p><strong>Teléfono:</strong> {usuario?.telefono}</p>
-                <button className="btn-editar">✏️ Editar Perfil</button>
-              </div>
+                  <div className="card-info">
+                    <p className="precio">💰 €{prof.precio_por_hora}/h</p>
+                    <p className="experiencia">📊 {prof.nivel_experiencia}</p>
+                    <p className="rating">⭐ {prof.valoracion_media?.toFixed(1) || 'Sin rating'}</p>
+                  </div>
+
+                  <button
+                    className="btn-match"
+                    onClick={() => hacerMatch(prof.id)}
+                  >
+                    ✨ Contactar
+                  </button>
+                </div>
+              ))}
             </div>
           )}
         </div>
-      </main>
+      </div>
     </div>
   )
 }
