@@ -17,20 +17,44 @@ router.get('/servicios', (req, res) => {
 
 router.get('/buscar', (req, res) => {
   try {
-    const { servicioId, precioMin = 0, precioMax = 1000, kmMax = 100, offset = 0, limit = 20 } = req.query;
+    const db = require('../db/config');
+    const { servicioId, precioMin = 0, precioMax = 10000, offset = 0, limit = 10 } = req.query;
 
     if (!servicioId) {
       return res.status(400).json({ error: 'servicioId requerido' });
     }
 
-    const profesionales = Profesional.buscarPorServicio(parseInt(servicioId), parseInt(offset), parseInt(limit));
+    // Búsqueda mejorada con filtros de seguridad y verificación
+    const profesionales = db.prepare(`
+      SELECT
+        p.id,
+        p.usuario_id,
+        p.precio_por_hora,
+        p.nivel_experiencia,
+        p.tiene_certificaciones,
+        p.valoracion_media,
+        p.total_resenas,
+        u.nombre,
+        u.foto_perfil_url,
+        u.foto_verificada
+      FROM profesionales p
+      JOIN usuarios u ON p.usuario_id = u.id
+      JOIN profesional_servicios ps ON p.id = ps.profesional_id
+      WHERE ps.servicio_id = ?
+        AND u.usuario_bloqueado = 0
+        AND u.foto_verificada = 1
+        AND p.precio_por_hora >= ?
+        AND p.precio_por_hora <= ?
+      ORDER BY p.valoracion_media DESC, p.total_resenas DESC
+      LIMIT ? OFFSET ?
+    `).all(parseInt(servicioId), parseFloat(precioMin), parseFloat(precioMax), parseInt(limit), parseInt(offset));
 
-    const filtrados = profesionales.filter(p => {
-      const precioOk = p.precio_por_hora >= precioMin && p.precio_por_hora <= precioMax;
-      return precioOk;
+    res.json({
+      total: profesionales.length,
+      profesionales,
+      offset: parseInt(offset),
+      limit: parseInt(limit)
     });
-
-    res.json(filtrados);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Error en búsqueda' });
