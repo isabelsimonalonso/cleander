@@ -14,7 +14,7 @@ async function seed() {
     db.prepare("DELETE FROM usuarios WHERE email NOT LIKE 'admin%'").run();
 
     // Contraseña demo (mínimo 12 caracteres)
-    const passwordHash = await bcrypt.hash('DemoPassword123', 12);
+    const passwordHash = bcrypt.hashSync('DemoPassword123', 10);
 
     // URLs de fotos de demo (usando placeholders de Lorem Picsum)
     const fotosClientes = [
