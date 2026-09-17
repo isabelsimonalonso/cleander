@@ -336,7 +336,8 @@
   <footer>
     © 2026 Cleander. Todos los derechos reservados |
     <a href="#" onclick="mostrarPrivacidad(); return false;">Privacidad</a> •
-    <a href="#" onclick="mostrarTerminos(); return false;">Términos</a>
+    <a href="#" onclick="mostrarTerminos(); return false;">Términos</a> •
+    <a href="#" onclick="mostrarAvisoLegal(); return false;">Aviso Legal</a>
   </footer>
 
   <!-- Modal Privacidad -->
@@ -387,6 +388,42 @@
     </div>
   </div>
 
+  <!-- Modal Aviso Legal -->
+  <div id="modalAvisoLegal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; overflow-y: auto;">
+    <div style="background: white; max-width: 600px; margin: 40px auto; padding: 40px; border-radius: 12px;">
+      <button onclick="document.getElementById('modalAvisoLegal').style.display='none'" style="float: right; background: #f0f0f0; border: none; padding: 8px 12px; cursor: pointer; border-radius: 4px;">✕</button>
+      <h2 style="color: var(--turquesa); margin-bottom: 20px;">Aviso Legal</h2>
+      <div style="font-size: 13px; line-height: 1.8; color: #666;">
+        <p><strong>1. Exención de responsabilidad</strong></p>
+        <p>Cleander es una plataforma de intermediación que facilita la conexión entre usuarios. No asume responsabilidad alguna sobre:</p>
+        <ul style="margin-left: 20px;">
+          <li>La calidad, legalidad o idoneidad de los servicios ofrecidos</li>
+          <li>El cumplimiento de obligaciones entre usuarios</li>
+          <li>Daños, perjuicios o incumplimientos derivados de transacciones</li>
+          <li>Comportamiento, identidad verificada o antecedentes de usuarios</li>
+        </ul>
+
+        <p><strong>2. Prohibición de actividades ilícitas</strong></p>
+        <p>El usuario se compromete a no utilizar la plataforma para: actividades ilegales, acoso, fraude, suplantación de identidad, incitación a la violencia, o distribución de contenido ofensivo o discriminatorio.</p>
+
+        <p><strong>3. Responsabilidad del usuario</strong></p>
+        <p>Cada usuario es responsable de verificar la identidad, antecedentes y credibilidad de otros usuarios antes de realizar transacciones. Cleander no verifica ni garantiza información alguna proporcionada por usuarios.</p>
+
+        <p><strong>4. Limitación de responsabilidad</strong></p>
+        <p>Cleander no será responsable de: pérdidas económicas, daños directos o indirectos, lucro cesante, o cualquier otro daño derivado del uso o imposibilidad de uso de la plataforma, incluso si ha sido informada de la posibilidad de tales daños.</p>
+
+        <p><strong>5. Transacciones fuera de plataforma</strong></p>
+        <p>Cualquier transacción realizada fuera de los canales proporcionados por Cleander queda completamente fuera de nuestro control y responsabilidad. El usuario asume todo riesgo.</p>
+
+        <p><strong>6. Reserva de derechos</strong></p>
+        <p>Cleander se reserva el derecho de: suspender o eliminar cuentas, rechazar usuarios, modificar servicios, y cambiar estos términos en cualquier momento.</p>
+
+        <p><strong>7. Jurisdicción y legislación aplicable</strong></p>
+        <p>Este aviso legal se rige por la legislación española. Cualquier disputa se someterá a los juzgados y tribunales de España.</p>
+      </div>
+    </div>
+  </div>
+
   <script>
     document.getElementById('loginForm').addEventListener('submit', (e) => {
       e.preventDefault();
@@ -402,6 +439,10 @@
 
     function mostrarTerminos() {
       document.getElementById('modalTerminos').style.display = 'block';
+    }
+
+    function mostrarAvisoLegal() {
+      document.getElementById('modalAvisoLegal').style.display = 'block';
     }
 
     // Cerrar modales al hacer click fuera
