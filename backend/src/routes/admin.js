@@ -71,4 +71,35 @@ router.get('/matches', autenticar, soloAdmin, (req, res) => {
   }
 });
 
+// Eliminar usuario
+router.delete('/usuarios/:id', autenticar, soloAdmin, (req, res) => {
+  try {
+    const { id } = req.params;
+    if (parseInt(id) === req.usuario.id) {
+      return res.status(400).json({ error: 'No puedes eliminar tu propia cuenta' });
+    }
+    const stmt = db.prepare('DELETE FROM usuarios WHERE id = ?');
+    stmt.run(id);
+    res.json({ success: true, message: 'Usuario eliminado' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Cambiar tipo de usuario
+router.patch('/usuarios/:id/tipo', autenticar, soloAdmin, (req, res) => {
+  try {
+    const { id } = req.params;
+    const { tipo } = req.body;
+    if (!['CLIENTE', 'PROFESIONAL'].includes(tipo)) {
+      return res.status(400).json({ error: 'Tipo inválido' });
+    }
+    const stmt = db.prepare('UPDATE usuarios SET tipo = ? WHERE id = ?');
+    stmt.run(tipo, id);
+    res.json({ success: true, message: `Tipo actualizado a ${tipo}` });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
