@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { auth } from '../services/api'
+import Logo from '../components/Logo'
 import '../styles/auth.css'
 
 export default function Registro() {
@@ -10,6 +11,7 @@ export default function Registro() {
     nombre: '',
     email: '',
     telefono: '',
+    password: '',
     fotoPerfil: '',
     precioHora: '',
   })
@@ -56,6 +58,9 @@ export default function Registro() {
   return (
     <div className="auth-container">
       <div className="auth-box">
+        <div className="logo-container">
+          <Logo size={80} />
+        </div>
         <h1>Cleander</h1>
         <h2>Crear cuenta</h2>
 
@@ -98,6 +103,14 @@ export default function Registro() {
             name="telefono"
             placeholder="Teléfono"
             value={formData.telefono}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Contraseña (mínimo 6 caracteres)"
+            value={formData.password}
             onChange={handleChange}
             required
           />

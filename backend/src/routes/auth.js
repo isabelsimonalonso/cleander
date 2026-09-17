@@ -8,10 +8,14 @@ const router = express.Router();
 
 router.post('/registro', (req, res) => {
   try {
-    const { nombre, email, telefono, tipo, fotoPerfil, direccion, latitud, longitud, precioHora, nivelExperiencia, seDesplaza, rangoDesplazamiento } = req.body;
+    const { nombre, email, telefono, password, tipo, fotoPerfil, precioHora, nivelExperiencia } = req.body;
 
-    if (!nombre || !email || !telefono || !tipo || !fotoPerfil) {
-      return res.status(400).json({ error: 'Campos obligatorios: nombre, email, teléfono, tipo, fotoPerfil' });
+    if (!nombre || !email || !telefono || !password || !tipo || !fotoPerfil) {
+      return res.status(400).json({ error: 'Campos obligatorios: nombre, email, teléfono, password, tipo, fotoPerfil' });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
     }
 
     const existente = Usuario.obtenerPorEmail(email);
@@ -19,7 +23,7 @@ router.post('/registro', (req, res) => {
       return res.status(400).json({ error: 'El email ya está registrado' });
     }
 
-    const passwordHash = bcrypt.hashSync('temporal123', 10);
+    const passwordHash = bcrypt.hashSync(password, 10);
 
     const usuario = Usuario.crear({
       nombre,

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { auth } from '../services/api'
+import Logo from '../components/Logo'
 import '../styles/auth.css'
 
 export default function Login() {
@@ -31,6 +32,9 @@ export default function Login() {
   return (
     <div className="auth-container">
       <div className="auth-box">
+        <div className="logo-container">
+          <Logo size={80} />
+        </div>
         <h1>Cleander</h1>
         <h2>Iniciar sesión</h2>
 
