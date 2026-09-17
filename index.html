@@ -314,6 +314,33 @@
     </div>
   </header>
 
+  <!-- Dashboard -->
+  <div class="dashboard">
+    <div class="dashboard-header">
+      <div>
+        <h2>Cleander</h2>
+        <p style="color: #999; font-size: 12px; margin: 4px 0 0 0;">Bienvenido a tu dashboard</p>
+      </div>
+      <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesión</button>
+    </div>
+    <div class="dashboard-content">
+      <h3>🎉 Sesión iniciada correctamente</h3>
+      <p style="color: #666; font-size: 14px; line-height: 1.6;">
+        Bienvenido a Cleander. Aquí es donde podrías:
+      </p>
+      <ul style="color: #666; font-size: 14px; margin-left: 20px; line-height: 1.8;">
+        <li>Buscar y conectar con profesionales</li>
+        <li>Gestionar tus solicitudes de servicio</li>
+        <li>Ver tus matches activos</li>
+        <li>Editar tu perfil</li>
+        <li>Dejar y recibir valoraciones</li>
+      </ul>
+      <p style="color: #999; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #f0f0f0;">
+        Esta es una demostración. El backend completo se implementará próximamente.
+      </p>
+    </div>
+  </div>
+
   <main>
     <div class="login-box">
       <h2>Bienvenido</h2>
@@ -424,13 +451,94 @@
     </div>
   </div>
 
+  <style>
+    .dashboard {
+      display: none;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .dashboard.active {
+      display: flex;
+    }
+
+    .dashboard-header {
+      background: white;
+      padding: 20px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dashboard-header h2 {
+      color: var(--turquesa);
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .dashboard-content {
+      flex: 1;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .dashboard-content h3 {
+      color: var(--turquesa);
+      margin-bottom: 20px;
+    }
+
+    .logout-btn {
+      padding: 8px 16px;
+      background: linear-gradient(135deg, var(--turquesa) 0%, var(--turquesa-claro) 100%);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .logout-btn:hover {
+      opacity: 0.9;
+    }
+
+    .login-page {
+      display: flex;
+    }
+
+    .login-page.hidden {
+      display: none;
+    }
+  </style>
+
   <script>
+    // Dashboard logic
+    function mostrarDashboard() {
+      document.querySelector('main').classList.add('hidden');
+      document.querySelector('.dashboard').classList.add('active');
+      localStorage.setItem('usuarioLogueado', 'true');
+    }
+
+    function cerrarSesion() {
+      document.querySelector('main').classList.remove('hidden');
+      document.querySelector('.dashboard').classList.remove('active');
+      localStorage.removeItem('usuarioLogueado');
+      document.getElementById('loginForm').reset();
+    }
+
+    // Verificar si está logueado al cargar
+    window.addEventListener('load', function() {
+      if (localStorage.getItem('usuarioLogueado')) {
+        mostrarDashboard();
+      }
+    });
+
     document.getElementById('loginForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      const msg = document.getElementById('message');
-      msg.textContent = '✓ Formulario enviado correctamente';
-      msg.className = 'message success';
-      setTimeout(() => msg.className = 'message', 3000);
+      const email = document.getElementById('email').value;
+      mostrarDashboard();
     });
 
     function mostrarPrivacidad() {
