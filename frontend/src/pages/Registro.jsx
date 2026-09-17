@@ -10,6 +10,7 @@ export default function Registro() {
     nombre: '',
     email: '',
     telefono: '',
+    password: '',
     fotoPerfil: '',
     precioHora: '',
   })
@@ -98,6 +99,14 @@ export default function Registro() {
             name="telefono"
             placeholder="Teléfono"
             value={formData.telefono}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Contraseña (mínimo 6 caracteres)"
+            value={formData.password}
             onChange={handleChange}
             required
           />
