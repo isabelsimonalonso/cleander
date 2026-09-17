@@ -10,8 +10,8 @@ router.post('/registro', (req, res) => {
   try {
     const { nombre, email, telefono, password, tipo, fotoPerfil, precioHora, nivelExperiencia } = req.body;
 
-    if (!nombre || !email || !telefono || !password || !tipo || !fotoPerfil) {
-      return res.status(400).json({ error: 'Campos obligatorios: nombre, email, teléfono, password, tipo, fotoPerfil' });
+    if (!nombre || !email || !telefono || !password || !tipo) {
+      return res.status(400).json({ error: 'Campos obligatorios: nombre, email, teléfono, password, tipo' });
     }
 
     if (password.length < 12) {
@@ -30,7 +30,7 @@ router.post('/registro', (req, res) => {
       email,
       telefono,
       tipo,
-      fotoPerfil,
+      fotoPerfil: fotoPerfil || null,
       passwordHash,
     });
 

@@ -12,7 +12,6 @@ export default function Registro() {
     email: '',
     telefono: '',
     password: '',
-    fotoPerfil: '',
     precioHora: '',
   })
   const [error, setError] = useState('')
@@ -31,7 +30,7 @@ export default function Registro() {
     setLoading(true)
 
     try {
-      if (!formData.nombre || !formData.email || !formData.telefono || !formData.fotoPerfil) {
+      if (!formData.nombre || !formData.email || !formData.telefono || !formData.password) {
         throw new Error('Por favor completa todos los campos obligatorios')
       }
 
@@ -40,7 +39,10 @@ export default function Registro() {
       }
 
       const datos = {
-        ...formData,
+        nombre: formData.nombre,
+        email: formData.email,
+        telefono: formData.telefono,
+        password: formData.password,
         tipo,
         precioHora: tipo === 'PROFESIONAL' ? parseFloat(formData.precioHora) : null,
       }
@@ -64,7 +66,6 @@ export default function Registro() {
           <Logo size={80} />
         </div>
         <h1>Cleander</h1>
-        <h2>Crear cuenta</h2>
 
         <div className="tipo-selector">
           <button
@@ -111,16 +112,8 @@ export default function Registro() {
           <input
             type="password"
             name="password"
-            placeholder="Contraseña (mínimo 6 caracteres)"
+            placeholder="Contraseña (mínimo 12 caracteres)"
             value={formData.password}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="fotoPerfil"
-            placeholder="URL de foto de perfil (obligatoria)"
-            value={formData.fotoPerfil}
             onChange={handleChange}
             required
           />
