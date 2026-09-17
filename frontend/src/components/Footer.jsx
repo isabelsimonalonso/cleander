@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer-content">
-        <p>© {currentYear} Cleander. Todos los derechos reservados a <strong>@Isabel Simón</strong></p>
+        <p>© {currentYear} Cleander. Todos los derechos reservados.</p>
         <div className="footer-links">
           <a href="#privacidad">Privacidad</a>
           <span className="separator">•</span>

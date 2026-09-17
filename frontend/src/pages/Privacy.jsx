@@ -10,7 +10,7 @@ export default function Privacy() {
         <section>
           <h2>1. Responsable del Tratamiento</h2>
           <p>
-            <strong>Cleander</strong> (en adelante, "la Aplicación"), con propietaria <strong>Isabel Simón</strong>,
+            <strong>Cleander</strong> (en adelante, "la Aplicación")
             es responsable del tratamiento de datos personales conforme a la Ley Orgánica 3/2018 de Protección de Datos
             Personales y Garantía de Derechos Digitales (LOPD) y el Reglamento (UE) 2016/679 (GDPR).
           </p>
@@ -82,7 +82,7 @@ export default function Privacy() {
             <li><strong>Restricción:</strong> Limitar el procesamiento de datos</li>
           </ul>
           <p>
-            Para ejercer estos derechos, contactar a: <strong>isabel.simon@cleander.app</strong>
+            Para ejercer estos derechos, contactar a: <strong>contact@cleander.app</strong>
           </p>
         </section>
 
@@ -157,7 +157,7 @@ export default function Privacy() {
             Para consultas sobre privacidad y ejercer derechos GDPR:
           </p>
           <p>
-            <strong>Email:</strong> isabel.simon@cleander.app<br/>
+            <strong>Email:</strong> contact@cleander.app<br/>
             <strong>Respuesta garantizada:</strong> 30 días hábiles (conforme a GDPR)
           </p>
         </section>
