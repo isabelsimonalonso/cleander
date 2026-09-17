@@ -1,3 +1,6 @@
 const app = require('../backend/src/index');
 
-module.exports = app;
+module.exports = (req, res) => {
+  // Vercel Functions handler
+  return app(req, res);
+};
