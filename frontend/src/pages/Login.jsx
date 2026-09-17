@@ -19,11 +19,13 @@ export default function Login() {
     setLoading(true)
 
     try {
-      const { data } = await auth.login(email, password)
-      login(data.usuario, data.token)
+      const response = await auth.login(email, password)
+      const { usuario, token } = response.data
+      login(usuario, token)
       navigate('/dashboard')
     } catch (err) {
-      setError(err.response?.data?.error || 'Error en el login')
+      console.error('Login error:', err)
+      setError(err.response?.data?.error || err.message || 'Error en el login')
     } finally {
       setLoading(false)
     }

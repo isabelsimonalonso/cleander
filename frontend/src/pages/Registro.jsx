@@ -45,10 +45,12 @@ export default function Registro() {
         precioHora: tipo === 'PROFESIONAL' ? parseFloat(formData.precioHora) : null,
       }
 
-      const { data } = await auth.registro(datos)
-      login(data.usuario, data.token)
+      const response = await auth.registro(datos)
+      const { usuario, token } = response.data
+      login(usuario, token)
       navigate('/dashboard')
     } catch (err) {
+      console.error('Registro error:', err)
       setError(err.response?.data?.error || err.message || 'Error en el registro')
     } finally {
       setLoading(false)
