@@ -1,12 +1,16 @@
 {
+  "version": 2,
   "builds": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    },
     {
       "src": "backend/src/index.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "frontend/**/*",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -19,11 +23,9 @@
       "dest": "frontend/dist/$1"
     }
   ],
-  "buildCommand": "cd backend && npm install && cd ../frontend && npm install && npm run build",
-  "outputDirectory": "frontend/dist",
   "env": {
     "NODE_ENV": "production",
-    "VITE_API_URL": "https://cleander.vercel.app/api"
+    "VITE_API_URL": "/api"
   },
   "functions": {
     "backend/src/index.js": {
