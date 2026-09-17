@@ -54,7 +54,7 @@ router.post('/registro', (req, res) => {
   }
 });
 
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -62,7 +62,7 @@ router.post('/login', (req, res) => {
       return res.status(400).json({ error: 'Email y contraseña requeridos' });
     }
 
-    const usuario = Usuario.obtenerPorEmail(email);
+    const usuario = await db.oneOrNone('SELECT * FROM usuarios WHERE email = $1', [email]);
     if (!usuario) {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }

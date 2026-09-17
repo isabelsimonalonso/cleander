@@ -5,9 +5,7 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
-// Detectar si usamos PostgreSQL o SQLite
-const usePostgres = !!process.env.DATABASE_URL;
-const { initDB } = usePostgres ? require('./db/init-postgres') : require('./db/init');
+const { initDB } = require('./db/init');
 
 const authRoutes = require('./routes/auth');
 const perfilRoutes = require('./routes/perfil');
