@@ -6,6 +6,7 @@
   align-items: center;
   min-height: 100vh;
   background: linear-gradient(135deg, #1da1b8 0%, #0d9488 100%);
+  padding: 20px;
 }
 
 .auth-box {
@@ -15,6 +16,22 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
+  margin: 0 20px;
+}
+
+@media (max-width: 768px) {
+  .auth-box {
+    padding: 30px 20px;
+    margin: 0 15px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-box {
+    padding: 25px 15px;
+    margin: 0 10px;
+  }
 }
 
 .logo-container {
@@ -40,9 +57,12 @@
 
 .auth-box h2 {
   text-align: center;
-  color: #333;
+  color: #666;
   margin-bottom: 30px;
-  font-size: 20px;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .tipo-selector {
