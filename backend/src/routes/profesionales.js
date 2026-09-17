@@ -58,16 +58,16 @@ router.get('/buscar', async (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const profesional = Profesional.obtenerPorUsuarioId(id);
+    const profesional = await Profesional.obtenerPorUsuarioId(id);
 
     if (!profesional) {
       return res.status(404).json({ error: 'Profesional no encontrado' });
     }
 
-    const servicios = Profesional.obtenerServicios(profesional.id);
+    const servicios = await Profesional.obtenerServicios(profesional.id);
 
     res.json({
       ...profesional,
@@ -81,17 +81,17 @@ router.get('/:id', (req, res) => {
   }
 });
 
-router.post('/:id/servicios', autenticar, (req, res) => {
+router.post('/:id/servicios', autenticar, async (req, res) => {
   try {
     const { servicioId } = req.body;
     const { id } = req.params;
 
-    const profesional = Profesional.obtenerPorUsuarioId(id);
+    const profesional = await Profesional.obtenerPorUsuarioId(id);
     if (!profesional || profesional.usuario_id !== req.usuario.id) {
       return res.status(403).json({ error: 'No autorizado' });
     }
 
-    const resultado = Profesional.agregarServicio(profesional.id, servicioId);
+    const resultado = await Profesional.agregarServicio(profesional.id, servicioId);
     res.json(resultado);
   } catch (err) {
     console.error(err);

@@ -7,7 +7,7 @@ const { generarToken, autenticar } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.post('/registro', (req, res) => {
+router.post('/registro', async (req, res) => {
   try {
     const { nombre, email, telefono, password, tipo, fotoPerfil, precioHora, nivelExperiencia } = req.body;
 
@@ -19,14 +19,14 @@ router.post('/registro', (req, res) => {
       return res.status(400).json({ error: 'La contraseña debe tener al menos 12 caracteres (mayús, minús, números)' });
     }
 
-    const existente = Usuario.obtenerPorEmail(email);
+    const existente = await Usuario.obtenerPorEmail(email);
     if (existente) {
       return res.status(400).json({ error: 'El email ya está registrado' });
     }
 
     const passwordHash = bcrypt.hashSync(password, 10);
 
-    const usuario = Usuario.crear({
+    const usuario = await Usuario.crear({
       nombre,
       email,
       telefono,
@@ -39,7 +39,7 @@ router.post('/registro', (req, res) => {
       if (!precioHora) {
         return res.status(400).json({ error: 'profesionales deben especificar precioHora' });
       }
-      Profesional.crear(usuario.id, {
+      await Profesional.crear(usuario.id, {
         precioHora,
         nivelExperiencia: nivelExperiencia || 'PRINCIPIANTE',
         tieneCertificaciones: false,
@@ -81,9 +81,9 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/me', autenticar, (req, res) => {
+router.get('/me', autenticar, async (req, res) => {
   try {
-    const usuario = Usuario.obtenerPorId(req.usuario.id);
+    const usuario = await Usuario.obtenerPorId(req.usuario.id);
     res.json(usuario);
   } catch (err) {
     console.error(err);
