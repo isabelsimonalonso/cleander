@@ -14,8 +14,8 @@ router.post('/registro', (req, res) => {
       return res.status(400).json({ error: 'Campos obligatorios: nombre, email, teléfono, password, tipo, fotoPerfil' });
     }
 
-    if (password.length < 6) {
-      return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
+    if (password.length < 12) {
+      return res.status(400).json({ error: 'La contraseña debe tener al menos 12 caracteres (mayús, minús, números)' });
     }
 
     const existente = Usuario.obtenerPorEmail(email);

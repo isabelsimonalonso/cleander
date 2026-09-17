@@ -20,7 +20,7 @@ const generarToken = (usuarioId, tipo) => {
   return jwt.sign(
     { id: usuarioId, tipo },
     process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRY || '7d' }
+    { expiresIn: process.env.JWT_EXPIRY || '15m' }
   );
 };
 

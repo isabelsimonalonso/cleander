@@ -2,12 +2,23 @@ const express = require('express');
 const { autenticar } = require('../middleware/auth');
 const db = require('../db/config');
 const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
 
 const router = express.Router();
 
 // Generar código de 6 dígitos
 const generarCodigo = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
+};
+
+// Hashear código de verificación
+const hashearCodigo = (codigo) => {
+  return bcrypt.hashSync(codigo, 10);
+};
+
+// Verificar código hasheado
+const verificarCodigo = (codigo, codigoHash) => {
+  return bcrypt.compareSync(codigo, codigoHash);
 };
 
 // Obtener perfil del usuario
@@ -81,22 +92,21 @@ router.post('/me/cambiar-email/solicitar', autenticar, (req, res) => {
 
     // Generar código
     const codigo = generarCodigo();
+    const codigoHash = hashearCodigo(codigo);
     const expiraEn = new Date(Date.now() + 15 * 60 * 1000); // 15 minutos
 
     const stmt = db.prepare(`
       INSERT INTO codigos_verificacion (usuario_id, tipo, codigo, valor_nuevo, expira_en)
       VALUES (?, ?, ?, ?, ?)
     `);
-    stmt.run(req.usuario.id, 'EMAIL', codigo, email_nuevo, expiraEn.toISOString());
+    stmt.run(req.usuario.id, 'EMAIL', codigoHash, email_nuevo, expiraEn.toISOString());
 
     // En MVP, mostrar código en consola. En producción, sería vía email
     console.log(`📧 Código verificación email: ${codigo}`);
 
     res.json({
       success: true,
-      message: 'Código enviado',
-      // En producción NO devolver el código
-      codigo: codigo // Solo para desarrollo
+      message: 'Código de 6 dígitos enviado al email. Válido por 15 minutos.'
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -108,11 +118,16 @@ router.post('/me/cambiar-email/verificar', autenticar, (req, res) => {
   try {
     const { codigo } = req.body;
 
-    const record = db.prepare(`
+    const records = db.prepare(`
       SELECT * FROM codigos_verificacion
-      WHERE usuario_id = ? AND tipo = 'EMAIL' AND codigo = ? AND usado = 0
-    `).get(req.usuario.id, codigo);
+      WHERE usuario_id = ? AND tipo = 'EMAIL' AND usado = 0
+    `).all(req.usuario.id);
 
+    if (!records || records.length === 0) {
+      return res.status(400).json({ error: 'Código inválido' });
+    }
+
+    const record = records.find(r => verificarCodigo(codigo, r.codigo));
     if (!record) {
       return res.status(400).json({ error: 'Código inválido' });
     }
@@ -148,20 +163,20 @@ router.post('/me/cambiar-telefono/solicitar', autenticar, (req, res) => {
 
     // Generar código
     const codigo = generarCodigo();
+    const codigoHash = hashearCodigo(codigo);
     const expiraEn = new Date(Date.now() + 15 * 60 * 1000);
 
     const stmt = db.prepare(`
       INSERT INTO codigos_verificacion (usuario_id, tipo, codigo, valor_nuevo, expira_en)
       VALUES (?, ?, ?, ?, ?)
     `);
-    stmt.run(req.usuario.id, 'TELEFONO', codigo, telefono_nuevo, expiraEn.toISOString());
+    stmt.run(req.usuario.id, 'TELEFONO', codigoHash, telefono_nuevo, expiraEn.toISOString());
 
     console.log(`📱 Código verificación teléfono: ${codigo}`);
 
     res.json({
       success: true,
-      message: 'Código enviado',
-      codigo: codigo // Solo para desarrollo
+      message: 'Código de 6 dígitos enviado al teléfono. Válido por 15 minutos.'
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -173,11 +188,16 @@ router.post('/me/cambiar-telefono/verificar', autenticar, (req, res) => {
   try {
     const { codigo } = req.body;
 
-    const record = db.prepare(`
+    const records = db.prepare(`
       SELECT * FROM codigos_verificacion
-      WHERE usuario_id = ? AND tipo = 'TELEFONO' AND codigo = ? AND usado = 0
-    `).get(req.usuario.id, codigo);
+      WHERE usuario_id = ? AND tipo = 'TELEFONO' AND usado = 0
+    `).all(req.usuario.id);
 
+    if (!records || records.length === 0) {
+      return res.status(400).json({ error: 'Código inválido' });
+    }
+
+    const record = records.find(r => verificarCodigo(codigo, r.codigo));
     if (!record) {
       return res.status(400).json({ error: 'Código inválido' });
     }
