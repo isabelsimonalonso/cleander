@@ -13,12 +13,18 @@ const adminRoutes = require('./routes/admin');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const corsOrigin = process.env.CORS_ORIGIN
+const corsOriginList = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
   : ['http://localhost:3000', 'http://localhost:3001'];
 
 app.use(cors({
-  origin: corsOrigin,
+  origin: function(origin, callback) {
+    if (!origin || corsOriginList.indexOf(origin) !== -1 || origin.startsWith('http://localhost:')) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS not allowed'));
+    }
+  },
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
