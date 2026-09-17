@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1da1b8 0%, #0d9488 100%);
 }
 
 .auth-box {
@@ -17,7 +17,7 @@
 
 .auth-box h1 {
   text-align: center;
-  color: #667eea;
+  color: #1da1b8;
   margin-bottom: 10px;
   font-size: 32px;
 }
@@ -46,7 +46,7 @@
 }
 
 .tipo-selector button.active {
-  background: #667eea;
+  background: #1da1b8;
   color: white;
 }
 
@@ -64,13 +64,13 @@
 }
 
 .auth-box input:focus {
-  border-color: #667eea;
+  border-color: #1da1b8;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .auth-box button[type="submit"] {
   padding: 12px;
-  background: #667eea;
+  background: #1da1b8;
   color: white;
   font-weight: 600;
   border-radius: 8px;
@@ -78,7 +78,7 @@
 }
 
 .auth-box button[type="submit"]:hover:not(:disabled) {
-  background: #5568d3;
+  background: #1a8399;
 }
 
 .auth-box button[type="submit"]:disabled {
@@ -102,7 +102,7 @@
 }
 
 .auth-box a {
-  color: #667eea;
+  color: #1da1b8;
   text-decoration: none;
   font-weight: 600;
 }
