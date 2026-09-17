@@ -3,6 +3,7 @@ import { AuthProvider } from './context/AuthContext'
 import Login from './pages/Login'
 import Registro from './pages/Registro'
 import Dashboard from './pages/Dashboard'
+import Admin from './pages/Admin'
 import ProtectedRoute from './components/ProtectedRoute'
 
 export default function App() {
@@ -17,6 +18,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <Admin />
               </ProtectedRoute>
             }
           />
