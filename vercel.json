@@ -1,9 +1,34 @@
 {
-  "buildCommand": "cd frontend && npm install && npm run build",
+  "builds": [
+    {
+      "src": "backend/src/index.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "frontend/**/*",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "backend/src/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "frontend/dist/$1"
+    }
+  ],
+  "buildCommand": "cd backend && npm install && cd ../frontend && npm install && npm run build",
   "outputDirectory": "frontend/dist",
-  "installCommand": "npm install --prefix frontend && npm install --prefix backend",
   "env": {
-    "VITE_API_URL": "@api_url"
+    "NODE_ENV": "production",
+    "VITE_API_URL": "https://cleander.vercel.app/api"
   },
-  "regions": ["iad1"]
+  "functions": {
+    "backend/src/index.js": {
+      "memory": 1024,
+      "maxDuration": 60
+    }
+  }
 }
