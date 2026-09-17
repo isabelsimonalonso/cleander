@@ -71,21 +71,19 @@ app.use('/api/resenas', resenasRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/admin', adminAdvancedRoutes);
 
-// Inicializar BD
-(async () => {
+// Inicializar BD y luego iniciar servidor
+async function startServer() {
   try {
     await initDB();
+    app.listen(PORT, () => {
+      console.log(`Cleander backend escuchando en puerto ${PORT}`);
+    });
   } catch (err) {
-    console.error('Error inicializando BD:', err);
+    console.error('Error iniciando servidor:', err);
+    process.exit(1);
   }
-})();
-
-// En Vercel Functions, no llamar a listen()
-// El framework lo maneja automáticamente
-if (process.env.VERCEL !== '1' && process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    console.log(`Cleander backend escuchando en puerto ${PORT}`);
-  });
 }
+
+startServer();
 
 module.exports = app;
