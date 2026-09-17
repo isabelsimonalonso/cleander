@@ -1,13 +1,12 @@
 const express = require('express');
-const Profesional = require('../models/Profesional');
-const Servicio = require('../models/Servicio');
+const db = require('../db/config');
 const { autenticar } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.get('/servicios', (req, res) => {
+router.get('/servicios', async (req, res) => {
   try {
-    const servicios = Servicio.obtenerTodos();
+    const servicios = await db.any('SELECT id, nombre, descripcion FROM servicios ORDER BY nombre');
     res.json(servicios);
   } catch (err) {
     console.error(err);
@@ -15,17 +14,15 @@ router.get('/servicios', (req, res) => {
   }
 });
 
-router.get('/buscar', (req, res) => {
+router.get('/buscar', async (req, res) => {
   try {
-    const db = require('../db/config');
     const { servicioId, precioMin = 0, precioMax = 10000, offset = 0, limit = 10 } = req.query;
 
     if (!servicioId) {
       return res.status(400).json({ error: 'servicioId requerido' });
     }
 
-    // Búsqueda mejorada con filtros de seguridad y verificación
-    const profesionales = db.prepare(`
+    const profesionales = await db.any(`
       SELECT
         p.id,
         p.usuario_id,
@@ -40,14 +37,14 @@ router.get('/buscar', (req, res) => {
       FROM profesionales p
       JOIN usuarios u ON p.usuario_id = u.id
       JOIN profesional_servicios ps ON p.id = ps.profesional_id
-      WHERE ps.servicio_id = ?
+      WHERE ps.servicio_id = $1
         AND u.usuario_bloqueado = 0
         AND u.foto_verificada = 1
-        AND p.precio_por_hora >= ?
-        AND p.precio_por_hora <= ?
+        AND p.precio_por_hora >= $2
+        AND p.precio_por_hora <= $3
       ORDER BY p.valoracion_media DESC, p.total_resenas DESC
-      LIMIT ? OFFSET ?
-    `).all(parseInt(servicioId), parseFloat(precioMin), parseFloat(precioMax), parseInt(limit), parseInt(offset));
+      LIMIT $4 OFFSET $5
+    `, [parseInt(servicioId), parseFloat(precioMin), parseFloat(precioMax), parseInt(limit), parseInt(offset)]);
 
     res.json({
       total: profesionales.length,
