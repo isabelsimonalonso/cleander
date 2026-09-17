@@ -1,69 +1,52 @@
 const db = require('../db/config');
 
 class Match {
-  static crear(clienteId, profesionalId) {
-    const stmt = db.prepare(`
-      INSERT INTO matches (cliente_id, profesional_id, estado)
-      VALUES (?, ?, 'PENDIENTE')
-    `);
-    stmt.run(clienteId, profesionalId);
-    return db.prepare('SELECT * FROM matches WHERE cliente_id = ? AND profesional_id = ?').get(clienteId, profesionalId);
+  static async crear(clienteId, profesionalId) {
+    await db.none('INSERT INTO matches (cliente_id, profesional_id, estado) VALUES ($1, $2, $3)', [clienteId, profesionalId, 'PENDIENTE']);
+    return db.oneOrNone('SELECT * FROM matches WHERE cliente_id = $1 AND profesional_id = $2', [clienteId, profesionalId]);
   }
 
-  static obtenerMatch(clienteId, profesionalId) {
-    return db.prepare(`
-      SELECT * FROM matches
-      WHERE (cliente_id = ? AND profesional_id = ?)
-         OR (cliente_id = ? AND profesional_id = ?)
-    `).get(clienteId, profesionalId, profesionalId, clienteId);
+  static async obtenerMatch(clienteId, profesionalId) {
+    return db.oneOrNone(
+      'SELECT * FROM matches WHERE (cliente_id = $1 AND profesional_id = $2) OR (cliente_id = $3 AND profesional_id = $4)',
+      [clienteId, profesionalId, profesionalId, clienteId]
+    );
   }
 
-  static aceptarMatch(matchId) {
-    db.prepare(`
-      UPDATE matches
-      SET estado = 'ACEPTADO', actualizado_en = CURRENT_TIMESTAMP
-      WHERE id = ?
-    `).run(matchId);
-    return db.prepare('SELECT * FROM matches WHERE id = ?').get(matchId);
+  static async aceptarMatch(matchId) {
+    await db.none('UPDATE matches SET estado = $1, actualizado_en = CURRENT_TIMESTAMP WHERE id = $2', ['ACEPTADO', matchId]);
+    return db.oneOrNone('SELECT * FROM matches WHERE id = $1', [matchId]);
   }
 
-  static rechazarMatch(matchId) {
-    db.prepare(`
-      UPDATE matches
-      SET estado = 'RECHAZADO', actualizado_en = CURRENT_TIMESTAMP
-      WHERE id = ?
-    `).run(matchId);
-    return db.prepare('SELECT * FROM matches WHERE id = ?').get(matchId);
+  static async rechazarMatch(matchId) {
+    await db.none('UPDATE matches SET estado = $1, actualizado_en = CURRENT_TIMESTAMP WHERE id = $2', ['RECHAZADO', matchId]);
+    return db.oneOrNone('SELECT * FROM matches WHERE id = $1', [matchId]);
   }
 
-  static obtenerMatchesDeUsuario(usuarioId) {
-    return db.prepare(`
-      SELECT m.*,
-             u1.nombre as otro_nombre, u1.foto_perfil_url as otro_foto,
-             u2.nombre as mi_nombre
-      FROM matches m
-      JOIN usuarios u1 ON (
-        (m.cliente_id = ? AND m.profesional_id = u1.id) OR
-        (m.profesional_id = ? AND m.cliente_id = u1.id)
-      )
-      JOIN usuarios u2 ON u2.id = ?
-      WHERE m.estado = 'ACEPTADO'
-      ORDER BY m.actualizado_en DESC
-    `).all(usuarioId, usuarioId, usuarioId);
+  static async obtenerMatchesDeUsuario(usuarioId) {
+    return db.any(
+      `SELECT m.*,
+        u1.nombre as otro_nombre, u1.foto_perfil_url as otro_foto,
+        u2.nombre as mi_nombre
+       FROM matches m
+       JOIN usuarios u1 ON ((m.cliente_id = $1 AND m.profesional_id = u1.id) OR (m.profesional_id = $1 AND m.cliente_id = u1.id))
+       JOIN usuarios u2 ON u2.id = $1
+       WHERE m.estado = 'ACEPTADO'
+       ORDER BY m.actualizado_en DESC`,
+      [usuarioId]
+    );
   }
 
-  static obtenerContactoSiMatch(usuarioActualId, otroUsuarioId) {
-    return db.prepare(`
-      SELECT u.telefono, u.email
-      FROM matches m
-      JOIN usuarios u ON
-        ((m.cliente_id = ? AND m.profesional_id = u.id) OR
-         (m.profesional_id = ? AND m.cliente_id = u.id))
-      WHERE ((m.cliente_id = ? AND m.profesional_id = ?) OR
-             (m.profesional_id = ? AND m.cliente_id = ?))
-        AND m.estado = 'ACEPTADO'
-      LIMIT 1
-    `).get(usuarioActualId, usuarioActualId, usuarioActualId, otroUsuarioId, usuarioActualId, otroUsuarioId);
+  static async obtenerContactoSiMatch(usuarioActualId, otroUsuarioId) {
+    return db.oneOrNone(
+      `SELECT u.telefono, u.email
+       FROM matches m
+       JOIN usuarios u ON ((m.cliente_id = $1 AND m.profesional_id = u.id) OR (m.profesional_id = $1 AND m.cliente_id = u.id))
+       WHERE ((m.cliente_id = $1 AND m.profesional_id = $2) OR (m.profesional_id = $1 AND m.cliente_id = $2))
+         AND m.estado = 'ACEPTADO'
+       LIMIT 1`,
+      [usuarioActualId, otroUsuarioId]
+    );
   }
 }
 

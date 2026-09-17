@@ -4,7 +4,7 @@ const { autenticar } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.post('/', autenticar, (req, res) => {
+router.post('/', autenticar, async (req, res) => {
   try {
     const { profesionalId } = req.body;
     const clienteId = req.usuario.id;
@@ -13,12 +13,12 @@ router.post('/', autenticar, (req, res) => {
       return res.status(400).json({ error: 'profesionalId requerido' });
     }
 
-    const existente = Match.obtenerMatch(clienteId, profesionalId);
+    const existente = await Match.obtenerMatch(clienteId, profesionalId);
     if (existente) {
       return res.status(400).json({ error: 'Ya existe un match entre estos usuarios' });
     }
 
-    const match = Match.crear(clienteId, profesionalId);
+    const match = await Match.crear(clienteId, profesionalId);
     res.status(201).json(match);
   } catch (err) {
     console.error(err);
@@ -26,9 +26,9 @@ router.post('/', autenticar, (req, res) => {
   }
 });
 
-router.get('/', autenticar, (req, res) => {
+router.get('/', autenticar, async (req, res) => {
   try {
-    const matches = Match.obtenerMatchesDeUsuario(req.usuario.id);
+    const matches = await Match.obtenerMatchesDeUsuario(req.usuario.id);
     res.json(matches);
   } catch (err) {
     console.error(err);
@@ -36,16 +36,16 @@ router.get('/', autenticar, (req, res) => {
   }
 });
 
-router.patch('/:matchId', autenticar, (req, res) => {
+router.patch('/:matchId', autenticar, async (req, res) => {
   try {
     const { matchId } = req.params;
     const { accion } = req.body;
 
     if (accion === 'aceptar') {
-      const match = Match.aceptarMatch(matchId);
+      const match = await Match.aceptarMatch(matchId);
       return res.json(match);
     } else if (accion === 'rechazar') {
-      const match = Match.rechazarMatch(matchId);
+      const match = await Match.rechazarMatch(matchId);
       return res.json(match);
     } else {
       return res.status(400).json({ error: 'acción debe ser aceptar o rechazar' });
