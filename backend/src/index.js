@@ -9,6 +9,7 @@ const profesionalesRoutes = require('./routes/profesionales');
 const matchesRoutes = require('./routes/matches');
 const resenasRoutes = require('./routes/resenas');
 const adminRoutes = require('./routes/admin');
+const adminAdvancedRoutes = require('./routes/admin-advanced');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -38,6 +39,7 @@ app.use('/api/profesionales', profesionalesRoutes);
 app.use('/api/matches', matchesRoutes);
 app.use('/api/resenas', resenasRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/admin', adminAdvancedRoutes);
 
 initDB();
 

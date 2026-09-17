@@ -10,11 +10,34 @@ function initDB() {
       tipo TEXT NOT NULL CHECK (tipo IN ('CLIENTE', 'PROFESIONAL')),
       foto_perfil_url TEXT NOT NULL,
       foto_verificada INTEGER DEFAULT 0,
+      usuario_bloqueado INTEGER DEFAULT 0,
+      razon_bloqueo TEXT,
       direccion TEXT,
       latitud REAL,
       longitud REAL,
       estado_verificado INTEGER DEFAULT 0,
       password_hash TEXT NOT NULL,
+      creado_en DATETIME DEFAULT CURRENT_TIMESTAMP,
+      actualizado_en DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS auditoria (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      admin_id INTEGER NOT NULL REFERENCES usuarios(id),
+      accion TEXT NOT NULL,
+      tabla_afectada TEXT NOT NULL,
+      registro_id INTEGER NOT NULL,
+      detalles TEXT,
+      ip_address TEXT,
+      creado_en DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS consentimientos (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+      privacidad INTEGER DEFAULT 1,
+      marketing INTEGER DEFAULT 0,
+      analytics INTEGER DEFAULT 1,
       creado_en DATETIME DEFAULT CURRENT_TIMESTAMP,
       actualizado_en DATETIME DEFAULT CURRENT_TIMESTAMP
     );
