@@ -6,13 +6,13 @@
 }
 
 .dashboard-header {
-  background: linear-gradient(135deg, #1da1b8 0%, #0d9488 100%);
+  background: linear-gradient(135deg, #17A2B8 0%, #00BCD4 50%, #0F8BA5 100%);
   color: white;
   padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(23, 162, 184, 0.2);
   font-family: 'Poppins', sans-serif;
 }
 
@@ -23,12 +23,27 @@
   letter-spacing: -0.3px;
 }
 
+.dashboard-header button {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.dashboard-header button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
 .dashboard-tabs {
   background: white;
   display: flex;
   gap: 10px;
   padding: 15px 20px;
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid #E0F2F1;
   flex-wrap: wrap;
 }
 
@@ -41,15 +56,18 @@
   font-weight: 500;
   transition: all 0.3s;
   font-family: 'Poppins', sans-serif;
+  color: #666;
 }
 
 .dashboard-tabs button:hover {
-  background: #e0e0e0;
+  background: #E0F2F1;
+  color: #17A2B8;
 }
 
 .dashboard-tabs button.active {
-  background: #1da1b8;
+  background: #17A2B8;
   color: white;
+  box-shadow: 0 4px 8px rgba(23, 162, 184, 0.2);
 }
 
 .dashboard-content {
@@ -72,13 +90,15 @@
   background: white;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px rgba(23, 162, 184, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
+  border: 1px solid #E0F2F1;
 }
 
 .prof-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(23, 162, 184, 0.2);
+  border-color: #B2EBF2;
 }
 
 .card-header {
@@ -86,25 +106,26 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  background: #f8f9fa;
-  border-bottom: 1px solid #eee;
+  background: #F0F9FA;
+  border-bottom: 1px solid #E0F2F1;
 }
 
 .card-header h3 {
   margin: 0;
-  color: #1a1a1a;
+  color: #0F8BA5;
   font-size: 18px;
   font-weight: 500;
   letter-spacing: -0.2px;
 }
 
 .tag-ofrezo {
-  background: #1da1b8;
+  background: linear-gradient(135deg, #17A2B8 0%, #00BCD4 100%);
   color: white;
   padding: 4px 8px;
   border-radius: 12px;
   font-size: 12px;
   font-weight: 600;
+  box-shadow: 0 2px 4px rgba(23, 162, 184, 0.2);
 }
 
 .card-foto {
@@ -136,7 +157,7 @@
 .precio {
   font-size: 15px;
   font-weight: 500;
-  color: #1da1b8;
+  color: #17A2B8;
   letter-spacing: 0.1px;
 }
 
@@ -144,10 +165,11 @@
   width: calc(100% - 30px);
   margin: 0 15px 15px;
   padding: 12px;
-  background: #1da1b8;
+  background: linear-gradient(135deg, #17A2B8 0%, #00BCD4 100%);
   color: white;
   border: none;
   border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(23, 162, 184, 0.2);
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s;
@@ -155,8 +177,9 @@
 }
 
 .btn-match:hover {
-  background: #1a8399;
+  background: linear-gradient(135deg, #0F8BA5 0%, #0097A7 100%);
   transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(23, 162, 184, 0.3);
 }
 
 /* Profesional Perfil */
@@ -224,7 +247,7 @@
 
 .btn-editar,
 .btn-editar-perfil {
-  background: #1da1b8;
+  background: #17A2B8;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -237,7 +260,7 @@
 
 .btn-editar:hover,
 .btn-editar-perfil:hover {
-  background: #1a8399;
+  background: #0F8BA5;
 }
 
 /* Matches List */
@@ -251,10 +274,16 @@
   background: white;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px rgba(23, 162, 184, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-left: 4px solid #17A2B8;
+  transition: all 0.3s;
+}
+
+.match-card:hover {
+  box-shadow: 0 4px 16px rgba(23, 162, 184, 0.2);
 }
 
 .match-info h3 {
@@ -276,8 +305,10 @@
 }
 
 .estado-badge.aceptado {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: #E0F2F1;
+  color: #00796B;
+  border-left: 3px solid #17A2B8;
+  padding-left: 9px;
 }
 
 .match-fecha {
@@ -304,12 +335,14 @@
 }
 
 .btn-aceptar {
-  background: #4caf50;
+  background: linear-gradient(135deg, #17A2B8 0%, #00BCD4 100%);
   color: white;
+  box-shadow: 0 2px 8px rgba(23, 162, 184, 0.2);
 }
 
 .btn-aceptar:hover {
-  background: #45a049;
+  background: linear-gradient(135deg, #0F8BA5 0%, #0097A7 100%);
+  box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
 }
 
 .btn-rechazar {
@@ -342,7 +375,7 @@
 .rating-big {
   font-size: 48px;
   font-weight: 700;
-  color: #1da1b8;
+  color: #17A2B8;
 }
 
 .empty-state {
@@ -563,7 +596,7 @@
 }
 
 .perfil-info-compact .precio {
-  color: #1da1b8;
+  color: #17A2B8;
   font-weight: 400;
   font-size: 14px;
   margin-top: 8px !important;
@@ -624,12 +657,14 @@
 }
 
 .btn-guardar {
-  background: #4caf50;
+  background: linear-gradient(135deg, #17A2B8 0%, #00BCD4 100%);
   color: white;
+  box-shadow: 0 2px 8px rgba(23, 162, 184, 0.2);
 }
 
 .btn-guardar:hover {
-  background: #45a049;
+  background: linear-gradient(135deg, #0F8BA5 0%, #0097A7 100%);
+  box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
 }
 
 .btn-cancelar {
@@ -644,11 +679,13 @@
 .btn-editar-compact {
   width: 100%;
   padding: 8px;
-  background: #1da1b8;
+  background: linear-gradient(135deg, #17A2B8 0%, #00BCD4 100%);
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(23, 162, 184, 0.2);
+  transition: all 0.3s;
   font-weight: 600;
   font-size: 13px;
   font-family: 'Poppins', sans-serif;
@@ -656,7 +693,7 @@
 }
 
 .btn-editar-compact:hover {
-  background: #1a8399;
+  background: #0F8BA5;
 }
 
 .cliente-profesionales-main,
@@ -676,7 +713,7 @@
 
 .filtros-top h2 {
   margin: 0;
-  color: #1da1b8;
+  color: #17A2B8;
   font-size: 20px;
 }
 
@@ -700,7 +737,7 @@
 
 .cliente-card:hover {
   background: white;
-  border-color: #1da1b8;
+  border-color: #17A2B8;
   box-shadow: 0 2px 8px rgba(29, 161, 184, 0.1);
 }
 
