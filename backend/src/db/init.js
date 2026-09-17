@@ -9,6 +9,7 @@ function initDB() {
       telefono TEXT NOT NULL,
       tipo TEXT NOT NULL CHECK (tipo IN ('CLIENTE', 'PROFESIONAL')),
       foto_perfil_url TEXT NOT NULL,
+      foto_verificada INTEGER DEFAULT 0,
       direccion TEXT,
       latitud REAL,
       longitud REAL,

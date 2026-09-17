@@ -102,4 +102,43 @@ router.patch('/usuarios/:id/tipo', autenticar, soloAdmin, (req, res) => {
   }
 });
 
+// Fotos pendientes de validación
+router.get('/fotos-pendientes', autenticar, soloAdmin, (req, res) => {
+  try {
+    const fotos = db.prepare(`
+      SELECT id, nombre, email, foto_perfil_url, tipo, creado_en
+      FROM usuarios
+      WHERE foto_verificada = 0
+      ORDER BY creado_en ASC
+    `).all();
+    res.json(fotos);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Aprobar foto
+router.patch('/usuarios/:id/foto/aprobar', autenticar, soloAdmin, (req, res) => {
+  try {
+    const { id } = req.params;
+    const stmt = db.prepare('UPDATE usuarios SET foto_verificada = 1 WHERE id = ?');
+    stmt.run(id);
+    res.json({ success: true, message: 'Foto aprobada' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Rechazar foto
+router.patch('/usuarios/:id/foto/rechazar', autenticar, soloAdmin, (req, res) => {
+  try {
+    const { id } = req.params;
+    const stmt = db.prepare('UPDATE usuarios SET foto_verificada = 0 WHERE id = ?');
+    stmt.run(id);
+    res.json({ success: true, message: 'Foto rechazada' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
