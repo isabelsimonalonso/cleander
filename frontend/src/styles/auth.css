@@ -15,6 +15,16 @@
   max-width: 400px;
 }
 
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo-container svg {
+  filter: drop-shadow(0 4px 8px rgba(29, 161, 184, 0.2));
+}
+
 .auth-box h1 {
   text-align: center;
   color: #1da1b8;
