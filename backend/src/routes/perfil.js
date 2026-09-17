@@ -22,13 +22,13 @@ const verificarCodigo = (codigo, codigoHash) => {
 };
 
 // Obtener perfil del usuario
-router.get('/me', autenticar, (req, res) => {
+router.get('/me', autenticar, async (req, res) => {
   try {
-    const usuario = db.prepare(`
+    const usuario = await db.oneOrNone(`
       SELECT id, nombre, email, email_verificado, telefono, telefono_verificado,
              tipo, foto_perfil_url, foto_verificada, creado_en
-      FROM usuarios WHERE id = ?
-    `).get(req.usuario.id);
+      FROM usuarios WHERE id = $1
+    `, [req.usuario.id]);
 
     res.json(usuario);
   } catch (err) {
@@ -37,15 +37,17 @@ router.get('/me', autenticar, (req, res) => {
 });
 
 // Editar perfil (nombre, foto, dirección, etc)
-router.patch('/me', autenticar, (req, res) => {
+router.patch('/me', autenticar, async (req, res) => {
   try {
     const { nombre, foto_perfil_url, direccion } = req.body;
     const updates = [];
     const values = [];
+    let paramCount = 1;
 
     if (nombre) {
-      updates.push('nombre = ?');
+      updates.push(`nombre = $${paramCount}`);
       values.push(nombre);
+      paramCount++;
     }
     if (foto_perfil_url) {
       updates.push('foto_perfil_url = ?');
