@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const db = require('../db/config');
 const Usuario = require('../models/Usuario');
 const Profesional = require('../models/Profesional');
 const { generarToken, autenticar } = require('../middleware/auth');
