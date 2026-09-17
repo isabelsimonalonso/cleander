@@ -1,0 +1,89 @@
+const express = require('express');
+const bcrypt = require('bcryptjs');
+const Usuario = require('../models/Usuario');
+const Profesional = require('../models/Profesional');
+const { generarToken, autenticar } = require('../middleware/auth');
+
+const router = express.Router();
+
+router.post('/registro', async (req, res) => {
+  try {
+    const { nombre, email, telefono, tipo, fotoPerfil, direccion, latitud, longitud, precioHora, nivelExperiencia, seDesplaza, rangoDesplazamiento } = req.body;
+
+    if (!nombre || !email || !telefono || !tipo || !fotoPerfil) {
+      return res.status(400).json({ error: 'Campos obligatorios: nombre, email, teléfono, tipo, fotoPerfil' });
+    }
+
+    const existente = await Usuario.obtenerPorEmail(email);
+    if (existente) {
+      return res.status(400).json({ error: 'El email ya está registrado' });
+    }
+
+    const passwordHash = await bcrypt.hash('temporal123', 10);
+
+    const usuario = await Usuario.crear({
+      nombre,
+      email,
+      telefono,
+      tipo,
+      fotoPerfil,
+      passwordHash,
+    });
+
+    if (tipo === 'PROFESIONAL') {
+      if (!precioHora) {
+        return res.status(400).json({ error: 'profesionales deben especificar precioHora' });
+      }
+      const profesional = await Profesional.crear(usuario.id, {
+        precioHora,
+        nivelExperiencia: nivelExperiencia || 'PRINCIPIANTE',
+        tieneCertificaciones: false,
+        horarioDisponible: [],
+      });
+    }
+
+    const token = generarToken(usuario.id, tipo);
+    res.status(201).json({ usuario, token });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error en el registro' });
+  }
+});
+
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email y contraseña requeridos' });
+    }
+
+    const usuario = await Usuario.obtenerPorEmail(email);
+    if (!usuario) {
+      return res.status(401).json({ error: 'Credenciales inválidas' });
+    }
+
+    const valido = await bcrypt.compare(password, usuario.password_hash);
+    if (!valido) {
+      return res.status(401).json({ error: 'Credenciales inválidas' });
+    }
+
+    const token = generarToken(usuario.id, usuario.tipo);
+    res.json({ usuario, token });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error en el login' });
+  }
+});
+
+router.get('/me', autenticar, async (req, res) => {
+  try {
+    const usuario = await Usuario.obtenerPorId(req.usuario.id);
+    res.json(usuario);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error obteniendo perfil' });
+  }
+});
+
+module.exports = router;
