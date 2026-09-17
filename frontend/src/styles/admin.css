@@ -151,10 +151,273 @@
   color: #c62828;
 }
 
-.dashboard-view {
-  text-align: center;
-  padding: 40px;
+.dashboard-section {
+  padding: 30px;
+}
+
+.dashboard-section h2 {
+  color: #1da1b8;
+  margin-bottom: 30px;
+  font-size: 24px;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.action-group {
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #1da1b8;
+}
+
+.action-group h3 {
+  color: #1da1b8;
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+.action-group p {
   color: #666;
+  margin: 0 0 15px 0;
+  font-size: 14px;
+}
+
+.action-btn {
+  background: #1da1b8;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  width: 100%;
+  transition: all 0.3s;
+}
+
+.action-btn:hover {
+  background: #1a8399;
+  transform: translateY(-2px);
+}
+
+/* Fotos Grid */
+.fotos-section h2 {
+  color: #1da1b8;
+  margin-bottom: 20px;
+}
+
+.fotos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.foto-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.foto-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.foto-imagen {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: #f0f0f0;
+}
+
+.foto-imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.foto-info {
+  padding: 15px;
+}
+
+.foto-info h3 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.foto-info p {
+  margin: 4px 0;
+  color: #666;
+  font-size: 13px;
+}
+
+.foto-info .tipo {
+  font-weight: 600;
+  color: #1da1b8;
+}
+
+.foto-actions {
+  display: flex;
+  gap: 8px;
+  padding: 0 15px 15px 15px;
+}
+
+.btn-aprobar,
+.btn-rechazar {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.3s;
+}
+
+.btn-aprobar {
+  background: #4caf50;
+  color: white;
+}
+
+.btn-aprobar:hover {
+  background: #45a049;
+}
+
+.btn-rechazar {
+  background: #f44336;
+  color: white;
+}
+
+.btn-rechazar:hover {
+  background: #da190b;
+}
+
+/* Usuarios Section */
+.usuarios-section h2 {
+  color: #1da1b8;
+  margin-bottom: 20px;
+}
+
+.acciones {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-small {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.btn-small.bloquear {
+  background: #ff9800;
+  color: white;
+}
+
+.btn-small.bloquear:hover {
+  background: #f57c00;
+}
+
+.btn-small.desbloquear {
+  background: #4caf50;
+  color: white;
+}
+
+.btn-small.desbloquear:hover {
+  background: #45a049;
+}
+
+.btn-small.eliminar {
+  background: #f44336;
+  color: white;
+}
+
+.btn-small.eliminar:hover {
+  background: #da190b;
+}
+
+.badge.bloqueado {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.badge.activo {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* Auditoría */
+.auditoria-section h2 {
+  color: #1da1b8;
+  margin-bottom: 20px;
+}
+
+.auditoria-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.audit-entry {
+  padding: 15px;
+  background: #f8f9fa;
+  border-left: 4px solid #1da1b8;
+  border-radius: 4px;
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 15px;
+}
+
+.audit-time {
+  font-weight: 600;
+  color: #1da1b8;
+  font-size: 13px;
+}
+
+.audit-action {
+  color: #333;
+  font-weight: 600;
+}
+
+.audit-detalles {
+  color: #666;
+  font-size: 13px;
+  grid-column: 1 / -1;
+  margin-top: -10px;
+}
+
+.empty {
+  text-align: center;
+  color: #999;
+  padding: 30px;
+  font-size: 14px;
+}
+
+.logout-btn {
+  background: #dc3545 !important;
+  color: white !important;
+  border: none !important;
+  padding: 8px 16px !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  font-weight: 500 !important;
+}
+
+.logout-btn:hover {
+  background: #c82333 !important;
 }
 
 @media (max-width: 768px) {
@@ -179,5 +442,25 @@
   .admin-table th,
   .admin-table td {
     padding: 8px;
+  }
+
+  .fotos-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .audit-entry {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .acciones {
+    flex-direction: column;
+  }
+
+  .btn-small {
+    width: 100%;
   }
 }
