@@ -411,6 +411,28 @@
   font-size: 14px;
 }
 
+@media (max-width: 1024px) {
+  .cliente-container,
+  .profesional-container {
+    grid-template-columns: 1fr;
+  }
+
+  .cliente-perfil-sidebar,
+  .profesional-perfil-sidebar {
+    position: static;
+    width: 100%;
+  }
+
+  .dashboard-main {
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  .filtros {
+    width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
   .cards-container {
     grid-template-columns: 1fr;
@@ -418,16 +440,159 @@
 
   .perfil-card {
     grid-template-columns: 1fr;
+    padding: 20px;
   }
 
   .dashboard-tabs {
     flex-wrap: wrap;
+    padding: 10px;
+    gap: 8px;
   }
 
   .match-card {
     flex-direction: column;
     align-items: flex-start;
     gap: 15px;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 24px;
+  }
+
+  .dashboard-header button {
+    width: 100%;
+  }
+
+  .dashboard-content {
+    padding: 15px;
+  }
+
+  .filtros-top {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .select-servicio {
+    width: 100%;
+  }
+
+  .prof-card {
+    border-radius: 10px;
+  }
+
+  .card-foto {
+    height: 200px;
+  }
+
+  .perfil-info-compact h3 {
+    font-size: 18px;
+  }
+
+  .form-group input,
+  .form-group select {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .btn-aceptar,
+  .btn-rechazar,
+  .btn-editar,
+  .btn-guardar,
+  .btn-cancelar {
+    width: 100%;
+  }
+
+  .match-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-aceptar,
+  .btn-rechazar {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-header h1 {
+    font-size: 20px;
+  }
+
+  .dashboard-tabs button {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .prof-card {
+    margin: 0;
+  }
+
+  .card-header h3 {
+    font-size: 16px;
+  }
+
+  .card-info p {
+    font-size: 12px;
+  }
+
+  .btn-match {
+    margin: 0 10px 10px;
+    width: calc(100% - 20px);
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .perfil-foto {
+    width: 100%;
+    height: 250px;
+  }
+
+  .perfil-detalles h3 {
+    font-size: 20px;
+  }
+
+  .perfil-detalles p {
+    font-size: 13px;
+  }
+
+  .match-card {
+    padding: 15px;
+    border-left: 3px solid #17A2B8;
+  }
+
+  .match-info h3 {
+    font-size: 16px;
+  }
+
+  .estado-badge {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+
+  .cliente-card {
+    padding: 12px;
+    border-radius: 8px;
+  }
+
+  .cliente-card h3 {
+    font-size: 15px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn-guardar,
+  .btn-cancelar {
+    width: 100%;
+    padding: 10px;
   }
 }
 

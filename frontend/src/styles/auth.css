@@ -33,6 +33,46 @@
     padding: 25px 15px;
     margin: 0 10px;
   }
+
+  .auth-box h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+
+  .auth-box h2 {
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .auth-box input {
+    padding: 10px 12px;
+    font-size: 16px;
+  }
+
+  .auth-box button[type="submit"] {
+    padding: 11px;
+    font-size: 15px;
+  }
+
+  .tipo-selector {
+    gap: 8px;
+    margin-bottom: 15px;
+  }
+
+  .tipo-selector button {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .error-message {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .auth-box p {
+    font-size: 13px;
+    margin-top: 15px;
+  }
 }
 
 .logo-container {
