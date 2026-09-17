@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 .privacy-container {
   min-height: 100vh;
   background: #f5f7fa;
   padding: 40px 20px;
+  font-family: 'Poppins', sans-serif;
 }
 
 .privacy-content {
@@ -17,18 +20,22 @@
 
 .privacy-content h1 {
   color: #1da1b8;
-  font-size: 32px;
+  font-size: 38px;
   margin-bottom: 30px;
   text-align: center;
   border-bottom: 3px solid #1da1b8;
   padding-bottom: 15px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 .privacy-content h2 {
   color: #0d9488;
-  font-size: 20px;
+  font-size: 22px;
   margin-top: 30px;
   margin-bottom: 15px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
 }
 
 .privacy-content section {

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 .auth-container {
   display: flex;
   justify-content: center;
@@ -29,7 +31,11 @@
   text-align: center;
   color: #1da1b8;
   margin-bottom: 10px;
-  font-size: 32px;
+  font-size: 42px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  line-height: 1;
 }
 
 .auth-box h2 {
