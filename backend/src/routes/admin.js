@@ -159,4 +159,91 @@ router.post('/init-db', async (req, res) => {
   }
 });
 
+// Endpoint temporal para insertar datos de demo
+router.post('/seed', async (req, res) => {
+  try {
+    const bcrypt = require('bcryptjs');
+    const passwordHash = bcrypt.hashSync('DemoPassword123', 10);
+
+    // Limpiar usuarios anteriores (excepto admin)
+    db.prepare("DELETE FROM usuarios WHERE email NOT LIKE 'admin%'").run();
+
+    const fotosClientes = [
+      'https://i.pravatar.cc/150?img=1',
+      'https://i.pravatar.cc/150?img=2',
+      'https://i.pravatar.cc/150?img=3',
+    ];
+
+    const fotosProfesionales = [
+      'https://i.pravatar.cc/150?img=10',
+      'https://i.pravatar.cc/150?img=11',
+      'https://i.pravatar.cc/150?img=12',
+      'https://i.pravatar.cc/150?img=13',
+    ];
+
+    // Crear clientes
+    const clientesData = [
+      { nombre: 'María García', email: 'maria@demo.com', telefono: '600111111' },
+      { nombre: 'Juan López', email: 'juan@demo.com', telefono: '600222222' },
+      { nombre: 'Ana Martínez', email: 'ana@demo.com', telefono: '600333333' },
+    ];
+
+    const clienteIds = [];
+    clientesData.forEach((cliente, idx) => {
+      const result = db.prepare(`
+        INSERT INTO usuarios (nombre, email, telefono, tipo, foto_perfil_url, foto_verificada, email_verificado, telefono_verificado, password_hash)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(cliente.nombre, cliente.email, cliente.telefono, 'CLIENTE', fotosClientes[idx], 1, 1, 1, passwordHash);
+      clienteIds.push(result.lastInsertRowid);
+    });
+
+    // Crear profesionales
+    const profesionalesData = [
+      { nombre: 'Carlos López', email: 'carlos@demo.com', telefono: '600444444', precio: 25, experiencia: 'EXPERTO', servicios: [1, 2] },
+      { nombre: 'Elena Fernández', email: 'elena@demo.com', telefono: '600555555', precio: 35, experiencia: 'INTERMEDIO', servicios: [2, 3] },
+      { nombre: 'Miguel Rodríguez', email: 'miguel@demo.com', telefono: '600666666', precio: 20, experiencia: 'PRINCIPIANTE', servicios: [1, 4] },
+      { nombre: 'Isabel Gutiérrez', email: 'isabel@demo.com', telefono: '600777777', precio: 40, experiencia: 'EXPERTO', servicios: [3] },
+    ];
+
+    const profesionalIds = [];
+    profesionalesData.forEach((prof, idx) => {
+      const usuarioResult = db.prepare(`
+        INSERT INTO usuarios (nombre, email, telefono, tipo, foto_perfil_url, foto_verificada, email_verificado, telefono_verificado, password_hash)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(prof.nombre, prof.email, prof.telefono, 'PROFESIONAL', fotosProfesionales[idx], 1, 1, 1, passwordHash);
+
+      const usuarioId = usuarioResult.lastInsertRowid;
+      const profResult = db.prepare(`
+        INSERT INTO profesionales (usuario_id, precio_por_hora, nivel_experiencia, tiene_certificaciones)
+        VALUES (?, ?, ?, ?)
+      `).run(usuarioId, prof.precio, prof.experiencia, 1);
+
+      const profesionalId = profResult.lastInsertRowid;
+      profesionalIds.push(profesionalId);
+
+      prof.servicios.forEach(servicioId => {
+        db.prepare(`
+          INSERT INTO profesional_servicios (profesional_id, servicio_id)
+          VALUES (?, ?)
+        `).run(profesionalId, servicioId);
+      });
+    });
+
+    // Crear matches
+    db.prepare(`INSERT INTO matches (cliente_id, profesional_id, estado) VALUES (?, ?, ?)`).run(clienteIds[0], profesionalIds[0], 'PENDIENTE');
+    db.prepare(`INSERT INTO matches (cliente_id, profesional_id, estado) VALUES (?, ?, ?)`).run(clienteIds[1], profesionalIds[1], 'ACEPTADO');
+    db.prepare(`INSERT INTO matches (cliente_id, profesional_id, estado) VALUES (?, ?, ?)`).run(clienteIds[2], profesionalIds[2], 'PENDIENTE');
+
+    // Crear reseña
+    db.prepare(`INSERT INTO resenas (profesional_id, cliente_id, puntuacion, comentario) VALUES (?, ?, ?, ?)`).run(
+      profesionalIds[1], clienteIds[1], 5, 'Excelente trabajo, muy profesional'
+    );
+    db.prepare(`UPDATE profesionales SET valoracion_media = 5, total_resenas = 1 WHERE id = ?`).run(profesionalIds[1]);
+
+    res.json({ status: 'ok', message: 'Datos de demostración insertados' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
