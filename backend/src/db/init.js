@@ -6,7 +6,9 @@ function initDB() {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nombre TEXT NOT NULL,
       email TEXT UNIQUE NOT NULL,
+      email_verificado INTEGER DEFAULT 1,
       telefono TEXT NOT NULL,
+      telefono_verificado INTEGER DEFAULT 1,
       tipo TEXT NOT NULL CHECK (tipo IN ('CLIENTE', 'PROFESIONAL')),
       foto_perfil_url TEXT NOT NULL,
       foto_verificada INTEGER DEFAULT 0,
@@ -19,6 +21,17 @@ function initDB() {
       password_hash TEXT NOT NULL,
       creado_en DATETIME DEFAULT CURRENT_TIMESTAMP,
       actualizado_en DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS codigos_verificacion (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+      tipo TEXT NOT NULL CHECK (tipo IN ('EMAIL', 'TELEFONO')),
+      codigo TEXT NOT NULL,
+      valor_nuevo TEXT NOT NULL,
+      usado INTEGER DEFAULT 0,
+      expira_en DATETIME NOT NULL,
+      creado_en DATETIME DEFAULT CURRENT_TIMESTAMP
     );
 
     CREATE TABLE IF NOT EXISTS auditoria (

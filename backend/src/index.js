@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const { initDB } = require('./db/init');
 
 const authRoutes = require('./routes/auth');
+const perfilRoutes = require('./routes/perfil');
 const profesionalesRoutes = require('./routes/profesionales');
 const matchesRoutes = require('./routes/matches');
 const resenasRoutes = require('./routes/resenas');
@@ -35,6 +36,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/perfil', perfilRoutes);
 app.use('/api/profesionales', profesionalesRoutes);
 app.use('/api/matches', matchesRoutes);
 app.use('/api/resenas', resenasRoutes);
