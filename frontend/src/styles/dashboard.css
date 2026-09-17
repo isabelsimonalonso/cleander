@@ -92,8 +92,10 @@
 
 .card-header h3 {
   margin: 0;
-  color: #333;
+  color: #1a1a1a;
   font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
 }
 
 .tag-ofrezo {
@@ -124,14 +126,18 @@
 
 .card-info p {
   margin: 8px 0;
-  color: #666;
-  font-size: 14px;
+  color: #777;
+  font-size: 13px;
+  font-weight: 300;
+  letter-spacing: 0.1px;
+  line-height: 1.5;
 }
 
 .precio {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 500;
   color: #1da1b8;
+  letter-spacing: 0.1px;
 }
 
 .btn-match {
@@ -539,21 +545,36 @@
 }
 
 .perfil-info-compact h3 {
-  margin: 0;
-  font-size: 18px;
-  color: #333;
+  margin: 0 0 12px 0;
+  font-size: 20px;
+  color: #1a1a1a;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  line-height: 1.3;
 }
 
 .perfil-info-compact p {
-  margin: 0;
+  margin: 6px 0;
   font-size: 13px;
-  color: #666;
-  font-weight: 500;
+  color: #777;
+  font-weight: 300;
+  letter-spacing: 0.2px;
+  line-height: 1.5;
 }
 
 .perfil-info-compact .precio {
   color: #1da1b8;
-  font-weight: 600;
+  font-weight: 400;
+  font-size: 14px;
+  margin-top: 8px !important;
+  letter-spacing: 0.1px;
+}
+
+.perfil-info-compact .email,
+.perfil-info-compact .telefono,
+.perfil-info-compact .experiencia {
+  font-size: 12px;
+  color: #888;
 }
 
 .form-editar {
@@ -681,6 +702,22 @@
   background: white;
   border-color: #1da1b8;
   box-shadow: 0 2px 8px rgba(29, 161, 184, 0.1);
+}
+
+.cliente-card h3 {
+  margin: 0 0 8px 0;
+  color: #1a1a1a;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+}
+
+.cliente-card .email,
+.cliente-card .telefono {
+  font-size: 12px;
+  color: #888;
+  font-weight: 300;
+  letter-spacing: 0.1px;
 }
 
 .tag-busco {
