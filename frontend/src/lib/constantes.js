@@ -12,9 +12,30 @@ export const GRUPOS_SERVICIOS = [
       'Limpieza',
       'Limpieza de cristales',
       'Limpieza de fin de obra',
-      'Alquiler de robots de limpieza',
       'Planchado y lavandería',
       'Control de plagas',
+    ],
+  },
+  {
+    // Alquiler de máquinas, no mano de obra: quien ofrece presta el aparato
+    // y quien busca lo necesita unos días. El precio por hora se entiende
+    // como tarifa de alquiler.
+    grupo: 'Robótica y maquinaria en alquiler',
+    servicios: [
+      'Alquiler de robot aspirador',
+      'Alquiler de robot fregasuelos',
+      'Alquiler de robot limpiacristales',
+      'Alquiler de robot limpiafondos de piscina',
+      'Alquiler de robot cortacésped',
+      'Alquiler de aspirador industrial',
+      'Alquiler de máquina de vapor',
+      'Alquiler de hidrolimpiadora',
+      'Alquiler de abrillantadora de suelos',
+      'Alquiler de limpiamoquetas',
+      'Alquiler de deshumidificador',
+      'Alquiler de generador eléctrico',
+      'Alquiler de andamio o escalera',
+      'Alquiler de herramienta eléctrica',
     ],
   },
   {

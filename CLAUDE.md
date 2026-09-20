@@ -85,12 +85,17 @@ el frontend:
 - `trg_detectar_match` — si hay `like` en ambos sentidos, crea el match.
 
 ## Opciones predefinidas
-**Servicios:** 40 repartidos en 7 grupos, definidos en `src/lib/constantes.js`
+**Servicios:** 53 repartidos en 8 grupos, definidos en `src/lib/constantes.js`
 (`GRUPOS_SERVICIOS`). El desplegable los muestra agrupados con `optgroup`,
 porque una lista plana de cuarenta es inmanejable.
 
-Grupos: Limpieza y hogar · Instalaciones y averías · Obra y acabados ·
-Exteriores · Muebles y mudanzas · Cuidados a domicilio · Otros
+Grupos: Limpieza y hogar · Robótica y maquinaria en alquiler ·
+Instalaciones y averías · Obra y acabados · Exteriores ·
+Muebles y mudanzas · Cuidados a domicilio · Otros
+
+El grupo de alquiler no es mano de obra: quien ofrece presta el aparato y
+quien busca lo necesita unos días. El precio por hora se lee como tarifa
+de alquiler.
 
 En la base de datos se guarda el texto tal cual, así que añadir un servicio
 es escribir una línea en ese archivo. No hay migración.
