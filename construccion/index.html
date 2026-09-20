@@ -21,7 +21,6 @@
        el día que abramos tiene que reconocer el sitio. */
     :root {
       --turquesa: #24a4bc;
-      --turquesa-oscuro: #1b8299;
       --texto: #333;
     }
 
@@ -68,7 +67,7 @@
     }
 
     /* ── El mensaje ──────────────────────────────────────────────────── */
-    .aviso h1 {
+    h1 {
       max-width: 430px;
       font-size: clamp(20px, 5vw, 24px);
       font-weight: 500;
@@ -76,29 +75,12 @@
       letter-spacing: -0.3px;
     }
 
-    /* ── Pie: idioma y créditos ──────────────────────────────────────── */
-    .pie { display: flex; flex-direction: column; align-items: center; gap: 18px; }
-
-    .idiomas { display: flex; gap: 4px; }
-
-    .idiomas button {
-      border: 0;
-      background: none;
-      padding: 5px 9px;
-      border-radius: 7px;
-      font-family: inherit;
+    .copyright {
       font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.6px;
-      color: #c0c0c0;
-      cursor: pointer;
-      transition: color .2s, background .2s;
+      font-weight: 300;
+      color: #c4c4c4;
+      letter-spacing: 0.3px;
     }
-
-    .idiomas button:hover { color: var(--turquesa); }
-    .idiomas button[aria-pressed="true"] { color: var(--turquesa); background: rgba(36, 164, 188, 0.09); }
-
-    .copyright { font-size: 11px; font-weight: 300; color: #c4c4c4; letter-spacing: 0.3px; }
   </style>
 </head>
 
@@ -106,68 +88,16 @@
   <div class="marca">
     <img src="isotipo.png" alt="" draggable="false" />
     <span class="marca-nombre">CleanDerApp</span>
-    <span class="marca-lema" data-t="lema">Match de servicios domésticos</span>
+    <span class="marca-lema">Match de servicios domésticos</span>
   </div>
 
-  <div class="aviso">
-    <h1 data-t="titulo">Estamos terminándola</h1>
-  </div>
+  <h1>Estamos terminándola</h1>
 
-  <div class="pie">
-    <div class="idiomas">
-      <button type="button" data-idioma="es" aria-pressed="true">ES</button>
-      <button type="button" data-idioma="en" aria-pressed="false">EN</button>
-    </div>
+  <p class="copyright">© <span id="anyo">2026</span> CleanDerApp. Todos los derechos reservados.</p>
 
-    <p class="copyright"><span data-t="copyright">© 2026 CleanDerApp. Todos los derechos reservados.</span></p>
-  </div>
-
+  <!-- Lo único que no puede ir escrito a mano: se quedaría viejo solo. -->
   <script>
-    // Dos idiomas, sin dependencias: son cuatro frases.
-    const TEXTOS = {
-      es: {
-        titulo: 'Estamos terminándola',
-        lema: 'Match de servicios domésticos',
-        copyright: '© AÑO CleanDerApp. Todos los derechos reservados.',
-        pagina: 'CleanDerApp · En construcción',
-      },
-      en: {
-        titulo: 'We are still building it',
-        lema: 'Home services matchmaking',
-        copyright: '© AÑO CleanDerApp. All rights reserved.',
-        pagina: 'CleanDerApp · Under construction',
-      },
-    }
-
-    const ANYO = new Date().getFullYear()
-
-    function pintar(idioma) {
-      const textos = TEXTOS[idioma] ?? TEXTOS.es
-      document.documentElement.lang = idioma
-      document.title = textos.pagina
-
-      for (const nodo of document.querySelectorAll('[data-t]')) {
-        const texto = textos[nodo.dataset.t]
-        if (texto) nodo.innerHTML = texto.replace('AÑO', ANYO)
-      }
-
-      for (const boton of document.querySelectorAll('[data-idioma]')) {
-        boton.setAttribute('aria-pressed', String(boton.dataset.idioma === idioma))
-      }
-
-      try { localStorage.setItem('cleanderapp-idioma', idioma) } catch {}
-    }
-
-    // Lo que tenga guardado; si no, el del navegador; si no, español.
-    let inicial = 'es'
-    try { inicial = localStorage.getItem('cleanderapp-idioma') || inicial } catch {}
-    if (!TEXTOS[inicial]) inicial = navigator.language?.startsWith('en') ? 'en' : 'es'
-
-    pintar(inicial)
-
-    for (const boton of document.querySelectorAll('[data-idioma]')) {
-      boton.addEventListener('click', () => pintar(boton.dataset.idioma))
-    }
+    document.getElementById('anyo').textContent = new Date().getFullYear()
   </script>
 </body>
 </html>
