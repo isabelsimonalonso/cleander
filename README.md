@@ -145,13 +145,13 @@ segunda y haz lo mismo: aparecerá el aviso de match y los dos teléfonos.
 Mientras solo pruebas tú, nada de esto corre prisa. En cuanto se registre la
 primera persona real, es obligatorio:
 
-- [ ] **Correo de contacto.** Cambiar `CONTACTO` en
-      `frontend/src/pages/Privacy.jsx` por una dirección real y atendida.
-      Es donde llegan las denuncias de contenido ilícito y los derechos de
-      protección de datos. Sin un buzón atendido, la exención de
-      responsabilidad del artículo 16 LSSI-CE —la que protege de lo que
-      publiquen los usuarios— no se sostiene. Mientras siga entre corchetes,
-      la página legal avisa de que el servicio está en pruebas.
+- [x] ~~Correo de contacto~~ — **`info@cleanderapp.com`**, ya publicado en
+      el aviso legal.
+- [ ] **Que ese buzón exista y esté atendido.** Es donde llegan las denuncias
+      de contenido ilícito y los derechos de protección de datos. Sin alguien
+      leyéndolo, la exención de responsabilidad del artículo 16 LSSI-CE —la
+      que protege de lo que publiquen los usuarios— no se sostiene: depende
+      de poder enterarse de que hay contenido ilícito.
 - [ ] **Identificación del titular.** El artículo 10 de la Ley 34/2002
       (LSSI-CE) exige publicar además nombre o razón social, NIF y domicilio,
       y el artículo 13 del RGPD exige identificar a quien responde de los
