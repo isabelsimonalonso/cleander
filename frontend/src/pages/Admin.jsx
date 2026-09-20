@@ -61,6 +61,15 @@ export default function Admin() {
     cargar()
   }
 
+  // Cuántos textos esperan revisión, contando solo las filas que se listan.
+  // Va en la etiqueta de la casilla para que se vea qué hará al marcarla.
+  const pendientes = useMemo(
+    () => usuarios.filter(
+      (u) => u.id !== usuario.id && u.resumen && u.resumen_estado === 'pendiente'
+    ).length,
+    [usuarios, usuario.id]
+  )
+
   const visibles = useMemo(() => {
     const texto = busqueda.trim().toLowerCase()
     return usuarios.filter((u) => {
@@ -108,13 +117,15 @@ export default function Admin() {
             <option value="servicio">Servicios</option>
             <option value="admin">Administradores</option>
           </select>
-          <label className="campo-interruptor">
+          <label className={`campo-interruptor ${pendientes === 0 ? 'campo-interruptor--vacio' : ''}`}>
             <input
               type="checkbox"
               checked={soloPendientes}
+              disabled={pendientes === 0}
               onChange={(e) => setSoloPendientes(e.target.checked)}
             />
             Solo textos por revisar
+            <span className="contador-filtro">{pendientes}</span>
           </label>
           <button onClick={cargar}>Recargar</button>
         </div>
