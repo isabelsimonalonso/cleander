@@ -13,6 +13,7 @@ const PATRONES = [
   [/email not confirmed/i,              'errSinConfirmar'],
   [/already registered|already exists/i,'errCorreoUsado'],
   [/password should be at least/i,      'errContrasenaCorta'],
+  [/password should contain at least/i, 'errContrasenaCorta'],
   [/password.*(weak|compromised|pwned|leaked)/i, 'errContrasenaDebil'],
   [/same as the old|should be different/i, 'errContrasenaIgual'],
   [/invalid.*email|email address.*invalid/i, 'errCorreoInvalido'],

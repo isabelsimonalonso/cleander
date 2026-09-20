@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
-import { MIN_CONTRASENA } from '../lib/constantes'
+import { contrasenaValida } from '../lib/constantes'
 import { mensajeError } from '../lib/errores'
 import { useIdioma } from '../lib/i18n'
 
@@ -22,7 +22,7 @@ export default function CambiarClave({ onHecho, textoBoton }) {
     e.preventDefault()
     setError('')
 
-    if (clave.length < MIN_CONTRASENA) {
+    if (!contrasenaValida(clave)) {
       setError(t('errContrasenaCorta'))
       return
     }
@@ -51,7 +51,7 @@ export default function CambiarClave({ onHecho, textoBoton }) {
       <input
         type="password"
         autoComplete="new-password"
-        placeholder={t('contrasenaNueva')}
+        placeholder={t('contrasenaMinima')}
         value={clave}
         onChange={(e) => setClave(e.target.value)}
         required

@@ -288,10 +288,17 @@ export const LIMITE_RESUMEN = 150
 export const TAM_MAX_FOTO = 5 * 1024 * 1024 // 5 MB
 
 /**
- * Longitud mínima de contraseña. Supabase rechaza menos de 6 con un error
- * en inglés; comprobándolo aquí el aviso sale en el idioma de quien escribe.
+ * Reglas de contraseña. Tienen que ser LAS MISMAS que en Supabase
+ * (Authentication → Sign In / Providers → Email): ocho caracteres, con
+ * letras y números. Comprobándolas aquí, el aviso sale en el idioma de
+ * quien escribe en vez de llegar en inglés desde el servidor.
  */
-export const MIN_CONTRASENA = 6
+export const MIN_CONTRASENA = 8
+
+export const contrasenaValida = (valor) =>
+  (valor ?? '').length >= MIN_CONTRASENA &&
+  /[a-zA-Z]/.test(valor ?? '') &&
+  /\d/.test(valor ?? '')
 
 /**
  * Teléfono válido: empieza por + o por dígito y tiene al menos ocho cifras.

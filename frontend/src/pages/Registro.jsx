@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { supabase, subirFoto } from '../lib/supabase'
-import { LIMITE_RESUMEN, MIN_CONTRASENA, telefonoValido, unidadPrecio, unidadSugerida } from '../lib/constantes'
+import { LIMITE_RESUMEN, contrasenaValida, telefonoValido, unidadPrecio, unidadSugerida } from '../lib/constantes'
 import { mensajeError } from '../lib/errores'
 import Logo from '../components/Logo'
 import SelectorIdioma from '../components/SelectorIdioma'
@@ -66,7 +66,7 @@ export default function Registro() {
       setError(t('errUbicacion'))
       return
     }
-    if (datos.password.length < MIN_CONTRASENA) {
+    if (!contrasenaValida(datos.password)) {
       setError(t('errContrasenaCorta'))
       return
     }
