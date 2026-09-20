@@ -19,7 +19,7 @@ No hay pagos ni chat integrados.
 | Frontend | React 18 + Vite |
 | Rutas | react-router-dom con **HashRouter** |
 | Backend | **Supabase** (Postgres + Auth + Storage). No hay servidor propio. |
-| Hosting | GitHub Pages (`isabelsimonalonso.github.io/cleander/`) |
+| Hosting | GitHub Pages (`isabelsimonalonso.github.io/cleanderapp/`) |
 
 > No existe carpeta `backend/`. Se eliminó al migrar a Supabase: GitHub Pages
 > solo sirve archivos estáticos y no puede ejecutar Node.
@@ -27,7 +27,7 @@ No hay pagos ni chat integrados.
 ## Estructura
 
 ```
-cleander/
+cleanderapp/
 ├── .github/workflows/deploy.yml   # build + publicación automática en Pages
 ├── supabase/
 │   ├── 01_esquema.sql             # tablas, RLS, triggers, funciones, storage

@@ -80,7 +80,7 @@ Abre <http://localhost:3000>
 Con cada `push` a `main`, la acción compila y publica sola. La web queda en:
 
 ```
-https://isabelsimonalonso.github.io/cleander/
+https://isabelsimonalonso.github.io/cleanderapp/
 ```
 
 La configuración de Supabase para la web publicada vive en
