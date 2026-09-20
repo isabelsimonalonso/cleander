@@ -33,6 +33,27 @@ export default function Matches() {
     marcarMatchesVistos(usuario?.id)
   }, [marcarMatchesVistos, usuario?.id])
 
+  /** Quitarse un match de encima: dejáis de veros el teléfono. */
+  const eliminarMatch = async (m) => {
+    if (!confirm(
+      `¿Eliminar tu match con ${m.nombre}?\n\n` +
+      'Dejaréis de ver vuestros teléfonos y no volverá a aparecerte en ' +
+      'Descubrir. No se puede deshacer.'
+    )) return
+
+    const { error: errorEliminar } = await supabase.rpc('eliminar_match', { otro: m.id })
+
+    if (errorEliminar) {
+      setError(
+        errorEliminar.message.includes('Could not find the function')
+          ? 'Falta ejecutar supabase/15_deshacer_y_eliminar.sql en Supabase'
+          : errorEliminar.message
+      )
+      return
+    }
+    setLista((prev) => prev.filter((x) => x.id !== m.id))
+  }
+
   const pedirValoracion = async (otro, activar) => {
     if (enviando) return              // una petición cada vez
     setEnviando(otro)
