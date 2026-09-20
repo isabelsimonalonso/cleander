@@ -198,3 +198,8 @@
   color: #bbb !important;
   cursor: not-allowed;
 }
+
+.pastilla--admin {
+  background: #e3f4f7;
+  color: #1b8299;
+}

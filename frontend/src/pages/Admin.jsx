@@ -7,6 +7,11 @@ import '../styles/admin.css'
 
 const ETIQUETA_ROL = { admin: 'Admin', cliente: 'Cliente', servicio: 'Servicio' }
 
+// El rol admin NO se concede desde aquí: solo se puede corregir si alguien
+// se registró con el lado equivocado. Para nombrar a otro administrador hay
+// que entrar en Supabase y hacerlo por SQL, a propósito.
+const ROLES_ASIGNABLES = ['cliente', 'servicio']
+
 export default function Admin() {
   const { usuario } = useAuth()
   const [usuarios, setUsuarios] = useState([])
@@ -146,15 +151,18 @@ export default function Admin() {
                     </td>
 
                     <td>
-                      <select
-                        value={u.rol}
-                        disabled={u.id === usuario.id}
-                        onChange={(e) => actualizar(u.id, { rol: e.target.value })}
-                      >
-                        {Object.entries(ETIQUETA_ROL).map(([v, t]) => (
-                          <option key={v} value={v}>{t}</option>
-                        ))}
-                      </select>
+                      {u.rol === 'admin' ? (
+                        <span className="pastilla pastilla--admin">Admin</span>
+                      ) : (
+                        <select
+                          value={u.rol}
+                          onChange={(e) => actualizar(u.id, { rol: e.target.value })}
+                        >
+                          {ROLES_ASIGNABLES.map((v) => (
+                            <option key={v} value={v}>{ETIQUETA_ROL[v]}</option>
+                          ))}
+                        </select>
+                      )}
                     </td>
 
                     <td className="celda-contacto">
