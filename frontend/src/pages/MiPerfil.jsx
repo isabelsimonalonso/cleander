@@ -191,7 +191,7 @@ export default function MiPerfil() {
   return (
     <div className="app-layout">
       <NavApp />
-      <main className="app-main">
+      <main className="app-main app-main--perfil">
         <header className="app-cabecera">
           <h1>Mi perfil</h1>
           <p>Así te ven los demás. Tu teléfono nunca aparece sin match.</p>

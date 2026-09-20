@@ -99,6 +99,11 @@
   max-width: 1280px;
 }
 
+/* Mi perfil necesita sitio para sus dos columnas */
+.app-main--perfil {
+  max-width: 880px;
+}
+
 .app-cabecera {
   text-align: center;
   margin-bottom: 28px;
@@ -545,10 +550,11 @@
 .perfil-columnas {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 24px;
+  gap: 22px;
 }
 
 .perfil-formulario {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -556,6 +562,13 @@
   padding: 22px;
   border-radius: 14px;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+}
+
+.perfil-formulario input,
+.perfil-formulario select,
+.perfil-formulario textarea {
+  width: 100%;
+  max-width: 100%;
 }
 
 .perfil-formulario select,
@@ -601,7 +614,9 @@
 /* ── Responsive ──────────────────────────────────────────────────────── */
 @media (min-width: 860px) {
   .perfil-columnas {
-    grid-template-columns: 340px 1fr;
+    /* minmax(0, 1fr) y no 1fr: si no, las opciones largas del desplegable
+       de servicios ensanchan la columna y la rejilla se sale del ancho. */
+    grid-template-columns: 340px minmax(0, 1fr);
     align-items: start;
   }
 }
