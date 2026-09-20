@@ -1,7 +1,14 @@
 -- CLEANDER · Provincia y municipio · Parte B de 3
 -- La vista de tarjetas y el mazo pasan a filtrar por provincia y municipio.
 
-create or replace view public.tarjetas as
+-- Ojo: no vale CREATE OR REPLACE VIEW. Al insertar `provincia` delante de
+-- `ciudad` cambia el orden de las columnas, y Postgres lo rechaza como si
+-- fuera un renombrado. Hay que borrar la vista, y antes lo que depende de ella.
+drop function if exists public.descubrir(text, text, int);
+drop function if exists public.descubrir(text, text, text, int);
+drop view if exists public.tarjetas;
+
+create view public.tarjetas as
   select
     p.id, p.rol, p.nombre, p.provincia, p.ciudad, p.categoria, p.precio_hora,
     case when p.resumen_estado = 'aprobado' then p.resumen else '' end as resumen,
@@ -16,9 +23,7 @@ create or replace view public.tarjetas as
 revoke all on public.tarjetas from anon;
 grant select on public.tarjetas to authenticated;
 
-drop function if exists public.descubrir(text, text, int);
-
-create or replace function public.descubrir(
+create function public.descubrir(
   filtro_categoria text default null,
   filtro_provincia text default null,
   filtro_municipio text default null,
@@ -51,4 +56,6 @@ $$;
 revoke all on function public.descubrir(text, text, text, int) from anon, public;
 grant execute on function public.descubrir(text, text, text, int) to authenticated;
 
-select 'vista y descubrir actualizados' as resultado;
+notify pgrst, 'reload schema';
+
+select 'parte B lista' as resultado;
