@@ -157,7 +157,9 @@ primera persona real, es obligatorio:
       y el artículo 13 del RGPD exige identificar a quien responde de los
       datos. Se ha decidido publicar solo el correo; queda anotado como
       riesgo asumido.
-- [ ] **Cambiar la contraseña de `admin@cleander.app`**, desde
+- [ ] **Cambiar la contraseña de `admin@cleander.app`.** Durante las pruebas
+      es `123456`, y la web está publicada: cualquiera que la adivine ve todos
+      los teléfonos y puede borrar cuentas. Se cambia desde
       Supabase → *Authentication → Users*.
 - [ ] **Borrar las cuentas de prueba** (`cliente@` y `servicio@`) desde el
       panel de administración.

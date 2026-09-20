@@ -50,8 +50,8 @@ export default function Registro() {
       setError('Debes aceptar el aviso legal y la política de privacidad')
       return
     }
-    if (datos.password.length < 8) {
-      setError('La contraseña debe tener al menos 8 caracteres')
+    if (datos.password.length < 6) {
+      setError('La contraseña debe tener al menos 6 caracteres')
       return
     }
     if (!/^[+\d][\d\s]{7,}$/.test(datos.telefono.trim())) {
@@ -158,7 +158,7 @@ export default function Registro() {
           />
           <input
             type="password"
-            placeholder="Contraseña (mínimo 8 caracteres)"
+            placeholder="Contraseña (mínimo 6 caracteres)"
             value={datos.password}
             onChange={cambiar('password')}
             required
