@@ -1,4 +1,4 @@
-# Cleander
+# CleanDerApp
 
 Web tipo Tinder para servicios del hogar. Quien busca un servicio y quien lo
 ofrece se deslizan tarjetas; si hay interés **por las dos partes**, es **match**
@@ -151,4 +151,4 @@ npm run preview  # ver el resultado compilado
 
 ---
 
-© Cleander. Todos los derechos reservados.
+© CleanDerApp. Todos los derechos reservados.

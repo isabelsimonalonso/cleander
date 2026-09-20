@@ -1,4 +1,4 @@
-# Cleander — Match de servicios domésticos
+# CleanDerApp — Match de servicios domésticos
 
 ## Qué es
 Web tipo Tinder pero de servicios del hogar. Dos lados:

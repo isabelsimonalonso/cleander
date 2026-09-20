@@ -16,7 +16,7 @@ export default function NavApp() {
     <nav className="nav-app">
       <div className="nav-marca">
         <Logo size={30} />
-        <span>Cleander</span>
+        <span>CleanDerApp</span>
       </div>
 
       <div className="nav-enlaces">

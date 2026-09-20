@@ -9,7 +9,7 @@ export default function Privacy() {
         <section>
           <h2>1. Responsable del Tratamiento</h2>
           <p>
-            <strong>Cleander</strong> (en adelante, "la Aplicación")
+            <strong>CleanDerApp</strong> (en adelante, "la Aplicación")
             es responsable del tratamiento de datos personales conforme a la Ley Orgánica 3/2018 de Protección de Datos
             Personales y Garantía de Derechos Digitales (LOPD) y el Reglamento (UE) 2016/679 (GDPR).
           </p>

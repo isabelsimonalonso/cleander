@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer-content">
-        <p>© {currentYear} Cleander. Todos los derechos reservados.</p>
+        <p>© {currentYear} CleanDerApp. Todos los derechos reservados.</p>
         <div className="footer-links">
           <Link to="/privacidad">Privacidad</Link>
         </div>

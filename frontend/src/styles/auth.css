@@ -25,13 +25,30 @@
   text-align: center;
 }
 
-/* Aprox. la mitad del ancho de la tarjeta, que es lo que cuadra a la vista.
-   Sin ancho en línea en el JSX, o este clamp no se aplicaría. */
+/* El logo se compone aquí: la casa es imagen, el nombre es texto.
+   Proporciones tomadas del logo original (el nombre ocupa algo más de
+   ancho que el icono y alrededor de un tercio de su altura). */
 .logo-completo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.logo-completo-icono {
   display: block;
-  width: clamp(185px, 48vw, 235px);
+  width: clamp(104px, 27vw, 132px);
   height: auto;
-  filter: drop-shadow(0 6px 20px rgba(36, 164, 188, 0.14));
+  filter: drop-shadow(0 6px 18px rgba(36, 164, 188, 0.16));
+}
+
+.logo-completo-nombre {
+  color: var(--turquesa);
+  font-size: clamp(30px, 7.6vw, 38px);
+  font-weight: 600;
+  letter-spacing: -0.9px;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .auth-cabecera p {
