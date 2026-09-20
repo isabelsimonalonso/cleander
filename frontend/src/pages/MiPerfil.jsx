@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase, subirFoto, borrarFotosDe } from '../lib/supabase'
-import { COPY, LIMITE_RESUMEN, TAM_MAX_FOTO, unidadPrecio } from '../lib/constantes'
+import { COPY, LIMITE_RESUMEN, unidadPrecio } from '../lib/constantes'
 import { useAuth } from '../context/AuthContext'
 import NavApp from '../components/NavApp'
 import Tarjeta from '../components/Tarjeta'
 import SelectorUbicacion from '../components/SelectorUbicacion'
 import SelectorServicio from '../components/SelectorServicio'
+import SubirFoto from '../components/SubirFoto'
 import { IconoDescarga, IconoPapelera, IconoArchivar } from '../components/Iconos'
 import '../styles/app.css'
 
@@ -77,14 +78,7 @@ export default function MiPerfil() {
   const cambiar = (campo) => (e) =>
     setForm((prev) => ({ ...prev, [campo]: e.target.value }))
 
-  const cambiarFoto = async (e) => {
-    const archivo = e.target.files?.[0]
-    if (!archivo) return
-    if (archivo.size > TAM_MAX_FOTO) {
-      setError('La foto no puede pesar más de 5 MB')
-      return
-    }
-    setError('')
+  const cambiarFoto = async (archivo) => {
     setGuardando(true)
     try {
       const url = await subirFoto(archivo, usuario.id)
@@ -234,13 +228,12 @@ export default function MiPerfil() {
           </section>
 
           <form className="perfil-formulario" onSubmit={guardar}>
-            <label className="campo-etiqueta">Foto</label>
-            <input type="file" accept="image/*" onChange={cambiarFoto} />
-            {form.foto_url && (
-              <span className={`estado-resumen estado-resumen--${(ESTADO_FOTO[form.foto_estado] ?? ESTADO_FOTO.pendiente).clase}`}>
-                {(ESTADO_FOTO[form.foto_estado] ?? ESTADO_FOTO.pendiente).texto}
-              </span>
-            )}
+            <SubirFoto
+              vistaPrevia={form.foto_url}
+              estado={form.foto_url ? (ESTADO_FOTO[form.foto_estado] ?? ESTADO_FOTO.pendiente) : null}
+              onArchivo={cambiarFoto}
+              onError={setError}
+            />
 
             <label className="campo-etiqueta">Nombre</label>
             <input type="text" value={form.nombre} onChange={cambiar('nombre')} maxLength={80} required />

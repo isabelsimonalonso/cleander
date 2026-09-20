@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { supabase, subirFoto } from '../lib/supabase'
-import { COPY, LIMITE_RESUMEN, TAM_MAX_FOTO, unidadPrecio } from '../lib/constantes'
+import { COPY, LIMITE_RESUMEN, unidadPrecio } from '../lib/constantes'
 import Logo from '../components/Logo'
 import SelectorUbicacion from '../components/SelectorUbicacion'
 import SelectorServicio from '../components/SelectorServicio'
+import SubirFoto from '../components/SubirFoto'
 import '../styles/auth.css'
 
 export default function Registro() {
@@ -30,19 +31,11 @@ export default function Registro() {
   const cambiar = (campo) => (e) =>
     setDatos((prev) => ({ ...prev, [campo]: e.target.value }))
 
-  const elegirFoto = (e) => {
-    const archivo = e.target.files?.[0]
-    if (!archivo) return setFoto(null)
-    if (!archivo.type.startsWith('image/')) {
-      setError('La foto debe ser una imagen')
-      return
-    }
-    if (archivo.size > TAM_MAX_FOTO) {
-      setError('La foto no puede pesar más de 5 MB')
-      return
-    }
-    setError('')
+  const [previa, setPrevia] = useState(null)
+
+  const elegirFoto = (archivo) => {
     setFoto(archivo)
+    setPrevia(URL.createObjectURL(archivo))
   }
 
   const handleSubmit = async (e) => {
@@ -220,8 +213,11 @@ export default function Registro() {
             {datos.resumen.length}/{LIMITE_RESUMEN} · lo revisa el equipo antes de publicarse
           </span>
 
-          <label className="campo-etiqueta">Foto de perfil (recomendada)</label>
-          <input type="file" accept="image/*" onChange={elegirFoto} />
+          <SubirFoto
+            vistaPrevia={previa}
+            onArchivo={elegirFoto}
+            onError={setError}
+          />
 
           <label className="campo-acepto">
             <input

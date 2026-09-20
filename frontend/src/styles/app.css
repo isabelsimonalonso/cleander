@@ -1402,3 +1402,78 @@
 .zona-denuncias li {
   padding-right: 8px;
 }
+
+/* ── Zona de la foto: pulsar, arrastrar o pegar ──────────────────────── */
+.zona-foto {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border: 2px dashed #dcdcdc;
+  border-radius: 13px;
+  background: #fbfbfb;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.zona-foto:hover,
+.zona-foto:focus-visible {
+  border-color: var(--turquesa);
+  background: #f7fcfd;
+  outline: none;
+}
+
+.zona-foto--encima {
+  border-color: var(--turquesa);
+  border-style: solid;
+  background: #eaf7fa;
+}
+
+.zona-foto-previa,
+.zona-foto-hueco {
+  width: 62px;
+  height: 62px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.zona-foto-hueco {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eee;
+  color: #b0b0b0;
+  font-size: 11px;
+  font-weight: 300;
+}
+
+.zona-foto-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.zona-foto-texto strong {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--turquesa-oscuro);
+}
+
+.zona-foto-texto small {
+  font-size: 11.5px;
+  font-weight: 300;
+  line-height: 1.45;
+  color: #a0a0a0;
+}
+
+.estado-foto {
+  font-size: 11.5px;
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+.estado-foto--pendiente { color: #b8860b; }
+.estado-foto--aprobado  { color: #1b7a48; }
+.estado-foto--rechazado { color: #c33; }
