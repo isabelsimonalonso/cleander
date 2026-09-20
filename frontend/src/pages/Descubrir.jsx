@@ -9,7 +9,7 @@ import '../styles/app.css'
 const UMBRAL_ARRASTRE = 110 // píxeles que hay que arrastrar para que cuente
 
 export default function Descubrir() {
-  const { usuario, rol } = useAuth()
+  const { usuario, rol, refrescarMatchesNuevos } = useAuth()
   const [mazo, setMazo] = useState([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
@@ -63,7 +63,10 @@ export default function Descubrir() {
         .eq('usuario_a', a)
         .eq('usuario_b', b)
         .maybeSingle()
-      if (match) setMatchNuevo(actual)
+      if (match) {
+        setMatchNuevo(actual)
+        refrescarMatchesNuevos()
+      }
     }
 
     // Damos tiempo a que se vea la animación de salida

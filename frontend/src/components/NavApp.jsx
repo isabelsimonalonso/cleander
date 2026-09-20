@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import Logo from './Logo'
 
 export default function NavApp() {
-  const { rol, logout } = useAuth()
+  const { rol, logout, matchesNuevos } = useAuth()
   const navigate = useNavigate()
   const esAdmin = rol === 'admin'
 
@@ -26,7 +26,14 @@ export default function NavApp() {
         ) : (
           <>
             <NavLink to="/descubrir">Descubrir</NavLink>
-            <NavLink to="/matches">Matches</NavLink>
+            <NavLink to="/matches" className="nav-con-aviso">
+              Matches
+              {matchesNuevos > 0 && (
+                <span className="nav-aviso" aria-label={`${matchesNuevos} matches nuevos`}>
+                  {matchesNuevos}
+                </span>
+              )}
+            </NavLink>
             <NavLink to="/perfil">Mi perfil</NavLink>
           </>
         )}

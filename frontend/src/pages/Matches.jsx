@@ -7,7 +7,7 @@ import Estrellas from '../components/Estrellas'
 import '../styles/app.css'
 
 export default function Matches() {
-  const { usuario } = useAuth()
+  const { usuario, marcarMatchesVistos } = useAuth()
   const [lista, setLista] = useState([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
@@ -21,6 +21,25 @@ export default function Matches() {
   }, [])
 
   useEffect(() => { cargar() }, [cargar])
+
+  // Con solo abrir esta pantalla, el aviso rojo se apaga.
+  useEffect(() => {
+    marcarMatchesVistos(usuario?.id)
+  }, [marcarMatchesVistos, usuario?.id])
+
+  const pedirValoracion = async (otro, activar) => {
+    const { error: errorPeticion } = await supabase.rpc('pedir_valoracion', {
+      otro,
+      activar,
+    })
+    if (errorPeticion) {
+      setError(errorPeticion.message)
+      return
+    }
+    setLista((prev) =>
+      prev.map((m) => (m.id === otro ? { ...m, he_pedido_valoracion: activar } : m))
+    )
+  }
 
   const votar = async (destinatario, estrellas) => {
     const { error: errorVoto } = await supabase
@@ -62,13 +81,26 @@ export default function Matches() {
           {lista.map((m) => (
             <Tarjeta key={m.id} perfil={m} telefono={m.telefono}>
               <div className="votacion">
-                <span>Tu valoración</span>
+                <span>
+                  {m.puedo_valorar
+                    ? `${m.nombre.split(' ')[0]} te pide que le valores`
+                    : 'Aún no te ha pedido valoración'}
+                </span>
                 <Estrellas
                   valor={m.mi_voto ?? 0}
-                  onVotar={(n) => votar(m.id, n)}
+                  onVotar={m.puedo_valorar ? (n) => votar(m.id, n) : null}
                   tamano={22}
                 />
               </div>
+
+              <button
+                className={`boton-invitar ${m.he_pedido_valoracion ? 'boton-invitar--puesta' : ''}`}
+                onClick={() => pedirValoracion(m.id, !m.he_pedido_valoracion)}
+              >
+                {m.he_pedido_valoracion
+                  ? 'Valoración pedida · retirar'
+                  : 'Pedirle que me valore'}
+              </button>
             </Tarjeta>
           ))}
         </div>

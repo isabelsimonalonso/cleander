@@ -611,3 +611,80 @@
   color: #a8a8a8;
   font-weight: 300;
 }
+
+/* ── Aviso de matches sin ver ────────────────────────────────────────── */
+.nav-con-aviso {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.nav-aviso {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #e5484d;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  box-shadow: 0 2px 8px rgba(229, 72, 77, 0.38);
+  animation: latido-aviso 1.6s ease-in-out 3;
+}
+
+/* Sobre la pestaña activa el rojo se mantiene legible */
+.nav-enlaces a.active .nav-aviso {
+  background: white;
+  color: #e5484d;
+  box-shadow: none;
+}
+
+@keyframes latido-aviso {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.18); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-aviso { animation: none; }
+}
+
+/* ── Valoraciones por invitación ─────────────────────────────────────── */
+.votacion span {
+  flex: 1;
+  line-height: 1.4;
+}
+
+/* Sin invitación, las estrellas se ven apagadas y no responden */
+.estrellas:not(:has(.votable)) .estrella {
+  opacity: 0.75;
+}
+
+.boton-invitar {
+  width: 100%;
+  margin-top: 10px;
+  padding: 11px;
+  border-radius: 10px;
+  background: #f2f7f8;
+  color: var(--turquesa-oscuro);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.boton-invitar:hover {
+  background: #e4f1f4;
+}
+
+.boton-invitar--puesta {
+  background: #e3f4f7;
+  color: #1b8299;
+}
+
+.boton-invitar--puesta::before {
+  content: '✓ ';
+  font-weight: 600;
+}

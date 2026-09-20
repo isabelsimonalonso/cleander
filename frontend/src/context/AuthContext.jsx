@@ -7,6 +7,7 @@ export function AuthProvider({ children }) {
   const [sesion, setSesion] = useState(null)
   const [perfil, setPerfil] = useState(null)
   const [cargando, setCargando] = useState(true)
+  const [matchesNuevos, setMatchesNuevos] = useState(0)
 
   const cargarPerfil = useCallback(async (userId) => {
     if (!userId) {
@@ -25,6 +26,27 @@ export function AuthProvider({ children }) {
     return data ?? null
   }, [])
 
+  /** Cuántos matches han aparecido desde la última vez que miró. */
+  const refrescarMatchesNuevos = useCallback(async () => {
+    const { data, error } = await supabase.rpc('matches_nuevos')
+    if (error) {
+      // Si aún no se ha ejecutado 04_avisos_matches.sql, no molestamos.
+      setMatchesNuevos(0)
+      return
+    }
+    setMatchesNuevos(data ?? 0)
+  }, [])
+
+  /** Al entrar en Matches se dan todos por vistos y el aviso desaparece. */
+  const marcarMatchesVistos = useCallback(async (userId) => {
+    if (!userId) return
+    await supabase
+      .from('perfiles')
+      .update({ matches_vistos_en: new Date().toISOString() })
+      .eq('id', userId)
+    setMatchesNuevos(0)
+  }, [])
+
   useEffect(() => {
     let activo = true
 
@@ -32,6 +54,7 @@ export function AuthProvider({ children }) {
       if (!activo) return
       setSesion(data.session)
       await cargarPerfil(data.session?.user?.id)
+      if (data.session) await refrescarMatchesNuevos()
       if (activo) setCargando(false)
     })
 
@@ -43,6 +66,8 @@ export function AuthProvider({ children }) {
       setTimeout(async () => {
         if (!activo) return
         await cargarPerfil(nuevaSesion?.user?.id)
+        if (nuevaSesion) await refrescarMatchesNuevos()
+        else setMatchesNuevos(0)
         if (activo) setCargando(false)
       }, 0)
     })
@@ -51,12 +76,13 @@ export function AuthProvider({ children }) {
       activo = false
       sub.subscription.unsubscribe()
     }
-  }, [cargarPerfil])
+  }, [cargarPerfil, refrescarMatchesNuevos])
 
   const logout = useCallback(async () => {
     await supabase.auth.signOut()
     setPerfil(null)
     setSesion(null)
+    setMatchesNuevos(0)
   }, [])
 
   const refrescarPerfil = useCallback(
@@ -72,6 +98,9 @@ export function AuthProvider({ children }) {
     cargando,
     logout,
     refrescarPerfil,
+    matchesNuevos,
+    refrescarMatchesNuevos,
+    marcarMatchesVistos,
   }
 
   return <AuthContext.Provider value={valor}>{children}</AuthContext.Provider>
