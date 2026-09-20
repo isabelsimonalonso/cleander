@@ -11,8 +11,12 @@ const TITULAR = {
   nombre: '[NOMBRE O RAZÓN SOCIAL]',
   nif: '[NIF / CIF]',
   domicilio: '[DOMICILIO]',
-  email: 'contacto@cleander.app',
+  email: '[CORREO DE CONTACTO]',
 }
+
+/** Mientras queden huecos por rellenar, la página lo advierte en vez de
+ *  mostrar corchetes sueltos como si fuera una plantilla a medio hacer. */
+const PENDIENTE = Object.values(TITULAR).some((v) => v.startsWith('['))
 
 export default function Privacy() {
   const hoy = new Date().toLocaleDateString('es-ES')
@@ -21,6 +25,17 @@ export default function Privacy() {
     <div className="privacy-container">
       <div className="privacy-content">
         <h1>Aviso legal, condiciones de uso y privacidad</h1>
+
+        {PENDIENTE && (
+          <section className="aviso-pendiente">
+            <p>
+              <strong>Servicio en pruebas.</strong> CleanDerApp no está abierta al público
+              y todavía no presta servicio a usuarios reales. Los datos identificativos
+              del titular y el correo de contacto se publicarán antes de su puesta en
+              funcionamiento, conforme al artículo 10 de la Ley 34/2002.
+            </p>
+          </section>
+        )}
 
         <section className="aviso-destacado">
           <p>
@@ -32,11 +47,18 @@ export default function Privacy() {
 
         <section>
           <h2>1. Titular del servicio</h2>
-          <p>
-            <strong>{TITULAR.nombre}</strong> · NIF {TITULAR.nif}<br />
-            Domicilio: {TITULAR.domicilio}<br />
-            Contacto: <strong>{TITULAR.email}</strong>
-          </p>
+          {PENDIENTE ? (
+            <p className="tenue-legal">
+              Pendiente de publicar antes de la apertura al público: nombre o razón
+              social, NIF, domicilio y correo electrónico de contacto.
+            </p>
+          ) : (
+            <p>
+              <strong>{TITULAR.nombre}</strong> · NIF {TITULAR.nif}<br />
+              Domicilio: {TITULAR.domicilio}<br />
+              Contacto: <strong>{TITULAR.email}</strong>
+            </p>
+          )}
           <p>
             En adelante, «CleanDerApp» o «la Plataforma». El uso de la Plataforma implica
             la aceptación de este documento en su totalidad.

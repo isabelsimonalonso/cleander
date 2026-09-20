@@ -137,3 +137,24 @@
   color: var(--turquesa);
   font-weight: 500;
 }
+
+/* Aviso mientras faltan los datos obligatorios del titular */
+.aviso-pendiente {
+  background: #fff8e6;
+  border-left: 4px solid #d4a017;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+
+.aviso-pendiente p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #7a5c0a;
+}
+
+.tenue-legal {
+  color: #999;
+  font-style: italic;
+}

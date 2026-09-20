@@ -140,6 +140,31 @@ segunda y haz lo mismo: aparecerá el aviso de match y los dos teléfonos.
 
 ---
 
+## ⚠️ Antes de abrir la web a usuarios reales
+
+Mientras solo pruebas tú, nada de esto corre prisa. En cuanto se registre la
+primera persona real, es obligatorio:
+
+- [ ] **Datos del titular.** Rellenar `TITULAR` en
+      `frontend/src/pages/Privacy.jsx`: nombre o razón social, NIF, domicilio
+      y correo. Lo exige el artículo 10 de la Ley 34/2002 (LSSI-CE), y su
+      ausencia es infracción leve, sancionable con hasta 30.000 €.
+      Mientras queden sin rellenar, la página legal avisa de que el servicio
+      está en pruebas en lugar de mostrar los huecos.
+- [ ] **Correo de contacto operativo.** Es donde llegan las denuncias de
+      contenido ilícito y los derechos de protección de datos. Sin un buzón
+      atendido, la exención de responsabilidad del artículo 16 LSSI-CE
+      —la que te protege de lo que publiquen los usuarios— no se sostiene.
+- [ ] **Cambiar la contraseña de `admin@cleander.app`**, desde
+      Supabase → *Authentication → Users*.
+- [ ] **Borrar las cuentas de prueba** (`cliente@` y `servicio@`) desde el
+      panel de administración.
+- [ ] **Revisión legal.** El aviso legal cubre los riesgos evidentes, pero no
+      lo ha escrito un abogado. Para una plataforma que conecta desconocidos
+      y trata datos personales, conviene que alguien lo mire.
+
+---
+
 ## Comandos
 
 ```bash
