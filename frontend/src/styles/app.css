@@ -278,13 +278,12 @@
   letter-spacing: -0.3px;
 }
 
-/* La unidad, del mismo turquesa pero atenuada: el precio se lee como una
-   sola cosa, no como un número y una etiqueta gris pegada al lado. */
+/* La unidad, del mismo turquesa y a plena intensidad: el precio se lee
+   entero, «21 €/h», sin que la unidad parezca de segunda. */
 .tarjeta-precio small {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 400;
   color: var(--turquesa);
-  opacity: 0.6;
 }
 
 .tarjeta-categoria {
