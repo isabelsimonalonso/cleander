@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
-import { CATEGORIAS, COPY } from '../lib/constantes'
+import { COPY } from '../lib/constantes'
 import { PROVINCIAS, municipiosDe } from '../lib/ubicacion'
+import SelectorServicio from '../components/SelectorServicio'
 import { useAuth } from '../context/AuthContext'
 import NavApp from '../components/NavApp'
 import Tarjeta from '../components/Tarjeta'
@@ -126,14 +127,13 @@ export default function Descubrir() {
         </header>
 
         <div className="filtros">
-          <select
+          <SelectorServicio
             className="filtro-ancho"
             value={filtros.categoria}
+            requerido={false}
+            placeholder="Todos los servicios"
             onChange={(e) => setFiltros((f) => ({ ...f, categoria: e.target.value }))}
-          >
-            <option value="">Todos los servicios</option>
-            {CATEGORIAS.map((c) => <option key={c} value={c}>{c}</option>)}
-          </select>
+          />
           <select
             value={filtros.provincia}
             onChange={(e) =>

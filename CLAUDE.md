@@ -85,9 +85,19 @@ el frontend:
 - `trg_detectar_match` — si hay `like` en ambos sentidos, crea el match.
 
 ## Opciones predefinidas
-Categorías (en `src/lib/constantes.js`, deben coincidir con lo que se guarda):
-Limpieza · Alquiler de robots de limpieza · Fontanería · Electricidad ·
-Aire acondicionado · Reparaciones generales · Jardinería · Pintura · Mudanzas
+**Servicios:** 40 repartidos en 7 grupos, definidos en `src/lib/constantes.js`
+(`GRUPOS_SERVICIOS`). El desplegable los muestra agrupados con `optgroup`,
+porque una lista plana de cuarenta es inmanejable.
+
+Grupos: Limpieza y hogar · Instalaciones y averías · Obra y acabados ·
+Exteriores · Muebles y mudanzas · Cuidados a domicilio · Otros
+
+En la base de datos se guarda el texto tal cual, así que añadir un servicio
+es escribir una línea en ese archivo. No hay migración.
+
+**Ubicación:** provincia y municipio de lista cerrada, con el listado oficial
+del INE (52 provincias, 8.124 municipios) en `src/data/municipios.json`. Pesa
+124 kB y se carga aparte, solo al elegir provincia.
 
 ## Moderación
 El único texto libre es el **resumen** (máx. 150 caracteres). Nace como

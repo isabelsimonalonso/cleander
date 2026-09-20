@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { supabase, subirFoto } from '../lib/supabase'
-import { CATEGORIAS, COPY, LIMITE_RESUMEN, TAM_MAX_FOTO } from '../lib/constantes'
+import { COPY, LIMITE_RESUMEN, TAM_MAX_FOTO } from '../lib/constantes'
 import { useAuth } from '../context/AuthContext'
 import NavApp from '../components/NavApp'
 import Tarjeta from '../components/Tarjeta'
 import SelectorUbicacion from '../components/SelectorUbicacion'
+import SelectorServicio from '../components/SelectorServicio'
 import '../styles/app.css'
 
 const ESTADO_RESUMEN = {
@@ -19,10 +20,28 @@ export default function MiPerfil() {
   const [guardando, setGuardando] = useState(false)
   const [mensaje, setMensaje] = useState('')
   const [error, setError] = useState('')
+  const [valoracion, setValoracion] = useState({ media: 0, total: 0 })
 
   useEffect(() => {
     if (perfil) setForm(perfil)
   }, [perfil])
+
+  // Las estrellas que te han puesto, para que tu vista previa enseñe lo
+  // mismo que ven los demás en tu tarjeta.
+  useEffect(() => {
+    if (!usuario?.id) return
+    let activo = true
+    supabase
+      .from('valoraciones')
+      .select('estrellas')
+      .eq('destinatario', usuario.id)
+      .then(({ data }) => {
+        if (!activo || !data?.length) return
+        const suma = data.reduce((t, v) => t + v.estrellas, 0)
+        setValoracion({ media: suma / data.length, total: data.length })
+      })
+    return () => { activo = false }
+  }, [usuario?.id])
 
   if (!form) return <div className="pantalla-carga">Cargando…</div>
 
@@ -107,8 +126,8 @@ export default function MiPerfil() {
               perfil={{
                 ...form,
                 resumen: form.resumen_estado === 'aprobado' ? form.resumen : '',
-                valoracion_media: 0,
-                total_valoraciones: 0,
+                valoracion_media: valoracion.media,
+                total_valoraciones: valoracion.total,
               }}
             />
           </section>
@@ -130,9 +149,7 @@ export default function MiPerfil() {
             />
 
             <label className="campo-etiqueta">{copy.categoria}</label>
-            <select value={form.categoria} onChange={cambiar('categoria')}>
-              {CATEGORIAS.map((c) => <option key={c} value={c}>{c}</option>)}
-            </select>
+            <SelectorServicio value={form.categoria} onChange={cambiar('categoria')} />
 
             <label className="campo-etiqueta">{copy.precio} (€)</label>
             <input

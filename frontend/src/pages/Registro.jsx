@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { supabase, subirFoto } from '../lib/supabase'
-import { CATEGORIAS, COPY, LIMITE_RESUMEN, TAM_MAX_FOTO } from '../lib/constantes'
+import { COPY, LIMITE_RESUMEN, TAM_MAX_FOTO } from '../lib/constantes'
 import Logo from '../components/Logo'
 import SelectorUbicacion from '../components/SelectorUbicacion'
+import SelectorServicio from '../components/SelectorServicio'
 import '../styles/auth.css'
 
 export default function Registro() {
@@ -15,7 +16,7 @@ export default function Registro() {
     telefono: '',
     provincia: '',
     ciudad: '',
-    categoria: CATEGORIAS[0],
+    categoria: '',
     precio_hora: '',
     resumen: '',
   })
@@ -50,6 +51,10 @@ export default function Registro() {
 
     if (!acepto) {
       setError('Debes aceptar el aviso legal y la política de privacidad')
+      return
+    }
+    if (!datos.categoria) {
+      setError('Elige el servicio')
       return
     }
     if (!datos.provincia || !datos.ciudad) {
@@ -188,11 +193,7 @@ export default function Registro() {
           />
 
           <label className="campo-etiqueta">{copy.categoria}</label>
-          <select value={datos.categoria} onChange={cambiar('categoria')} required>
-            {CATEGORIAS.map((c) => (
-              <option key={c} value={c}>{c}</option>
-            ))}
-          </select>
+          <SelectorServicio value={datos.categoria} onChange={cambiar('categoria')} />
 
           <label className="campo-etiqueta">{copy.precio} (€)</label>
           <input
