@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase, subirFoto, borrarFotosDe } from '../lib/supabase'
-import { COPY, LIMITE_RESUMEN, unidadPrecio } from '../lib/constantes'
+import { COPY, LIMITE_RESUMEN, unidadPrecio, unidadSugerida } from '../lib/constantes'
 import { useAuth } from '../context/AuthContext'
 import NavApp from '../components/NavApp'
 import Tarjeta from '../components/Tarjeta'
@@ -185,6 +185,7 @@ export default function MiPerfil() {
         ciudad: form.ciudad,
         categoria: form.categoria,
         precio_hora: Number(form.precio_hora) || 0,
+        unidad_precio: form.unidad_precio ?? 'hora',
         resumen: (form.resumen ?? '').trim(),
         visible: form.visible,
       })
@@ -251,14 +252,20 @@ export default function MiPerfil() {
             <SelectorServicio value={form.categoria} onChange={cambiar('categoria')} />
 
             <label className="campo-etiqueta">
-              {copy.precio.replace('hora', unidadPrecio(form.categoria))} (€)
+              {copy.precio.replace('hora', unidadPrecio(form.unidad_precio))} (€)
             </label>
-            <input
-              type="number" min="0" max="1000" step="0.5"
-              value={form.precio_hora}
-              onChange={cambiar('precio_hora')}
-              required
-            />
+            <div className="precio-con-unidad">
+              <input
+                type="number" min="0" max="1000" step="0.5"
+                value={form.precio_hora}
+                onChange={cambiar('precio_hora')}
+                required
+              />
+              <select value={form.unidad_precio ?? 'hora'} onChange={cambiar('unidad_precio')}>
+                <option value="hora">por hora</option>
+                <option value="dia">por día</option>
+              </select>
+            </div>
 
             <label className="campo-etiqueta">Resumen</label>
             <textarea

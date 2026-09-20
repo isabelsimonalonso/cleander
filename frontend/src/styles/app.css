@@ -1479,3 +1479,42 @@
 .estado-foto--pendiente { color: #b8860b; }
 .estado-foto--aprobado  { color: #1b7a48; }
 .estado-foto--rechazado { color: #c33; }
+
+/* Precio y su unidad, en la misma línea */
+.precio-con-unidad {
+  display: flex;
+  gap: 8px;
+}
+
+.precio-con-unidad input { flex: 1; min-width: 0; }
+.precio-con-unidad select { flex: 0 0 auto; width: auto; }
+
+/* ── Redes sociales del pie ──────────────────────────────────────────── */
+.footer-redes {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.footer-redes a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  color: white;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.footer-redes a:hover {
+  background: rgba(255, 255, 255, 0.28);
+  transform: translateY(-2px);
+}
+
+.footer-redes svg {
+  width: 18px;
+  height: 18px;
+}

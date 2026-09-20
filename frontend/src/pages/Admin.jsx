@@ -350,7 +350,7 @@ export default function Admin() {
 
                     <td>
                       {u.categoria}
-                      <small>{Number(u.precio_hora).toFixed(0)} €{unidadCorta(u.categoria)}</small>
+                      <small>{Number(u.precio_hora).toFixed(0)} €{unidadCorta(u.unidad_precio)}</small>
                     </td>
 
                     <td className="celda-resumen">

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { supabase, subirFoto } from '../lib/supabase'
-import { COPY, LIMITE_RESUMEN, unidadPrecio } from '../lib/constantes'
+import { COPY, LIMITE_RESUMEN, unidadPrecio, unidadSugerida } from '../lib/constantes'
 import Logo from '../components/Logo'
 import SelectorUbicacion from '../components/SelectorUbicacion'
 import SelectorServicio from '../components/SelectorServicio'
@@ -19,6 +19,7 @@ export default function Registro() {
     ciudad: '',
     categoria: '',
     precio_hora: '',
+    unidad_precio: 'hora',
     resumen: '',
   })
   const [foto, setFoto] = useState(null)
@@ -28,8 +29,15 @@ export default function Registro() {
   const navigate = useNavigate()
   const copy = COPY[rol]
 
-  const cambiar = (campo) => (e) =>
-    setDatos((prev) => ({ ...prev, [campo]: e.target.value }))
+  const cambiar = (campo) => (e) => {
+    const valor = e.target.value
+    setDatos((prev) => ({
+      ...prev,
+      [campo]: valor,
+      // Al elegir un alquiler se propone «por día», pero se puede cambiar
+      ...(campo === 'categoria' ? { unidad_precio: unidadSugerida(valor) } : {}),
+    }))
+  }
 
   const [previa, setPrevia] = useState(null)
 
@@ -78,6 +86,7 @@ export default function Registro() {
           ciudad: datos.ciudad,
           categoria: datos.categoria,
           precio_hora: datos.precio_hora || '0',
+          unidad_precio: datos.unidad_precio,
           resumen: datos.resumen.trim(),
         },
       },
@@ -189,18 +198,24 @@ export default function Registro() {
           <SelectorServicio value={datos.categoria} onChange={cambiar('categoria')} />
 
           <label className="campo-etiqueta">
-            {copy.precio.replace('hora', unidadPrecio(datos.categoria))} (€)
+            {copy.precio.replace('hora', unidadPrecio(datos.unidad_precio))} (€)
           </label>
-          <input
-            type="number"
-            min="0"
-            max="1000"
-            step="0.5"
-            placeholder="15"
-            value={datos.precio_hora}
-            onChange={cambiar('precio_hora')}
-            required
-          />
+          <div className="precio-con-unidad">
+            <input
+              type="number"
+              min="0"
+              max="1000"
+              step="0.5"
+              placeholder="15"
+              value={datos.precio_hora}
+              onChange={cambiar('precio_hora')}
+              required
+            />
+            <select value={datos.unidad_precio} onChange={cambiar('unidad_precio')}>
+              <option value="hora">por hora</option>
+              <option value="dia">por día</option>
+            </select>
+          </div>
 
           <textarea
             placeholder={copy.resumenPlaceholder}

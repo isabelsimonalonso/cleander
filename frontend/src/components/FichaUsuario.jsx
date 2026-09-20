@@ -100,7 +100,7 @@ export default function FichaUsuario({ usuario, nombrePorId, onCerrar, onActuali
             {usuario.provincia && usuario.provincia !== usuario.ciudad ? `, ${usuario.provincia}` : ''}
           </Dato>
           <Dato etiqueta="Precio">
-            {Number(usuario.precio_hora).toFixed(0)} €{unidadCorta(usuario.categoria)}
+            {Number(usuario.precio_hora).toFixed(0)} €{unidadCorta(usuario.unidad_precio)}
           </Dato>
           <Dato etiqueta="Alta">{fecha(usuario.creado_en)}</Dato>
           <Dato etiqueta="Decisiones">

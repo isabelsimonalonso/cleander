@@ -120,11 +120,14 @@ const SERVICIOS_ALQUILER = new Set(
 
 export const esAlquiler = (categoria) => SERVICIOS_ALQUILER.has(categoria)
 
+/** Lo que se propone al elegir servicio; luego cada uno lo cambia. */
+export const unidadSugerida = (categoria) => (esAlquiler(categoria) ? 'dia' : 'hora')
+
 /** "hora" o "día", para las etiquetas de los formularios. */
-export const unidadPrecio = (categoria) => (esAlquiler(categoria) ? 'día' : 'hora')
+export const unidadPrecio = (unidad) => (unidad === 'dia' ? 'día' : 'hora')
 
 /** "/h" o "/día", para la esquina de la tarjeta. */
-export const unidadCorta = (categoria) => (esAlquiler(categoria) ? '/día' : '/h')
+export const unidadCorta = (unidad) => (unidad === 'dia' ? '/día' : '/h')
 
 export const ROLES = {
   CLIENTE: 'cliente',
@@ -155,6 +158,17 @@ export const COPY = {
  * Aparece en el aviso legal y en el mensaje de cuenta bloqueada.
  */
 export const CONTACTO = 'info@cleanderapp.com'
+
+/**
+ * Redes sociales del pie. Pon la dirección de cada una cuando la tengas;
+ * las que estén vacías no se muestran, así no hay iconos que no llevan
+ * a ninguna parte.
+ */
+export const REDES = [
+  { id: 'instagram', nombre: 'Instagram', url: '' },
+  { id: 'tiktok', nombre: 'TikTok', url: '' },
+  { id: 'facebook', nombre: 'Facebook', url: '' },
+]
 
 /** Motivos de denuncia. Lista cerrada, para poder filtrar y contar. */
 export const MOTIVOS_DENUNCIA = [

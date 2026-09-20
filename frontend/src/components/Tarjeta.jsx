@@ -62,7 +62,7 @@ export default function Tarjeta({ perfil, telefono = null, propio = false, child
           <h3>{perfil.nombre}</h3>
           <span className="tarjeta-precio">
             {Number(perfil.precio_hora).toFixed(0)} €
-            <small>{unidadCorta(perfil.categoria)}</small>
+            <small>{unidadCorta(perfil.unidad_precio)}</small>
           </span>
         </div>
 
