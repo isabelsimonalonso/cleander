@@ -340,24 +340,48 @@
 .tarjeta-whatsapp:hover { background: #1fb457; }
 
 /* ── El mazo y el gesto de deslizar ──────────────────────────────────── */
+/* Altura fija: así todas las tarjetas miden igual tengan foto o no, y la
+   de detrás no puede desbordarse por encima de los botones ni del pie. */
 .mazo {
   position: relative;
-  min-height: 460px;
+  height: clamp(500px, 70vh, 640px);
   touch-action: pan-y;
 }
 
-.mazo-fondo {
+.mazo-fondo,
+.mazo-frente {
   position: absolute;
   inset: 0;
+}
+
+.mazo-fondo {
   transform: scale(0.95) translateY(12px);
   opacity: 0.5;
   pointer-events: none;
+  overflow: hidden;
+  border-radius: 20px;
 }
 
 .mazo-frente {
-  position: relative;
   cursor: grab;
   user-select: none;
+}
+
+/* Dentro del mazo la tarjeta ocupa el alto exacto del contenedor:
+   la mitad para la foto y el resto para los datos. */
+.mazo .tarjeta {
+  height: 100%;
+}
+
+.mazo .tarjeta-foto {
+  flex: 0 0 50%;
+  aspect-ratio: auto;
+}
+
+.mazo .tarjeta-cuerpo {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .mazo-frente:active { cursor: grabbing; }
@@ -460,6 +484,15 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
+  align-items: stretch;
+}
+
+.rejilla .tarjeta {
+  height: 100%;
+}
+
+.rejilla .tarjeta-cuerpo {
+  flex: 1 1 auto;
 }
 
 .votacion {
