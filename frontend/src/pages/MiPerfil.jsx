@@ -31,6 +31,7 @@ export default function MiPerfil() {
   const [valoracion, setValoracion] = useState({ media: 0, total: 0 })
   const [confirmacion, setConfirmacion] = useState('')
   const [borrando, setBorrando] = useState(false)
+  const [verBorrado, setVerBorrado] = useState(false)
 
   useEffect(() => {
     if (perfil) setForm(perfil)
@@ -259,7 +260,10 @@ export default function MiPerfil() {
             </button>
           </form>
 
-          <section className="zona-datos">
+        </div>
+
+        <div className="perfil-extra">
+        <section className="zona-datos">
             <h2>Mis datos</h2>
             <p>
               Descarga todo lo que CleanDerApp guarda sobre ti: tu perfil, tus
@@ -268,9 +272,19 @@ export default function MiPerfil() {
             <button type="button" onClick={descargarDatos}>
               Descargar mis datos
             </button>
-          </section>
+        </section>
 
-          <section className="zona-peligro">
+        <section className="zona-peligro">
+          {!verBorrado ? (
+            <button
+              type="button"
+              className="abrir-borrado"
+              onClick={() => setVerBorrado(true)}
+            >
+              Eliminar mi cuenta
+            </button>
+          ) : (
+          <>
             <h2>Eliminar mi cuenta</h2>
             <p>
               Se borrarán tu perfil, tu foto, tus matches y tus valoraciones.
@@ -296,7 +310,16 @@ export default function MiPerfil() {
             >
               {borrando ? 'Eliminando…' : 'Eliminar mi cuenta definitivamente'}
             </button>
-          </section>
+            <button
+              type="button"
+              className="boton-retirar"
+              onClick={() => { setVerBorrado(false); setConfirmacion('') }}
+            >
+              Cancelar
+            </button>
+          </>
+          )}
+        </section>
         </div>
       </main>
     </div>

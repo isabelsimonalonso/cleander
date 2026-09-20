@@ -873,7 +873,6 @@
 
 /* ── Eliminar la cuenta ──────────────────────────────────────────────── */
 .zona-peligro {
-  margin-top: 26px;
   padding: 22px;
   border: 1px solid #f3d6d7;
   border-radius: 14px;
@@ -1140,8 +1139,15 @@
 }
 
 /* ── Descargar mis datos ─────────────────────────────────────────────── */
+/* Las dos secciones del pie, fuera de la rejilla y a todo lo ancho */
+.perfil-extra {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 28px;
+}
+
 .zona-datos {
-  margin-top: 26px;
   padding: 22px;
   border: 1px solid #e6eef0;
   border-radius: 14px;
@@ -1175,4 +1181,25 @@
 
 .zona-datos button:hover {
   background: #e2f1f4;
+}
+
+/* Un borrado de cuenta no debe estar siempre a la vista */
+.abrir-borrado {
+  width: 100%;
+  padding: 13px;
+  border-radius: 10px;
+  background: transparent;
+  color: #b4413f;
+  font-size: 13.5px;
+  font-weight: 400;
+  text-decoration: underline;
+}
+
+.abrir-borrado:hover {
+  background: #fdf0f0;
+  text-decoration: none;
+}
+
+.zona-peligro .boton-retirar {
+  align-self: center;
 }
