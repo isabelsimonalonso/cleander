@@ -5,7 +5,9 @@
   color: white;
   padding: 20px;
   text-align: center;
-  margin-top: 40px;
+  /* Sin margen: dejaba ver el fondo de la página entre el contenido y el
+     pie, y sobre el blanco del login se veía como una franja gris. El
+     espacio lo pone el relleno inferior de cada pantalla. */
   font-size: 14px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   font-family: 'Poppins', sans-serif;
@@ -53,7 +55,6 @@
 @media (max-width: 480px) {
   .footer {
     padding: 16px;
-    margin-top: 30px;
   }
 
   .footer-content p {
