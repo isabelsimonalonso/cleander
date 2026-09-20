@@ -107,6 +107,25 @@ export const GRUPOS_SERVICIOS = [
 /** Lista plana, para validar y para recorrer sin los grupos. */
 export const CATEGORIAS = GRUPOS_SERVICIOS.flatMap((g) => g.servicios)
 
+/**
+ * El alquiler se cobra por día, no por hora: nadie alquila una
+ * hidrolimpiadora sesenta minutos.
+ *
+ * En la base de datos la columna sigue llamándose `precio_hora` y guarda
+ * un número a secas; lo único que cambia es cómo se lee según el servicio.
+ */
+const SERVICIOS_ALQUILER = new Set(
+  GRUPOS_SERVICIOS.find((g) => g.grupo.includes('alquiler'))?.servicios ?? []
+)
+
+export const esAlquiler = (categoria) => SERVICIOS_ALQUILER.has(categoria)
+
+/** "hora" o "día", para las etiquetas de los formularios. */
+export const unidadPrecio = (categoria) => (esAlquiler(categoria) ? 'día' : 'hora')
+
+/** "/h" o "/día", para la esquina de la tarjeta. */
+export const unidadCorta = (categoria) => (esAlquiler(categoria) ? '/día' : '/h')
+
 export const ROLES = {
   CLIENTE: 'cliente',
   SERVICIO: 'servicio',

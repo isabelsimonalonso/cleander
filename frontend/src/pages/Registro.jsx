@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { supabase, subirFoto } from '../lib/supabase'
-import { COPY, LIMITE_RESUMEN, TAM_MAX_FOTO } from '../lib/constantes'
+import { COPY, LIMITE_RESUMEN, TAM_MAX_FOTO, unidadPrecio } from '../lib/constantes'
 import Logo from '../components/Logo'
 import SelectorUbicacion from '../components/SelectorUbicacion'
 import SelectorServicio from '../components/SelectorServicio'
@@ -195,7 +195,9 @@ export default function Registro() {
           <label className="campo-etiqueta">{copy.categoria}</label>
           <SelectorServicio value={datos.categoria} onChange={cambiar('categoria')} />
 
-          <label className="campo-etiqueta">{copy.precio} (€)</label>
+          <label className="campo-etiqueta">
+            {copy.precio.replace('hora', unidadPrecio(datos.categoria))} (€)
+          </label>
           <input
             type="number"
             min="0"

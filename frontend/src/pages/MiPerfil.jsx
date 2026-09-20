@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase, subirFoto } from '../lib/supabase'
-import { COPY, LIMITE_RESUMEN, TAM_MAX_FOTO } from '../lib/constantes'
+import { COPY, LIMITE_RESUMEN, TAM_MAX_FOTO, unidadPrecio } from '../lib/constantes'
 import { useAuth } from '../context/AuthContext'
 import NavApp from '../components/NavApp'
 import Tarjeta from '../components/Tarjeta'
@@ -151,7 +151,9 @@ export default function MiPerfil() {
             <label className="campo-etiqueta">{copy.categoria}</label>
             <SelectorServicio value={form.categoria} onChange={cambiar('categoria')} />
 
-            <label className="campo-etiqueta">{copy.precio} (€)</label>
+            <label className="campo-etiqueta">
+              {copy.precio.replace('hora', unidadPrecio(form.categoria))} (€)
+            </label>
             <input
               type="number" min="0" max="1000" step="0.5"
               value={form.precio_hora}

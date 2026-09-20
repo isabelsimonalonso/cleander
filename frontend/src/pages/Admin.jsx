@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
+import { unidadCorta } from '../lib/constantes'
 import NavApp from '../components/NavApp'
 import '../styles/app.css'
 import '../styles/admin.css'
@@ -183,7 +184,7 @@ export default function Admin() {
 
                     <td>
                       {u.categoria}
-                      <small>{Number(u.precio_hora).toFixed(0)} €/h</small>
+                      <small>{Number(u.precio_hora).toFixed(0)} €{unidadCorta(u.categoria)}</small>
                     </td>
 
                     <td className="celda-resumen">

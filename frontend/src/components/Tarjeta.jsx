@@ -1,4 +1,4 @@
-import { COPY } from '../lib/constantes'
+import { COPY, unidadCorta } from '../lib/constantes'
 import Estrellas from './Estrellas'
 import IconoWhatsApp from './IconoWhatsApp'
 
@@ -43,7 +43,8 @@ export default function Tarjeta({ perfil, telefono = null, propio = false, child
         <div className="tarjeta-cabecera">
           <h3>{perfil.nombre}</h3>
           <span className="tarjeta-precio">
-            {Number(perfil.precio_hora).toFixed(0)} €<small>/h</small>
+            {Number(perfil.precio_hora).toFixed(0)} €
+            <small>{unidadCorta(perfil.categoria)}</small>
           </span>
         </div>
 
