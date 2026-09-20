@@ -1,42 +1,84 @@
-import { createContext, useState, useContext, useEffect } from 'react'
+import { createContext, useContext, useEffect, useState, useCallback } from 'react'
+import { supabase } from '../lib/supabase'
 
-const AuthContext = createContext()
+const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
-  const [usuario, setUsuario] = useState(null)
-  const [token, setToken] = useState(localStorage.getItem('token'))
-  const [loading, setLoading] = useState(true)
+  const [sesion, setSesion] = useState(null)
+  const [perfil, setPerfil] = useState(null)
+  const [cargando, setCargando] = useState(true)
 
-  useEffect(() => {
-    if (token) {
-      localStorage.setItem('token', token)
-    } else {
-      localStorage.removeItem('token')
+  const cargarPerfil = useCallback(async (userId) => {
+    if (!userId) {
+      setPerfil(null)
+      return null
     }
-  }, [token])
+    // RLS hace que esta consulta solo pueda devolver TU propia fila.
+    const { data, error } = await supabase
+      .from('perfiles')
+      .select('*')
+      .eq('id', userId)
+      .maybeSingle()
 
-  useEffect(() => {
-    setLoading(false)
+    if (error) console.error('Error cargando perfil:', error.message)
+    setPerfil(data ?? null)
+    return data ?? null
   }, [])
 
-  const login = (usuarioData, tokenData) => {
-    setUsuario(usuarioData)
-    setToken(tokenData)
-  }
+  useEffect(() => {
+    let activo = true
 
-  const logout = () => {
-    setUsuario(null)
-    setToken(null)
-    localStorage.removeItem('token')
-  }
+    supabase.auth.getSession().then(async ({ data }) => {
+      if (!activo) return
+      setSesion(data.session)
+      await cargarPerfil(data.session?.user?.id)
+      if (activo) setCargando(false)
+    })
 
-  return (
-    <AuthContext.Provider value={{ usuario, token, loading, login, logout }}>
-      {children}
-    </AuthContext.Provider>
+    const { data: sub } = supabase.auth.onAuthStateChange((_evento, nuevaSesion) => {
+      if (!activo) return
+      setSesion(nuevaSesion)
+      // Ojo: llamar a supabase DENTRO de este callback puede bloquear el
+      // cliente. Por eso la consulta se saca del callback con setTimeout(0).
+      setTimeout(async () => {
+        if (!activo) return
+        await cargarPerfil(nuevaSesion?.user?.id)
+        if (activo) setCargando(false)
+      }, 0)
+    })
+
+    return () => {
+      activo = false
+      sub.subscription.unsubscribe()
+    }
+  }, [cargarPerfil])
+
+  const logout = useCallback(async () => {
+    await supabase.auth.signOut()
+    setPerfil(null)
+    setSesion(null)
+  }, [])
+
+  const refrescarPerfil = useCallback(
+    () => cargarPerfil(sesion?.user?.id),
+    [cargarPerfil, sesion]
   )
+
+  const valor = {
+    sesion,
+    usuario: sesion?.user ?? null,
+    perfil,
+    rol: perfil?.rol ?? null,
+    cargando,
+    logout,
+    refrescarPerfil,
+  }
+
+  return <AuthContext.Provider value={valor}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {
-  return useContext(AuthContext)
+  const ctx = useContext(AuthContext)
+  if (!ctx) throw new Error('useAuth debe usarse dentro de <AuthProvider>')
+  return ctx
 }

@@ -34,3 +34,13 @@ logs/
 # Database
 *.sqlite
 *.sqlite3
+
+# Build de Vite
+frontend/dist/
+
+# Credenciales locales (repo publico)
+CREDENCIALES.local.md
+*.local.md
+
+# Worktrees y ajustes locales de Claude Code
+.claude/

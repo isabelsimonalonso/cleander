@@ -1,0 +1,522 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   CLEANDER · Estilos de la aplicación (tarjetas, navegación, perfil)
+   Paleta: turquesa #1da1b8 · verde azulado #0d9488
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.raiz-contenido {
+  flex: 1;
+}
+
+.pantalla-carga {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  color: #777;
+  font-weight: 300;
+  padding: 24px;
+  text-align: center;
+}
+
+/* ── Navegación ──────────────────────────────────────────────────────── */
+.nav-app {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  background: white;
+  border-bottom: 1px solid #e8e8e8;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.nav-marca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #1da1b8;
+  font-size: 18px;
+}
+
+.nav-enlaces {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.nav-enlaces a {
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #555;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.nav-enlaces a:hover {
+  background: #f0fbfd;
+  color: #1da1b8;
+}
+
+.nav-enlaces a.active {
+  background: #1da1b8;
+  color: white;
+  font-weight: 500;
+}
+
+.nav-salir {
+  background: transparent;
+  color: #999;
+  font-size: 14px;
+  padding: 8px 12px;
+}
+
+.nav-salir:hover {
+  color: #c33;
+}
+
+/* ── Estructura de página ────────────────────────────────────────────── */
+.app-main {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.app-main--ancho {
+  max-width: 1280px;
+}
+
+.app-cabecera {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.app-cabecera h1 {
+  font-size: 26px;
+  font-weight: 500;
+  color: #222;
+  letter-spacing: -0.3px;
+}
+
+.app-cabecera p {
+  color: #888;
+  font-size: 14px;
+  font-weight: 300;
+  margin-top: 4px;
+}
+
+.filtros {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filtros select,
+.filtros input {
+  flex: 1;
+  min-width: 150px;
+  background: white;
+  font-size: 15px;
+}
+
+.aviso {
+  padding: 12px 14px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.aviso--error { background: #fee; color: #c33; }
+.aviso--ok    { background: #e7f8ef; color: #1b7a48; }
+
+.tenue { color: #aaa; font-weight: 300; }
+
+/* ── Tarjeta ─────────────────────────────────────────────────────────── */
+.tarjeta {
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.10);
+  display: flex;
+  flex-direction: column;
+}
+
+.tarjeta-foto {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, #1da1b8 0%, #0d9488 100%);
+}
+
+.tarjeta-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.tarjeta-iniciales {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 56px;
+  font-weight: 300;
+  letter-spacing: 2px;
+}
+
+.tarjeta-etiqueta {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: white;
+  backdrop-filter: blur(4px);
+}
+
+.tarjeta-etiqueta--servicio { background: rgba(13, 148, 136, 0.92); }
+.tarjeta-etiqueta--cliente  { background: rgba(217, 119, 6, 0.92); }
+
+.tarjeta-cuerpo {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tarjeta-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.tarjeta-cabecera h3 {
+  font-size: 21px;
+  font-weight: 500;
+  color: #222;
+  letter-spacing: -0.3px;
+}
+
+.tarjeta-precio {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1da1b8;
+  white-space: nowrap;
+}
+
+.tarjeta-precio small {
+  font-size: 13px;
+  font-weight: 400;
+  color: #999;
+}
+
+.tarjeta-categoria {
+  font-size: 15px;
+  color: #0d9488;
+  font-weight: 500;
+}
+
+.tarjeta-ciudad {
+  font-size: 14px;
+  color: #888;
+  font-weight: 300;
+}
+
+.tarjeta-resumen {
+  font-size: 14px;
+  color: #555;
+  font-weight: 300;
+  line-height: 1.5;
+  border-left: 3px solid #e3f4f7;
+  padding-left: 10px;
+}
+
+/* ── Estrellas ───────────────────────────────────────────────────────── */
+.estrellas {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.estrella { color: #ddd; line-height: 1; }
+.estrella.llena { color: #f5b301; }
+.estrella.votable { cursor: pointer; transition: transform .1s; }
+.estrella.votable:hover { transform: scale(1.2); }
+
+.estrellas-total {
+  font-size: 13px;
+  color: #999;
+  margin-left: 6px;
+  font-weight: 300;
+}
+
+/* ── Teléfono oculto / revelado ──────────────────────────────────────── */
+.tarjeta-telefono {
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.tarjeta-telefono-oculto {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pixelado {
+  filter: blur(5px);
+  user-select: none;
+  pointer-events: none;
+  font-size: 17px;
+  color: #444;
+  width: fit-content;
+}
+
+.tarjeta-telefono-oculto small {
+  font-size: 12px;
+  color: #aaa;
+  font-weight: 300;
+}
+
+.tarjeta-whatsapp {
+  display: inline-block;
+  background: #25d366;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.tarjeta-whatsapp:hover { background: #1fb457; }
+
+/* ── El mazo y el gesto de deslizar ──────────────────────────────────── */
+.mazo {
+  position: relative;
+  min-height: 460px;
+  touch-action: pan-y;
+}
+
+.mazo-fondo {
+  position: absolute;
+  inset: 0;
+  transform: scale(0.95) translateY(12px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.mazo-frente {
+  position: relative;
+  cursor: grab;
+  user-select: none;
+}
+
+.mazo-frente:active { cursor: grabbing; }
+
+.mazo-vacio {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+  font-weight: 300;
+}
+
+.mazo-vacio button {
+  margin-top: 16px;
+  background: #1da1b8;
+  color: white;
+}
+
+.sello {
+  position: absolute;
+  top: 28px;
+  padding: 8px 18px;
+  border: 3px solid;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 1px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.sello--like { right: 22px; color: #0d9488; border-color: #0d9488; transform: rotate(14deg); }
+.sello--pass { left: 22px;  color: #c33;    border-color: #c33;    transform: rotate(-14deg); }
+
+.acciones {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  margin-top: 24px;
+}
+
+.accion {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  font-size: 26px;
+  background: white;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.accion--pass { color: #c33; }
+.accion--like { color: #0d9488; }
+.accion:hover { transform: scale(1.08); opacity: 1; }
+
+/* ── Aviso de match ──────────────────────────────────────────────────── */
+.modal-match {
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 148, 136, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 20px;
+}
+
+.modal-match-caja {
+  background: white;
+  border-radius: 18px;
+  padding: 36px 28px;
+  text-align: center;
+  max-width: 380px;
+}
+
+.modal-match-caja h2 {
+  font-size: 30px;
+  color: #1da1b8;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.modal-match-caja p {
+  color: #666;
+  font-weight: 300;
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+.modal-match-caja button {
+  background: #1da1b8;
+  color: white;
+  padding: 12px 28px;
+}
+
+/* ── Rejilla de matches ──────────────────────────────────────────────── */
+.rejilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.votacion {
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.votacion span {
+  font-size: 13px;
+  color: #888;
+  font-weight: 300;
+}
+
+/* ── Mi perfil ───────────────────────────────────────────────────────── */
+.perfil-columnas {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.perfil-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: white;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+}
+
+.perfil-formulario select,
+.perfil-formulario textarea {
+  font-family: inherit;
+  font-size: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+}
+
+.perfil-formulario button[type="submit"] {
+  background: #1da1b8;
+  color: white;
+  font-weight: 500;
+  padding: 12px;
+  margin-top: 6px;
+}
+
+.campo-interruptor {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #555;
+  font-weight: 300;
+  cursor: pointer;
+}
+
+.campo-interruptor input { width: auto; }
+
+.estado-resumen {
+  font-size: 12px;
+  font-weight: 300;
+  margin-top: -8px;
+}
+
+.estado-resumen--pendiente { color: #b8860b; }
+.estado-resumen--aprobado  { color: #1b7a48; }
+.estado-resumen--rechazado { color: #c33; }
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+@media (min-width: 860px) {
+  .perfil-columnas {
+    grid-template-columns: 340px 1fr;
+    align-items: start;
+  }
+}
+
+@media (max-width: 520px) {
+  .nav-marca span { display: none; }
+  .nav-enlaces a { padding: 8px 10px; font-size: 14px; }
+  .app-main { padding: 16px 12px 40px; }
+}
