@@ -613,12 +613,22 @@
 
 /* ── Responsive ──────────────────────────────────────────────────────── */
 @media (min-width: 860px) {
+  /* El formulario es mucho más alto que la tarjeta, así que lo secundario
+     va debajo de ella: llena ese hueco en vez de dejar un vacío. */
   .perfil-columnas {
     /* minmax(0, 1fr) y no 1fr: si no, las opciones largas del desplegable
        de servicios ensanchan la columna y la rejilla se sale del ancho. */
     grid-template-columns: 340px minmax(0, 1fr);
+    grid-template-areas:
+      "tarjeta formulario"
+      "extra   formulario";
+    grid-template-rows: auto 1fr;
     align-items: start;
   }
+
+  .perfil-vista-previa { grid-area: tarjeta; }
+  .perfil-formulario   { grid-area: formulario; }
+  .perfil-extra        { grid-area: extra; margin-top: 0; }
 }
 
 @media (max-width: 520px) {
@@ -888,7 +898,7 @@
 
 /* ── Eliminar la cuenta ──────────────────────────────────────────────── */
 .zona-peligro {
-  padding: 22px;
+  padding: 18px;
   border: 1px solid #f3d6d7;
   border-radius: 14px;
   background: #fffafa;
@@ -1155,15 +1165,20 @@
 
 /* ── Descargar mis datos ─────────────────────────────────────────────── */
 /* Las dos secciones del pie, fuera de la rejilla y a todo lo ancho */
+/* En una columna: tarjeta, formulario y al final lo secundario. Lo que
+   se usa a diario primero; borrarse la cuenta, lo último. */
 .perfil-extra {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  margin-top: 28px;
+  order: 3;
 }
 
+.perfil-formulario { order: 2; }
+.perfil-vista-previa { order: 1; }
+
 .zona-datos {
-  padding: 22px;
+  padding: 18px;
   border: 1px solid #e6eef0;
   border-radius: 14px;
   background: #fbfdfd;
@@ -1221,7 +1236,7 @@
 
 /* ── Mis denuncias ───────────────────────────────────────────────────── */
 .zona-denuncias {
-  padding: 22px;
+  padding: 18px;
   border: 1px solid #f0e6d6;
   border-radius: 14px;
   background: #fffdf9;

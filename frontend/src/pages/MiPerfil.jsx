@@ -274,8 +274,6 @@ export default function MiPerfil() {
             </button>
           </form>
 
-        </div>
-
         <div className="perfil-extra">
         {misDenuncias.length > 0 && (
           <section className="zona-denuncias">
@@ -357,6 +355,7 @@ export default function MiPerfil() {
           </>
           )}
         </section>
+        </div>
         </div>
       </main>
     </div>
