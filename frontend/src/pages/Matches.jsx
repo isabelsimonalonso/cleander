@@ -11,6 +11,7 @@ export default function Matches() {
   const [lista, setLista] = useState([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
+  const [enviando, setEnviando] = useState(null)   // id del match en curso
 
   const cargar = useCallback(async () => {
     setCargando(true)
@@ -28,14 +29,30 @@ export default function Matches() {
   }, [marcarMatchesVistos, usuario?.id])
 
   const pedirValoracion = async (otro, activar) => {
-    const { error: errorPeticion } = await supabase.rpc('pedir_valoracion', {
+    if (enviando) return              // una petición cada vez
+    setEnviando(otro)
+    setError('')
+
+    const { data, error: errorPeticion } = await supabase.rpc('pedir_valoracion', {
       otro,
       activar,
     })
+
+    setEnviando(null)
+
     if (errorPeticion) {
-      setError(errorPeticion.message)
+      setError(
+        errorPeticion.message.includes('Could not find the function')
+          ? 'Falta ejecutar supabase/05_valoraciones_por_invitacion.sql en Supabase'
+          : errorPeticion.message
+      )
       return
     }
+    if (data === false) {
+      setError('No se encontró ese match')
+      return
+    }
+
     setLista((prev) =>
       prev.map((m) => (m.id === otro ? { ...m, he_pedido_valoracion: activar } : m))
     )
@@ -93,14 +110,26 @@ export default function Matches() {
                 />
               </div>
 
-              <button
-                className={`boton-invitar ${m.he_pedido_valoracion ? 'boton-invitar--puesta' : ''}`}
-                onClick={() => pedirValoracion(m.id, !m.he_pedido_valoracion)}
-              >
-                {m.he_pedido_valoracion
-                  ? 'Valoración pedida · retirar'
-                  : 'Pedirle que me valore'}
-              </button>
+              {m.he_pedido_valoracion ? (
+                <div className="invitacion-enviada">
+                  <span>Petición de valoración enviada</span>
+                  <button
+                    className="boton-retirar"
+                    disabled={enviando === m.id}
+                    onClick={() => pedirValoracion(m.id, false)}
+                  >
+                    {enviando === m.id ? 'Retirando…' : 'Retirar'}
+                  </button>
+                </div>
+              ) : (
+                <button
+                  className="boton-invitar"
+                  disabled={enviando === m.id}
+                  onClick={() => pedirValoracion(m.id, true)}
+                >
+                  {enviando === m.id ? 'Enviando…' : 'Pedirle que me valore'}
+                </button>
+              )}
             </Tarjeta>
           ))}
         </div>
