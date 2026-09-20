@@ -1,174 +1,292 @@
 import '../styles/privacy.css'
 
+/**
+ * Aviso legal, condiciones de uso y política de privacidad.
+ *
+ * IMPORTANTE: rellena TITULAR antes de abrir la web al público. La Ley
+ * 34/2002 (LSSI-CE, art. 10) obliga a identificar a quien presta el
+ * servicio con nombre, NIF y una dirección de contacto reales.
+ */
+const TITULAR = {
+  nombre: '[NOMBRE O RAZÓN SOCIAL]',
+  nif: '[NIF / CIF]',
+  domicilio: '[DOMICILIO]',
+  email: 'contacto@cleander.app',
+}
+
 export default function Privacy() {
+  const hoy = new Date().toLocaleDateString('es-ES')
+
   return (
     <div className="privacy-container">
       <div className="privacy-content">
-        <h1>Política de Privacidad y Protección de Datos</h1>
+        <h1>Aviso legal, condiciones de uso y privacidad</h1>
 
-        <section>
-          <h2>1. Responsable del Tratamiento</h2>
+        <section className="aviso-destacado">
           <p>
-            <strong>CleanDerApp</strong> (en adelante, "la Aplicación")
-            es responsable del tratamiento de datos personales conforme a la Ley Orgánica 3/2018 de Protección de Datos
-            Personales y Garantía de Derechos Digitales (LOPD) y el Reglamento (UE) 2016/679 (GDPR).
+            <strong>Resumen en una línea:</strong> CleanDerApp es un tablón que pone en
+            contacto a particulares. No participa en los servicios que se acuerden, no
+            los supervisa y no responde de ellos ni de lo que cada usuario publique.
           </p>
         </section>
 
         <section>
-          <h2>2. Datos Personales Recopilados</h2>
-          <p>La Aplicación recopila los siguientes datos personales:</p>
-          <ul>
-            <li>Nombre completo</li>
-            <li>Email (verificado)</li>
-            <li>Teléfono (verificado)</li>
-            <li>Foto de perfil (verificada por administrador)</li>
-            <li>Tipo de usuario (Cliente/Profesional)</li>
-            <li>Datos de ubicación (opcional)</li>
-            <li>Historial de servicios y transacciones</li>
-            <li>Valoraciones y reseñas</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2>3. Base Jurídica del Tratamiento</h2>
-          <p>El tratamiento de datos se realiza bajo los siguientes fundamentos:</p>
-          <ul>
-            <li><strong>Consentimiento del usuario:</strong> Otorgado en el registro</li>
-            <li><strong>Ejecución del contrato:</strong> Prestación del servicio de marketplace</li>
-            <li><strong>Cumplimiento legal:</strong> Obligaciones fiscales y de prevención de fraude</li>
-            <li><strong>Interés legítimo:</strong> Mejora de la Aplicación y seguridad</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2>4. Propósito del Tratamiento</h2>
-          <p>Los datos se utilizan para:</p>
-          <ul>
-            <li>Gestionar la cuenta de usuario y acceso a la Aplicación</li>
-            <li>Facilitar matches entre clientes y profesionales</li>
-            <li>Verificar identidad y prevenir fraude</li>
-            <li>Enviar notificaciones sobre matches y servicios</li>
-            <li>Cumplir obligaciones fiscales y legales</li>
-            <li>Mejorar la experiencia de usuario y seguridad</li>
-            <li>Análisis estadísticos y mejora del servicio</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2>5. Almacenamiento y Seguridad</h2>
+          <h2>1. Titular del servicio</h2>
           <p>
-            Los datos personales se almacenan en servidores seguros con encriptación end-to-end.
-            Se implementan medidas técnicas y organizativas de seguridad según GDPR, incluyendo:
+            <strong>{TITULAR.nombre}</strong> · NIF {TITULAR.nif}<br />
+            Domicilio: {TITULAR.domicilio}<br />
+            Contacto: <strong>{TITULAR.email}</strong>
           </p>
-          <ul>
-            <li>Encriptación de datos en tránsito y en reposo</li>
-            <li>Control de acceso mediante autenticación JWT</li>
-            <li>Auditoría completa de acciones administrativas</li>
-            <li>Cumplimiento de derechos ARCO (Acceso, Rectificación, Cancelación, Oposición)</li>
-          </ul>
+          <p>
+            En adelante, «CleanDerApp» o «la Plataforma». El uso de la Plataforma implica
+            la aceptación de este documento en su totalidad.
+          </p>
         </section>
 
         <section>
-          <h2>6. Derechos de los Usuarios - GDPR</h2>
-          <p>Conforme al GDPR, los usuarios tienen derecho a:</p>
+          <h2>2. Qué es CleanDerApp y qué no es</h2>
+          <p>
+            CleanDerApp es un <strong>servicio de intermediación</strong> que permite a unos
+            usuarios publicar que ofrecen un servicio doméstico y a otros publicar que lo
+            necesitan. Cuando ambos manifiestan interés mutuo, la Plataforma les muestra
+            sus respectivos teléfonos de contacto. Ahí termina su función.
+          </p>
+          <p>CleanDerApp, de forma expresa:</p>
           <ul>
-            <li><strong>Acceso:</strong> Solicitar copia de sus datos personales</li>
-            <li><strong>Rectificación:</strong> Corregir datos inexactos</li>
-            <li><strong>Cancelación (Derecho al olvido):</strong> Solicitar eliminación completa de datos</li>
-            <li><strong>Oposición:</strong> Rechazar tratamiento de datos para ciertos fines</li>
-            <li><strong>Portabilidad:</strong> Descargar sus datos en formato estructurado</li>
-            <li><strong>Restricción:</strong> Limitar el procesamiento de datos</li>
+            <li><strong>No es parte</strong> del contrato, acuerdo o relación que surja entre usuarios.</li>
+            <li><strong>No presta</strong> servicios de limpieza, fontanería, electricidad ni ningún otro.</li>
+            <li><strong>No emplea, contrata, subcontrata ni representa</strong> a quienes ofrecen servicios. No existe relación laboral, mercantil ni de dependencia con ellos.</li>
+            <li><strong>No interviene</strong> en precios, presupuestos, cobros, pagos, facturas ni condiciones. No gestiona pagos de ningún tipo.</li>
+            <li><strong>No supervisa, dirige ni controla</strong> la ejecución de los trabajos.</li>
+            <li><strong>No verifica</strong> la identidad real, la titulación, la colegiación, la experiencia, los seguros, las altas en la Seguridad Social ni las obligaciones fiscales de ningún usuario.</li>
+            <li><strong>No garantiza</strong> la calidad, la puntualidad, la seguridad ni la legalidad de los servicios acordados.</li>
           </ul>
           <p>
-            Para ejercer estos derechos, contactar a: <strong>contact@cleander.app</strong>
+            Toda relación entre usuarios se establece <strong>directamente entre ellos y bajo su
+            exclusiva responsabilidad</strong>, fuera de la Plataforma y sin su participación.
           </p>
         </section>
 
         <section>
-          <h2>7. Compartición de Datos</h2>
+          <h2>3. Contenidos publicados por los usuarios</h2>
           <p>
-            Los datos NO se compartirán con terceros excepto:
+            Los datos de cada perfil y anuncio —nombre, ciudad, servicio, precio, resumen,
+            fotografía y teléfono— son <strong>aportados y publicados por el propio usuario</strong>.
+          </p>
+          <p>
+            Cada usuario es el <strong>único y exclusivo responsable</strong> de lo que publica,
+            y garantiza que:
           </p>
           <ul>
-            <li>Entre usuarios matched (contacto directo - teléfono/email)</li>
-            <li>Autoridades públicas si lo requiere la ley</li>
-            <li>Proveedores de servicios esenciales (servidores, análisis)</li>
+            <li>La información es veraz, exacta y está actualizada.</li>
+            <li>Es titular de los derechos sobre las imágenes que sube, o cuenta con autorización, y no vulnera derechos de imagen de terceros.</li>
+            <li>Cumple la normativa aplicable a la actividad que ofrece, incluidas las obligaciones fiscales, laborales y de seguridad.</li>
+            <li>El contenido no es ilícito, falso, engañoso, injurioso, discriminatorio, sexual, violento ni contrario al orden público.</li>
           </ul>
-        </section>
-
-        <section>
-          <h2>8. Retención de Datos</h2>
           <p>
-            Los datos se conservarán mientras la cuenta esté activa. Al solicitar cancelación de cuenta,
-            los datos se eliminarán en 30 días, salvo obligaciones legales que requieran conservarlos.
+            <strong>CleanDerApp no responde de los contenidos generados por los usuarios.</strong> No
+            los elabora, no los asume como propios y no garantiza su veracidad. La
+            Plataforma actúa como prestador de servicios de alojamiento de datos conforme
+            al <strong>artículo 16 de la Ley 34/2002 (LSSI-CE)</strong> y al{' '}
+            <strong>Reglamento (UE) 2022/2065 de Servicios Digitales</strong>, de modo que no
+            responde de la información almacenada a petición de los usuarios siempre que no
+            tenga conocimiento efectivo de su ilicitud o que, al tenerlo, actúe con
+            diligencia para retirarla.
           </p>
         </section>
 
         <section>
-          <h2>9. Consentimiento para Marketing</h2>
+          <h2>4. Moderación y retirada de contenidos</h2>
           <p>
-            El envío de promociones requiere consentimiento explícito. Los usuarios pueden:
+            Los textos descriptivos pasan por una <strong>revisión previa</strong> antes de
+            publicarse. Esta revisión es una medida voluntaria de buena fe y, conforme al
+            artículo 7 del Reglamento (UE) 2022/2065, <strong>no hace que CleanDerApp asuma la
+            autoría de los contenidos</strong> ni le priva de la exención de responsabilidad del
+            apartado anterior. No constituye una garantía sobre la veracidad de lo publicado.
           </p>
+          <p>
+            Si detectas contenido ilícito, falso u ofensivo, comunícalo a{' '}
+            <strong>{TITULAR.email}</strong> indicando el perfil afectado y el motivo. Una vez
+            tengamos conocimiento efectivo, retiraremos el contenido o bloquearemos la
+            cuenta con la mayor brevedad posible.
+          </p>
+          <p>
+            CleanDerApp puede suspender, ocultar o eliminar cualquier perfil o contenido, y
+            cancelar cuentas, sin previo aviso y sin derecho a indemnización, cuando
+            incumplan este documento o la legislación vigente.
+          </p>
+        </section>
+
+        <section>
+          <h2>5. Conducta exigida a los usuarios</h2>
+          <p>Está prohibido, entre otras conductas:</p>
           <ul>
-            <li>Aceptar/rechazar marketing en el perfil</li>
-            <li>Desuscribirse en cualquier momento</li>
-            <li>Controlar qué datos se usan para análisis</li>
+            <li>Suplantar la identidad de otra persona o usar fotografías que no sean propias.</li>
+            <li>Publicar datos de contacto de terceros sin su consentimiento.</li>
+            <li>Ofrecer o solicitar servicios ilegales, o cualquier servicio de naturaleza sexual.</li>
+            <li>Usar la Plataforma para acosar, amenazar, estafar o enviar publicidad no solicitada.</li>
+            <li>Emplear los teléfonos obtenidos mediante un match para un fin distinto de contactar sobre el servicio, o cederlos a terceros.</li>
+            <li>Extraer datos de forma automatizada o intentar vulnerar las medidas de seguridad.</li>
           </ul>
+          <p>
+            Recomendamos adoptar las precauciones habituales al tratar con desconocidos:
+            acordar las condiciones por escrito, desconfiar de pagos por adelantado y no
+            facilitar datos bancarios ni documentación personal.
+          </p>
         </section>
 
         <section>
-          <h2>10. Verificación de Identidad</h2>
-          <p>
-            Para garantizar confianza y seguridad:
-          </p>
+          <h2>6. Limitación de responsabilidad</h2>
+          <p>En la máxima medida permitida por la ley, CleanDerApp no responde de:</p>
           <ul>
-            <li>La foto de perfil es OBLIGATORIA y requiere aprobación del administrador</li>
-            <li>Email y teléfono deben ser verificados con código de 6 dígitos</li>
-            <li>Solo perfiles verificados aparecen en búsquedas</li>
-            <li>Los administradores pueden bloquear usuarios por incumplimiento de normas</li>
+            <li>Los daños, perjuicios, pérdidas o lesiones derivados de los servicios acordados entre usuarios, ni de su ejecución defectuosa, su retraso o su falta de ejecución.</li>
+            <li>El incumplimiento de pagos entre usuarios, ni de cualquier conflicto económico entre ellos.</li>
+            <li>La conducta de los usuarios, dentro o fuera de la Plataforma, incluidas las conversaciones que mantengan por WhatsApp u otros medios una vez intercambiados los teléfonos.</li>
+            <li>La falsedad de los datos aportados por un usuario, ni de la falta de titulación, seguro o habilitación de quien ofrece un servicio.</li>
+            <li>Las interrupciones, errores o indisponibilidad del servicio, que se presta «tal cual» y sin garantía de funcionamiento ininterrumpido.</li>
           </ul>
+          <p>
+            Nada de lo anterior excluye la responsabilidad que legalmente no pueda
+            excluirse, en particular la derivada de dolo o de daños causados a consumidores
+            por causa imputable a la Plataforma.
+          </p>
+          <p>
+            El usuario mantendrá indemne a CleanDerApp frente a reclamaciones de terceros
+            que traigan causa de los contenidos que haya publicado o del incumplimiento de
+            estas condiciones.
+          </p>
         </section>
 
         <section>
-          <h2>11. Bloqueo y Suspensión de Usuarios</h2>
-          <p>
-            La administración se reserva el derecho a:
-          </p>
+          <h2>7. Datos personales que se tratan</h2>
+          <p>Responsable del tratamiento: {TITULAR.nombre}, con los datos del apartado 1.</p>
+          <p>Se tratan los siguientes datos, todos facilitados por el usuario:</p>
           <ul>
-            <li>Bloquear usuarios por violación de términos</li>
-            <li>Eliminar usuarios tras investigación (Derecho al olvido - GDPR)</li>
-            <li>Mantener registro de auditoría de acciones administrativas</li>
+            <li>Nombre</li>
+            <li>Correo electrónico (necesario para acceder a la cuenta)</li>
+            <li>Teléfono de WhatsApp</li>
+            <li>Ciudad o localidad</li>
+            <li>Fotografía de perfil (opcional)</li>
+            <li>Tipo de usuario, servicio y precio por hora</li>
+            <li>Texto descriptivo, de un máximo de 150 caracteres</li>
+            <li>Intereses marcados, matches y valoraciones</li>
           </ul>
-        </section>
-
-        <section>
-          <h2>12. Cambios en la Política</h2>
           <p>
-            Esta política puede ser actualizada ocasionalmente. Los cambios se comunicarán
-            mediante notificación en la Aplicación. El uso continuado implica aceptación de cambios.
+            <strong>No se recogen</strong> datos de geolocalización, datos bancarios ni
+            categorías especiales de datos.
           </p>
         </section>
 
         <section>
-          <h2>13. Contacto para Privacidad</h2>
+          <h2>8. Para qué se usan y con qué base legal</h2>
+          <ul>
+            <li><strong>Ejecución del contrato:</strong> crear y mantener la cuenta, mostrar el perfil a otros usuarios y facilitar el contacto cuando hay match.</li>
+            <li><strong>Interés legítimo:</strong> moderar contenidos, prevenir fraudes y abusos, y mantener la seguridad del servicio.</li>
+            <li><strong>Cumplimiento legal:</strong> atender requerimientos de autoridades competentes.</li>
+          </ul>
           <p>
-            Para consultas sobre privacidad y ejercer derechos GDPR:
+            No se toman decisiones automatizadas con efectos jurídicos, ni se elaboran
+            perfiles con fines publicitarios. No se envía publicidad.
+          </p>
+        </section>
+
+        <section>
+          <h2>9. Cómo se protege el teléfono</h2>
+          <p>
+            El teléfono es el dato más sensible de la Plataforma y por eso no se publica
+            nunca. Mientras no exista un match, <strong>el teléfono de otro usuario no llega
+            siquiera al navegador</strong>: las tarjetas que se muestran no contienen ese dato, y
+            la base de datos solo lo entrega cuando comprueba que ambas partes se han
+            marcado mutuamente.
           </p>
           <p>
-            <strong>Email:</strong> contact@cleander.app<br/>
-            <strong>Respuesta garantizada:</strong> 30 días hábiles (conforme a GDPR)
+            A partir del match, cada parte ve el teléfono de la otra. Al aceptar estas
+            condiciones, el usuario <strong>consiente esa comunicación de su teléfono</strong> a
+            quien haya coincidido con él. Puede evitarla en cualquier momento ocultando su
+            perfil desde «Mi perfil» o eliminando su cuenta.
+          </p>
+        </section>
+
+        <section>
+          <h2>10. Destinatarios y conservación</h2>
+          <p>
+            Los datos se alojan en la infraestructura de <strong>Supabase</strong>, proveedor que
+            actúa como encargado del tratamiento. No se ceden datos a terceros salvo
+            obligación legal, y no se realizan transferencias internacionales fuera de las
+            previstas por ese proveedor bajo garantías adecuadas.
+          </p>
+          <p>
+            Los datos se conservan mientras la cuenta esté activa. Al solicitar su
+            eliminación se borran la cuenta, el perfil, los matches y las valoraciones,
+            salvo los que deban conservarse para atender responsabilidades legales.
+          </p>
+        </section>
+
+        <section>
+          <h2>11. Seguridad</h2>
+          <p>
+            Se aplican medidas técnicas razonables: cifrado del tráfico mediante HTTPS,
+            contraseñas almacenadas de forma cifrada e irreversible por el proveedor de
+            autenticación, y reglas de seguridad a nivel de base de datos que limitan cada
+            consulta a los datos que el usuario tiene derecho a ver.
+          </p>
+          <p>
+            Ningún sistema es infalible. La Plataforma no garantiza una seguridad absoluta
+            y el usuario es responsable de custodiar su contraseña.
+          </p>
+        </section>
+
+        <section>
+          <h2>12. Derechos del usuario</h2>
+          <p>
+            Puedes ejercer los derechos de acceso, rectificación, supresión, oposición,
+            limitación y portabilidad escribiendo a <strong>{TITULAR.email}</strong>, indicando el
+            derecho que ejercitas y acreditando tu identidad. Responderemos en el plazo de
+            un mes.
+          </p>
+          <p>
+            Si consideras que tus datos no se han tratado correctamente, puedes reclamar
+            ante la <strong>Agencia Española de Protección de Datos</strong> (www.aepd.es).
+          </p>
+        </section>
+
+        <section>
+          <h2>13. Menores de edad</h2>
+          <p>
+            El servicio está dirigido exclusivamente a mayores de 18 años. No se permite el
+            registro de menores. Si se detecta la cuenta de un menor, será eliminada.
+          </p>
+        </section>
+
+        <section>
+          <h2>14. Modificaciones</h2>
+          <p>
+            Este documento puede actualizarse. Los cambios se publicarán en esta misma
+            página con su fecha. El uso continuado de la Plataforma tras su publicación
+            implica su aceptación.
+          </p>
+        </section>
+
+        <section>
+          <h2>15. Ley aplicable y jurisdicción</h2>
+          <p>
+            Este documento se rige por la legislación española. Para cualquier controversia,
+            las partes se someten a los juzgados y tribunales que correspondan conforme a la
+            normativa aplicable; tratándose de consumidores, los de su domicilio.
           </p>
         </section>
 
         <section className="legal-notice">
           <p>
-            <strong>Aviso Legal:</strong> Esta Política de Privacidad cumple con la Ley Orgánica 3/2018 (LOPD),
-            el GDPR (Reglamento 2016/679), la Ley 34/1988 de Publicidad, y la Ley 34/1988 de Servicios de la Sociedad
-            de la Información y de Comercio Electrónico (LSSI-CE).
+            <strong>Normativa de referencia:</strong> Reglamento (UE) 2016/679 (RGPD);
+            Ley Orgánica 3/2018 de Protección de Datos Personales y Garantía de los Derechos
+            Digitales; Ley 34/2002 de Servicios de la Sociedad de la Información y de
+            Comercio Electrónico; Reglamento (UE) 2022/2065 de Servicios Digitales; y Real
+            Decreto Legislativo 1/2007, texto refundido de la Ley General para la Defensa de
+            los Consumidores y Usuarios.
           </p>
           <p>
-            <strong>Última actualización:</strong> {new Date().toLocaleDateString('es-ES')}
+            <strong>Última actualización:</strong> {hoy}
           </p>
         </section>
       </div>

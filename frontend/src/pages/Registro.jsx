@@ -18,6 +18,7 @@ export default function Registro() {
     resumen: '',
   })
   const [foto, setFoto] = useState(null)
+  const [acepto, setAcepto] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
@@ -45,6 +46,10 @@ export default function Registro() {
     e.preventDefault()
     setError('')
 
+    if (!acepto) {
+      setError('Debes aceptar el aviso legal y la política de privacidad')
+      return
+    }
     if (datos.password.length < 8) {
       setError('La contraseña debe tener al menos 8 caracteres')
       return
@@ -211,7 +216,21 @@ export default function Registro() {
           <label className="campo-etiqueta">Foto de perfil (recomendada)</label>
           <input type="file" accept="image/*" onChange={elegirFoto} />
 
-          <button type="submit" disabled={loading}>
+          <label className="campo-acepto">
+            <input
+              type="checkbox"
+              checked={acepto}
+              onChange={(e) => setAcepto(e.target.checked)}
+            />
+            <span>
+              Soy mayor de 18 años y he leído y acepto el{' '}
+              <Link to="/privacidad" target="_blank">
+                aviso legal, las condiciones de uso y la política de privacidad
+              </Link>.
+            </span>
+          </label>
+
+          <button type="submit" disabled={loading || !acepto}>
             {loading ? 'Creando cuenta...' : 'Crear cuenta'}
           </button>
         </form>

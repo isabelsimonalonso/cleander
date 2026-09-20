@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="footer-content">
         <p>© {currentYear} CleanDerApp. Todos los derechos reservados.</p>
         <div className="footer-links">
-          <Link to="/privacidad">Privacidad</Link>
+          <Link to="/privacidad">Aviso legal y privacidad</Link>
         </div>
       </div>
     </footer>

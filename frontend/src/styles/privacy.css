@@ -97,3 +97,43 @@
     text-align: left;
   }
 }
+
+/* Resumen en lenguaje llano al principio del documento legal */
+.aviso-destacado {
+  background: #f0fafc;
+  border-left: 4px solid var(--turquesa);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-bottom: 32px;
+}
+
+.aviso-destacado p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #46606a;
+}
+
+/* Casilla de aceptación en el registro */
+.campo-acepto {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12.5px;
+  font-weight: 300;
+  line-height: 1.55;
+  color: #7a7a7a;
+  cursor: pointer;
+}
+
+.campo-acepto input {
+  width: auto;
+  flex-shrink: 0;
+  margin-top: 2px;
+  accent-color: var(--turquesa);
+}
+
+.campo-acepto a {
+  color: var(--turquesa);
+  font-weight: 500;
+}
