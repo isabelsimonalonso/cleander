@@ -103,7 +103,7 @@ export default function Tarjeta({ perfil, telefono = null, propio = false, child
               {telefono}
             </a>
           ) : (
-            <span className="tarjeta-telefono-oculto" aria-label="Teléfono oculto hasta el match">
+            <span className="tarjeta-telefono-oculto" aria-label={t('visibleAlMatch')}>
               <span className="tarjeta-telefono-linea pixelado">
                 <IconoWhatsApp size={17} />
                 +34 600 000 000

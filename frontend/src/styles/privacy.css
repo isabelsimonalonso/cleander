@@ -158,3 +158,30 @@
   color: #999;
   font-style: italic;
 }
+
+/* Aviso de que el original es el español */
+.aviso-prevalencia {
+  padding: 15px 18px;
+  margin-bottom: 26px;
+  border-left: 4px solid #d4a017;
+  border-radius: 10px;
+  background: #fffdf7;
+}
+
+.aviso-prevalencia p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #7a6a4a;
+}
+
+.privacy-container {
+  position: relative;
+}
+
+.privacy-container .selector-idioma--flotante {
+  top: 22px;
+  right: 22px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+}
