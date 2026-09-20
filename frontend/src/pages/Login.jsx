@@ -80,7 +80,6 @@ export default function Login() {
         </p>
 
         <p>{t('sinCuenta')} <Link to="/registro">{t('registrate')}</Link></p>
-        <p><Link to="/sobre-nosotros">{t('queEsCleanderapp')}</Link></p>
       </div>
     </div>
   )
