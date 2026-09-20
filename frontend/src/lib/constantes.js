@@ -156,5 +156,17 @@ export const COPY = {
  */
 export const CONTACTO = 'info@cleanderapp.com'
 
+/** Motivos de denuncia. Lista cerrada, para poder filtrar y contar. */
+export const MOTIVOS_DENUNCIA = [
+  'Foto inapropiada',
+  'Suplanta a otra persona',
+  'Acoso o amenazas',
+  'Intento de estafa',
+  'Contenido sexual',
+  'Publicidad o spam',
+  'Datos falsos',
+  'Otro',
+]
+
 export const LIMITE_RESUMEN = 150
 export const TAM_MAX_FOTO = 5 * 1024 * 1024 // 5 MB

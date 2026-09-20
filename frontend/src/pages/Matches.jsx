@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import NavApp from '../components/NavApp'
 import Tarjeta from '../components/Tarjeta'
+import Denunciar from '../components/Denunciar'
 import '../styles/app.css'
 
 export default function Matches() {
@@ -117,6 +118,13 @@ export default function Matches() {
                 </button>
               )}
               </>)}
+
+              <div className="acciones-match">
+                <Denunciar perfil={m} compacto />
+                <button className="boton-eliminar-match" onClick={() => eliminarMatch(m)}>
+                  Eliminar match
+                </button>
+              </div>
             </Tarjeta>
           ))}
         </div>

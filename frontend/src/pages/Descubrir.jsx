@@ -6,6 +6,7 @@ import SelectorServicio from '../components/SelectorServicio'
 import { useAuth } from '../context/AuthContext'
 import NavApp from '../components/NavApp'
 import Tarjeta from '../components/Tarjeta'
+import Denunciar from '../components/Denunciar'
 import '../styles/app.css'
 
 const UMBRAL_ARRASTRE = 110 // píxeles que hay que arrastrar para que cuente
@@ -15,7 +16,8 @@ export default function Descubrir() {
   const [mazo, setMazo] = useState([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
-  const [filtros, setFiltros] = useState({ categoria: '', provincia: '', municipio: '' })
+  const [filtros, setFiltros] = useState({ categoria: '', provincia: '', municipio: '', precio: '' })
+  const [ultima, setUltima] = useState(null)   // para poder deshacer
   const [municipios, setMunicipios] = useState([])
   const [matchNuevo, setMatchNuevo] = useState(null)
   const [arrastre, setArrastre] = useState(0)
@@ -32,12 +34,13 @@ export default function Descubrir() {
       filtro_categoria: filtros.categoria || null,
       filtro_provincia: filtros.provincia || null,
       filtro_municipio: filtros.municipio || null,
+      precio_maximo: filtros.precio ? Number(filtros.precio) : null,
       limite: 40,
     })
     if (errorRpc) setError(errorRpc.message)
     setMazo(data ?? [])
     setCargando(false)
-  }, [filtros.categoria, filtros.provincia, filtros.municipio])
+  }, [filtros.categoria, filtros.provincia, filtros.municipio, filtros.precio])
 
   useEffect(() => { cargarMazo() }, [cargarMazo])
 
@@ -80,12 +83,31 @@ export default function Descubrir() {
       }
     }
 
+    setUltima(actual)
+
     // Damos tiempo a que se vea la animación de salida
     setTimeout(() => {
       setMazo((prev) => prev.slice(1))
       setArrastre(0)
       setSaliendo(null)
     }, 220)
+  }
+
+  /** Devuelve al mazo la última tarjeta descartada. */
+  const deshacer = async () => {
+    if (!ultima) return
+    const { error: errorDeshacer } = await supabase
+      .from('intereses')
+      .delete()
+      .eq('emisor', usuario.id)
+      .eq('receptor', ultima.id)
+
+    if (errorDeshacer) {
+      setError(errorDeshacer.message)
+      return
+    }
+    setMazo((prev) => [ultima, ...prev])
+    setUltima(null)
   }
 
   // ── Gesto de arrastre ────────────────────────────────────────────────
@@ -153,6 +175,15 @@ export default function Descubrir() {
             </option>
             {municipios.map((m) => <option key={m} value={m}>{m}</option>)}
           </select>
+          <select
+            value={filtros.precio}
+            onChange={(e) => setFiltros((f) => ({ ...f, precio: e.target.value }))}
+          >
+            <option value="">Cualquier precio</option>
+            {[10, 15, 20, 25, 30, 40, 50].map((p) => (
+              <option key={p} value={p}>Hasta {p} €</option>
+            ))}
+          </select>
         </div>
 
         {error && <div className="aviso aviso--error">{error}</div>}
@@ -197,7 +228,21 @@ export default function Descubrir() {
         </div>
 
         {actual && (
+          <div className="pie-mazo">
+            <Denunciar perfil={actual} compacto />
+          </div>
+        )}
+
+        {actual && (
           <div className="acciones">
+            <button
+              className="accion accion--deshacer"
+              disabled={!ultima}
+              title={ultima ? `Recuperar a ${ultima.nombre}` : 'Nada que deshacer'}
+              onClick={deshacer}
+            >
+              ↺
+            </button>
             <button className="accion accion--pass" onClick={() => decidir('pass')}>✕</button>
             <button className="accion accion--like" onClick={() => decidir('like')}>♥</button>
           </div>

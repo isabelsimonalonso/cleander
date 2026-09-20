@@ -20,18 +20,24 @@ export default function Admin() {
   const [busqueda, setBusqueda] = useState('')
   const [filtroRol, setFiltroRol] = useState('')
   const [soloPendientes, setSoloPendientes] = useState(false)
+  const [denuncias, setDenuncias] = useState([])
+  const [vista, setVista] = useState('usuarios')   // usuarios | denuncias
+  const [pagina, setPagina] = useState(0)
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
 
   const cargar = useCallback(async () => {
     setCargando(true)
-    const [{ data: lista, error: errorLista }, { data: numeros }] = await Promise.all([
-      supabase.rpc('admin_usuarios'),
-      supabase.rpc('admin_estadisticas'),
-    ])
+    const [{ data: lista, error: errorLista }, { data: numeros }, { data: denus }] =
+      await Promise.all([
+        supabase.rpc('admin_usuarios'),
+        supabase.rpc('admin_estadisticas'),
+        supabase.rpc('admin_denuncias'),
+      ])
     if (errorLista) setError(errorLista.message)
     setUsuarios(lista ?? [])
     setStats(numeros ?? {})
+    setDenuncias(denus ?? [])
     setCargando(false)
   }, [])
 
@@ -46,6 +52,14 @@ export default function Admin() {
       return
     }
     setUsuarios((prev) => prev.map((u) => (u.id === id ? { ...u, ...cambios } : u)))
+    supabase.rpc('admin_estadisticas').then(({ data }) => setStats(data ?? {}))
+  }
+
+  const resolverDenuncia = async (id, estado) => {
+    const { error: errorD } = await supabase
+      .from('denuncias').update({ estado }).eq('id', id)
+    if (errorD) { setError(errorD.message); return }
+    setDenuncias((prev) => prev.map((d) => (d.id === id ? { ...d, estado } : d)))
     supabase.rpc('admin_estadisticas').then(({ data }) => setStats(data ?? {}))
   }
 
@@ -99,6 +113,14 @@ export default function Admin() {
     })
   }, [usuarios, busqueda, filtroRol, soloPendientes, usuario.id])
 
+  const POR_PAGINA = 25
+  const totalPaginas = Math.max(1, Math.ceil(visibles.length / POR_PAGINA))
+  const paginaActual = Math.min(pagina, totalPaginas - 1)
+  const enPantalla = visibles.slice(
+    paginaActual * POR_PAGINA,
+    paginaActual * POR_PAGINA + POR_PAGINA
+  )
+
   return (
     <div className="app-layout">
       <NavApp />
@@ -118,8 +140,77 @@ export default function Admin() {
           <Stat etiqueta="Bloqueados" valor={stats.bloqueados} />
           <Stat etiqueta="Textos por revisar" valor={stats.resumenes_pendientes} destacado />
           <Stat etiqueta="Fotos por revisar" valor={stats.fotos_pendientes} destacado />
+          <Stat etiqueta="Denuncias" valor={stats.denuncias_pendientes} destacado />
         </div>
 
+        <div className="pestanas-admin">
+          <button
+            className={vista === 'usuarios' ? 'activa' : ''}
+            onClick={() => setVista('usuarios')}
+          >
+            Usuarios
+          </button>
+          <button
+            className={vista === 'denuncias' ? 'activa' : ''}
+            onClick={() => setVista('denuncias')}
+          >
+            Denuncias
+            {stats.denuncias_pendientes > 0 && (
+              <span className="contador-filtro">{stats.denuncias_pendientes}</span>
+            )}
+          </button>
+        </div>
+
+        {vista === 'denuncias' && (
+          <div className="lista-denuncias">
+            {denuncias.length === 0 && (
+              <p className="bloque-vacio">No hay ninguna denuncia.</p>
+            )}
+            {denuncias.map((d) => (
+              <div className={`denuncia denuncia--${d.estado}`} key={d.id}>
+                <div className="denuncia-cabecera">
+                  <strong>{d.motivo}</strong>
+                  <span className={`pastilla pastilla--${d.estado === 'pendiente' ? 'pendiente' : d.estado === 'revisada' ? 'aprobada' : 'rechazada'}`}>
+                    {d.estado}
+                  </span>
+                </div>
+                <p className="denuncia-contra">
+                  Contra <strong>{d.denunciado_nombre}</strong> ({d.denunciado_email})
+                  {d.denunciado_bloqueado && <span className="pastilla pastilla--rechazada">bloqueado</span>}
+                </p>
+                {d.detalle && <p className="denuncia-detalle">«{d.detalle}»</p>}
+                <small>
+                  De {d.denunciante_nombre} · {new Date(d.creado_en).toLocaleString('es-ES')}
+                </small>
+                <div className="botones-moderacion">
+                  {!d.denunciado_bloqueado && (
+                    <button
+                      className="btn-no"
+                      onClick={() => {
+                        actualizar(d.denunciado_id, { bloqueado: true })
+                        resolverDenuncia(d.id, 'revisada')
+                      }}
+                    >
+                      Bloquear y cerrar
+                    </button>
+                  )}
+                  {d.estado === 'pendiente' && (
+                    <>
+                      <button onClick={() => resolverDenuncia(d.id, 'revisada')}>
+                        Marcar revisada
+                      </button>
+                      <button onClick={() => resolverDenuncia(d.id, 'descartada')}>
+                        Descartar
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {vista === 'usuarios' && (
         <div className="filtros">
           <input
             type="search"
@@ -145,7 +236,9 @@ export default function Admin() {
           <button onClick={cargar}>Recargar</button>
         </div>
 
-        {cargando ? (
+        )}
+
+        {vista === 'usuarios' && (cargando ? (
           <p className="mazo-vacio">Cargando…</p>
         ) : (
           <div className="tabla-scroll">
@@ -163,7 +256,7 @@ export default function Admin() {
                 </tr>
               </thead>
               <tbody>
-                {visibles.map((u) => (
+                {enPantalla.map((u) => (
                   <tr key={u.id} className={u.bloqueado ? 'fila-bloqueada' : ''}>
                     <td>
                       <div className="celda-usuario">
@@ -290,7 +383,7 @@ export default function Admin() {
                   </tr>
                 ))}
 
-                {visibles.length === 0 && (
+                {enPantalla.length === 0 && (
                   <tr>
                     <td colSpan={8} className="celda-centro tenue">
                       Ningún usuario coincide con el filtro.
@@ -299,6 +392,23 @@ export default function Admin() {
                 )}
               </tbody>
             </table>
+          </div>
+        ))}
+
+        {vista === 'usuarios' && !cargando && totalPaginas > 1 && (
+          <div className="paginador">
+            <button disabled={paginaActual === 0} onClick={() => setPagina(paginaActual - 1)}>
+              Anterior
+            </button>
+            <span>
+              {paginaActual + 1} de {totalPaginas} · {visibles.length} usuarios
+            </span>
+            <button
+              disabled={paginaActual >= totalPaginas - 1}
+              onClick={() => setPagina(paginaActual + 1)}
+            >
+              Siguiente
+            </button>
           </div>
         )}
       </main>

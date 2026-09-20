@@ -81,6 +81,38 @@ export default function MiPerfil() {
     }
   }
 
+  /** Derecho de portabilidad: todo lo tuyo en un archivo. */
+  const descargarDatos = async () => {
+    setError('')
+    const [perfilPropio, misMatches, misVotos, votosRecibidos, misIntereses] =
+      await Promise.all([
+        supabase.from('perfiles').select('*').eq('id', usuario.id).maybeSingle(),
+        supabase.rpc('mis_matches'),
+        supabase.from('valoraciones').select('destinatario,estrellas,creado_en').eq('autor', usuario.id),
+        supabase.from('valoraciones').select('autor,estrellas,creado_en').eq('destinatario', usuario.id),
+        supabase.from('intereses').select('receptor,decision,creado_en').eq('emisor', usuario.id),
+      ])
+
+    const datos = {
+      exportado_en: new Date().toISOString(),
+      cuenta: { id: usuario.id, email: usuario.email },
+      perfil: perfilPropio.data,
+      matches: misMatches.data,
+      valoraciones_que_he_dado: misVotos.data,
+      valoraciones_que_he_recibido: votosRecibidos.data,
+      decisiones: misIntereses.data,
+    }
+
+    const enlace = document.createElement('a')
+    enlace.href = URL.createObjectURL(
+      new Blob([JSON.stringify(datos, null, 2)], { type: 'application/json' })
+    )
+    enlace.download = `cleanderapp-mis-datos-${new Date().toISOString().slice(0, 10)}.json`
+    enlace.click()
+    URL.revokeObjectURL(enlace.href)
+    setMensaje('Descarga preparada')
+  }
+
   const borrarCuenta = async () => {
     setError('')
     setBorrando(true)
@@ -226,6 +258,17 @@ export default function MiPerfil() {
               {guardando ? 'Guardando…' : 'Guardar cambios'}
             </button>
           </form>
+
+          <section className="zona-datos">
+            <h2>Mis datos</h2>
+            <p>
+              Descarga todo lo que CleanDerApp guarda sobre ti: tu perfil, tus
+              matches, tus valoraciones y tus decisiones.
+            </p>
+            <button type="button" onClick={descargarDatos}>
+              Descargar mis datos
+            </button>
+          </section>
 
           <section className="zona-peligro">
             <h2>Eliminar mi cuenta</h2>
