@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
-import { auth } from '../services/api'
+import { supabase } from '../lib/supabase'
 import Logo from '../components/Logo'
 import '../styles/auth.css'
 
@@ -10,7 +9,6 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const { login } = useAuth()
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -18,17 +16,22 @@ export default function Login() {
     setError('')
     setLoading(true)
 
-    try {
-      const response = await auth.login(email, password)
-      const { usuario, token } = response.data
-      login(usuario, token)
-      navigate('/dashboard')
-    } catch (err) {
-      console.error('Login error:', err)
-      setError(err.response?.data?.error || err.message || 'Error en el login')
-    } finally {
+    const { error: errorLogin } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    })
+
+    if (errorLogin) {
+      setError(
+        errorLogin.message === 'Invalid login credentials'
+          ? 'Email o contraseña incorrectos'
+          : errorLogin.message
+      )
       setLoading(false)
+      return
     }
+
+    navigate('/descubrir')
   }
 
   return (

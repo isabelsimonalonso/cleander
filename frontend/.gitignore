@@ -1,1 +1,1 @@
-package-lock.json
+# El lockfile SI debe versionarse: el despliegue usa "npm ci" y lo necesita.

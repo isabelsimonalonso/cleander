@@ -1,206 +1,114 @@
-# Cleander - Marketplace de Servicios Domésticos
+# Cleander — Match de servicios domésticos
 
-## Descripción General
-Plataforma web y mobile (iOS/Android) que conecta profesionales de servicios domésticos (limpieza, reparaciones, fontanería, electricista) con clientes que los necesitan.
+## Qué es
+Web tipo Tinder pero de servicios del hogar. Dos lados:
 
-**Modelo:** Marketplace sin pagos integrados (transacciones en persona). Descubrimiento con sistema de matching para intercambio de datos personales (estilo cards/swipe).
+- **Cliente** (`rol = 'cliente'`): necesita un servicio. Ve tarjetas de profesionales.
+- **Servicio** (`rol = 'servicio'`): ofrece un servicio. Ve tarjetas de clientes.
+- **Admin** (`rol = 'admin'`): control total sobre usuarios, textos y matches.
 
-**Diferencial:** Los perfiles de profesionales se crean mediante **plantillas y filtros controlados** para prevenir contenido inapropiado. Nada de texto libre.
+Cuando **las dos partes** se marcan mutuamente → **match** → se desbloquean los
+teléfonos de WhatsApp y siguen la conversación fuera de la web.
 
-## Stack Tecnológico
+No hay pagos ni chat integrados.
 
-### MVP Web
-- **Frontend:** React
-- **Backend:** Node.js + Express
-- **Base de datos:** PostgreSQL
-- **Autenticación:** JWT
+## Stack
 
-### Futuro (Mobile)
-- React Native o Flutter para iOS/Android
+| Pieza | Tecnología |
+|---|---|
+| Frontend | React 18 + Vite |
+| Rutas | react-router-dom con **HashRouter** |
+| Backend | **Supabase** (Postgres + Auth + Storage). No hay servidor propio. |
+| Hosting | GitHub Pages (`isabelsimonalonso.github.io/cleander/`) |
 
-## Arquitectura
+> No existe carpeta `backend/`. Se eliminó al migrar a Supabase: GitHub Pages
+> solo sirve archivos estáticos y no puede ejecutar Node.
+
+## Estructura
 
 ```
 cleander/
-├── backend/                  # Node.js + Express
-│   ├── src/
-│   │   ├── models/          # Esquemas de DB (usuarios, servicios, matches)
-│   │   ├── routes/          # Endpoints REST
-│   │   ├── controllers/      # Lógica de negocio
-│   │   ├── middleware/       # Auth, validaciones
-│   │   ├── db/              # Configuración de conexión
-│   │   └── index.js         # Entry point
-│   ├── migrations/           # Migraciones de esquema
-│   └── package.json
-│
-├── frontend/                 # React SPA
-│   ├── src/
-│   │   ├── components/       # Componentes reutilizables
-│   │   ├── pages/           # Vistas principales
-│   │   ├── context/         # Estado global (Auth, Búsqueda)
-│   │   ├── services/        # Llamadas a API
-│   │   └── App.jsx
-│   └── package.json
-│
-└── docs/                    # Documentación
-    └── API.md               # Especificación de endpoints
+├── .github/workflows/deploy.yml   # build + publicación automática en Pages
+├── supabase/
+│   ├── 01_esquema.sql             # tablas, RLS, triggers, funciones, storage
+│   └── 02_admin.sql               # convierte una cuenta en administradora
+└── frontend/
+    ├── public/                    # favicon y logo
+    └── src/
+        ├── lib/
+        │   ├── supabase.js        # cliente + subida de fotos
+        │   └── constantes.js      # categorías y textos por rol
+        ├── context/AuthContext.jsx
+        ├── components/            # Tarjeta, Estrellas, NavApp, Footer, Logo
+        ├── pages/                 # Login, Registro, Descubrir, Matches, MiPerfil, Admin, Privacy
+        └── styles/
 ```
 
-## Flujo Principal
+## Rutas de la web
 
-### Registro
-- **Profesionales:** Nombre, email, teléfono, foto perfil (OBLIGATORIA), servicios ofrecidos (de lista), precio/hora, nivel de experiencia (opciones predefinidas), certificaciones (sí/no)
-- **Clientes:** Nombre, email, teléfono, ubicación, foto perfil (OBLIGATORIA)
-- **Control:** Los perfiles se completan con campos seleccionables (dropdowns, checkboxes), NO texto libre
-- **Foto:** Requerida en ambos tipos de registro como medio de verificación y confianza
+| Ruta | Acceso | Qué hace |
+|---|---|---|
+| `/login` | pública | Entrar (email + contraseña) |
+| `/registro` | pública | Alta eligiendo cliente o servicio |
+| `/descubrir` | con sesión | El mazo de tarjetas deslizables |
+| `/matches` | con sesión | Matches conseguidos, con teléfono y estrellas |
+| `/perfil` | con sesión | Editar los propios datos |
+| `/admin` | solo admin | Panel de control |
+| `/privacidad` | pública | Política de privacidad |
 
-### Búsqueda y Tarjetas (Sistema de Cards)
-1. Filtra por tipo de servicio (limpieza, fontanería, etc.)
-2. Ve tarjeta del profesional con:
-   - Foto (grande, prominente)
-   - Nombre, servicios, precio/hora
-   - Valoración media ⭐
-   - **Etiqueta "Ofrezo" en esquina superior**
-3. Si interesa → desliza/toca "Contactar" → se crea un **match**
+## Base de datos
 
-### Perfil de Cliente (Búsqueda pasiva)
-- Similar a profesional, pero:
-- **Etiqueta "Busco" en esquina superior**
-- Los profesionales pueden hacer match con clientes si ven potencial
-
-### Match
-- En tarjeta: Se muestran foto, nombre, servicios, precio, valoración (SIN contacto)
-- Si hace match → **desbloquea teléfono/email** del otro usuario
-- El match debe ser aceptado por ambos antes de ver datos de contacto
-- No hay chat, solo datos para contacto directo en persona
-
-### Valoraciones
-- Después de contratar, el cliente puede dejar valoración ⭐ (1-5 estrellas)
-- Las valoraciones se muestran públicas en el perfil del profesional
-
-## Modelos de BD
-
-### Usuario (Base)
 ```
-- id (PK)
-- nombre
-- email
-- teléfono
-- tipo (CLIENTE | PROFESIONAL)
-- foto_perfil_url
-- estado_verificado (booleano)
-- creado_en
+auth.users                    (Supabase Auth: email + contraseña)
+  └─ perfiles (1:1)           rol, nombre, telefono, ciudad, categoria,
+                              precio_hora, resumen, resumen_estado,
+                              foto_url, visible, bloqueado
+       ├─ intereses           emisor → receptor, decision ('like' | 'pass')
+       ├─ matches             usuario_a < usuario_b (par ordenado, único)
+       └─ valoraciones        autor → destinatario, estrellas 1-5
 ```
 
-### Profesional (Extiende Usuario)
-```
-- id_usuario (FK)
-- servicios_ofrecidos (array - IDs de tabla servicios)
-- precio_por_hora
-- nivel_experiencia (PRINCIPIANTE | INTERMEDIO | EXPERTO - predefinido)
-- tiene_certificaciones (BOOLEAN)
-- horario_disponible (array de opciones predefinidas)
-- valoración_media
-- total_resenas
-```
+### Cómo se protege el teléfono
+Es la regla central del producto y está impuesta por la base de datos, no por
+el frontend:
 
-**Nota:** Sin campo de descripción libre. Todo controlado por plantillas/filtros del sistema.
+1. `perfiles` tiene RLS: **solo puedes leer tu propia fila**. Ahí está tu teléfono.
+2. Las tarjetas de los demás salen de la vista `tarjetas`, que **no tiene columna
+   `telefono`**. El dato no puede filtrarse porque no está.
+3. El teléfono de otra persona solo sale por la función `mis_matches()`, que
+   hace `JOIN` con `matches`. Sin match, no hay fila.
 
-### Servicio
-```
-- id (PK)
-- nombre (limpieza, fontanería, electricidad, etc.)
-- descripción
-```
+### Triggers importantes
+- `trg_nuevo_usuario` — crea el perfil al registrarse, con los metadatos del alta.
+- `trg_proteger_perfil` — impide que un usuario se cambie el rol o se desbloquee,
+  y devuelve el resumen a moderación cada vez que lo edita.
+- `trg_detectar_match` — si hay `like` en ambos sentidos, crea el match.
 
-### Match
-```
-- id (PK)
-- cliente_id (FK)
-- profesional_id (FK)
-- creado_en
-- estado (PENDIENTE | ACEPTADO | RECHAZADO)
-```
+## Opciones predefinidas
+Categorías (en `src/lib/constantes.js`, deben coincidir con lo que se guarda):
+Limpieza · Fontanería · Electricidad · Aire acondicionado ·
+Reparaciones generales · Jardinería · Pintura · Mudanzas
 
-### Reseña
-```
-- id (PK)
-- profesional_id (FK)
-- cliente_id (FK)
-- puntuación (1-5)
-- comentario
-- creado_en
+## Moderación
+El único texto libre es el **resumen** (máx. 150 caracteres). Nace como
+`pendiente` y no se muestra en la tarjeta hasta que un admin lo aprueba.
+Si el usuario lo edita, vuelve a `pendiente` automáticamente.
+
+## Puesta en marcha
+
+```bash
+cd frontend
+cp .env.example .env     # y rellenar VITE_SUPABASE_ANON_KEY
+npm install
+npm run dev              # http://localhost:3000
 ```
 
-### Opciones Predefinidas (Filtros/Plantillas del Sistema)
+En Supabase hay que ejecutar `supabase/01_esquema.sql` una vez, y activar
+*Authentication → Providers → Email* con la confirmación por correo desactivada.
 
-**Servicios:**
-- Limpieza
-- Fontanería
-- Electricidad
-- Reparaciones generales
+Ver `README.md` para los pasos completos de despliegue.
 
-**Nivel de Experiencia:**
-- Principiante (< 1 año)
-- Intermedio (1-5 años)
-- Experto (> 5 años)
-
-**Horarios Disponibles:**
-- Mañana (8:00 - 14:00)
-- Tarde (14:00 - 20:00)
-- Noche (20:00 - 23:00)
-- Fin de semana
-
-**Certificaciones:**
-- Sí / No
-
-## Endpoints Principales (v1)
-
-### Auth
-- `POST /api/auth/registro` - Registro (cliente o profesional)
-- `POST /api/auth/login` - Login
-- `GET /api/auth/me` - Datos del usuario actual
-
-### Profesionales
-- `GET /api/profesionales` - Listar con filtros
-- `GET /api/profesionales/:id` - Detalles (sin contacto si no hay match)
-
-### Matches
-- `POST /api/matches` - Crear match
-- `GET /api/matches` - Ver matches del usuario
-- `PATCH /api/matches/:id` - Aceptar/rechazar
-
-### Reseñas
-- `POST /api/resenas` - Crear reseña
-- `GET /api/profesionales/:id/resenas` - Ver reseñas de un profesional
-
-## Estado Actual
-- [ ] Backend: Estructura inicial + modelos
-- [ ] Backend: Autenticación (JWT)
-- [ ] Backend: CRUD de usuarios y profesionales
-- [ ] Backend: Sistema de matches
-- [ ] Frontend: Setup React + routing
-- [ ] Frontend: Login/Registro
-- [ ] Frontend: Búsqueda y filtros
-- [ ] Frontend: Perfil de profesional + match
-- [ ] Testing
-- [ ] Deploy (Vercel/Heroku)
-
-## Modelo de Monetización
-
-### Freemium
-- **Gratis:** Perfil normal, búsqueda estándar, matches limitados
-- **Premium (0.99€ en App Store):** 
-  - Perfil destacado (aparece primero en resultados)
-  - Búsquedas ilimitadas
-  - Acceso completo sin restricciones
-
-### Flujo Web vs Mobile
-- Web: Versión freemium completa
-- Mobile (iOS/Android): Versión premium en App Store a 0.99€ (acceso total)
-
-## Notas
-- Sin sistema de pagos integrado → transacciones en persona
-- Sin chat → solo intercambio de datos tras match
-- Prioridad: web MVP → luego mobile nativa
-- Web con freemium, mobile premium en App Store
+## Convenciones
+- Todo en español: nombres de tablas, columnas, variables y comentarios.
+- Nada de texto libre salvo el resumen moderado.
+- Cualquier regla de privacidad se impone en SQL (RLS), nunca solo en React.

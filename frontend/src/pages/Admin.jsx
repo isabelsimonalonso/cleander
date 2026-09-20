@@ -1,392 +1,238 @@
-import { useState, useEffect } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import NavApp from '../components/NavApp'
+import '../styles/app.css'
 import '../styles/admin.css'
 
-export default function Admin() {
-  const [activeTab, setActiveTab] = useState('dashboard')
-  const [stats, setStats] = useState(null)
-  const [usuarios, setUsuarios] = useState([])
-  const [fotoPendientes, setFotoPendientes] = useState([])
-  const [auditoria, setAuditoria] = useState([])
-  const [loading, setLoading] = useState(false)
-  const { token, logout } = useAuth()
-  const navigate = useNavigate()
+const ETIQUETA_ROL = { admin: 'Admin', cliente: 'Cliente', servicio: 'Servicio' }
 
-  // Cargar datos al montar
-  useEffect(() => {
-    cargarStats()
+export default function Admin() {
+  const { usuario } = useAuth()
+  const [usuarios, setUsuarios] = useState([])
+  const [stats, setStats] = useState({})
+  const [busqueda, setBusqueda] = useState('')
+  const [filtroRol, setFiltroRol] = useState('')
+  const [soloPendientes, setSoloPendientes] = useState(false)
+  const [cargando, setCargando] = useState(true)
+  const [error, setError] = useState('')
+
+  const cargar = useCallback(async () => {
+    setCargando(true)
+    const [{ data: lista, error: errorLista }, { data: numeros }] = await Promise.all([
+      supabase.rpc('admin_usuarios'),
+      supabase.rpc('admin_estadisticas'),
+    ])
+    if (errorLista) setError(errorLista.message)
+    setUsuarios(lista ?? [])
+    setStats(numeros ?? {})
+    setCargando(false)
   }, [])
 
-  // Cargar datos según la pestaña activa
-  useEffect(() => {
-    if (activeTab === 'fotos') cargarFotoPendientes()
-    else if (activeTab === 'usuarios') cargarUsuarios()
-    else if (activeTab === 'auditoria') cargarAuditoria()
-  }, [activeTab])
+  useEffect(() => { cargar() }, [cargar])
 
-  const cargarStats = async () => {
-    try {
-      const res = await fetch('http://localhost:5000/api/admin/stats', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      if (res.ok) setStats(await res.json())
-    } catch (err) {
-      console.error('Error cargando stats:', err)
+  /** Aplica un cambio en la fila y refresca los contadores. */
+  const actualizar = async (id, cambios) => {
+    setError('')
+    const { error: errorUpd } = await supabase.from('perfiles').update(cambios).eq('id', id)
+    if (errorUpd) {
+      setError(errorUpd.message)
+      return
     }
+    setUsuarios((prev) => prev.map((u) => (u.id === id ? { ...u, ...cambios } : u)))
+    supabase.rpc('admin_estadisticas').then(({ data }) => setStats(data ?? {}))
   }
 
-  const cargarFotoPendientes = async () => {
-    setLoading(true)
-    try {
-      const res = await fetch('http://localhost:5000/api/admin/fotos-pendientes', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      if (res.ok) setFotoPendientes(await res.json())
-    } catch (err) {
-      console.error('Error cargando fotos:', err)
-    } finally {
-      setLoading(false)
+  const borrar = async (u) => {
+    if (!confirm(`Borrar definitivamente a ${u.nombre || u.email}?\n\nSe eliminarán su perfil, sus matches y sus valoraciones. No se puede deshacer.`)) {
+      return
     }
+    const { error: errorDel } = await supabase.rpc('admin_borrar_usuario', { objetivo: u.id })
+    if (errorDel) {
+      setError(errorDel.message)
+      return
+    }
+    setUsuarios((prev) => prev.filter((x) => x.id !== u.id))
+    cargar()
   }
 
-  const cargarUsuarios = async () => {
-    setLoading(true)
-    try {
-      const res = await fetch('http://localhost:5000/api/admin/usuarios', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      if (res.ok) setUsuarios(await res.json())
-    } catch (err) {
-      console.error('Error cargando usuarios:', err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const cargarAuditoria = async () => {
-    setLoading(true)
-    try {
-      const res = await fetch('http://localhost:5000/api/admin/auditoria', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      if (res.ok) setAuditoria(await res.json())
-    } catch (err) {
-      console.error('Error cargando auditoría:', err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const aprobarFoto = async (usuarioId) => {
-    try {
-      const res = await fetch(`http://localhost:5000/api/admin/usuarios/${usuarioId}/foto/aprobar`, {
-        method: 'PATCH',
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      if (res.ok) {
-        cargarFotoPendientes()
-        cargarStats()
-      }
-    } catch (err) {
-      console.error('Error aprobando foto:', err)
-    }
-  }
-
-  const rechazarFoto = async (usuarioId) => {
-    try {
-      const res = await fetch(`http://localhost:5000/api/admin/usuarios/${usuarioId}/foto/rechazar`, {
-        method: 'PATCH',
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      if (res.ok) cargarFotoPendientes()
-    } catch (err) {
-      console.error('Error rechazando foto:', err)
-    }
-  }
-
-  const bloquearUsuario = async (usuarioId) => {
-    const razon = prompt('Razón del bloqueo:')
-    if (!razon) return
-
-    try {
-      const res = await fetch(`http://localhost:5000/api/admin/usuarios/${usuarioId}/bloquear`, {
-        method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ razon })
-      })
-      if (res.ok) {
-        cargarUsuarios()
-        cargarAuditoria()
-      }
-    } catch (err) {
-      console.error('Error bloqueando usuario:', err)
-    }
-  }
-
-  const desbloquearUsuario = async (usuarioId) => {
-    try {
-      const res = await fetch(`http://localhost:5000/api/admin/usuarios/${usuarioId}/desbloquear`, {
-        method: 'PATCH',
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      if (res.ok) {
-        cargarUsuarios()
-        cargarAuditoria()
-      }
-    } catch (err) {
-      console.error('Error desbloqueando usuario:', err)
-    }
-  }
-
-  const eliminarUsuario = async (usuarioId) => {
-    if (!confirm('¿Eliminar usuario permanentemente? (GDPR - No se puede deshacer)')) return
-
-    try {
-      const res = await fetch(`http://localhost:5000/api/admin/usuarios/${usuarioId}/gdpr`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      if (res.ok) {
-        cargarUsuarios()
-        cargarAuditoria()
-        cargarStats()
-      }
-    } catch (err) {
-      console.error('Error eliminando usuario:', err)
-    }
-  }
+  const visibles = useMemo(() => {
+    const texto = busqueda.trim().toLowerCase()
+    return usuarios.filter((u) => {
+      if (filtroRol && u.rol !== filtroRol) return false
+      if (soloPendientes && !(u.resumen && u.resumen_estado === 'pendiente')) return false
+      if (!texto) return true
+      return [u.nombre, u.email, u.ciudad, u.categoria, u.telefono]
+        .filter(Boolean)
+        .some((campo) => campo.toLowerCase().includes(texto))
+    })
+  }, [usuarios, busqueda, filtroRol, soloPendientes])
 
   return (
-    <div className="admin-container">
-      {/* Header */}
-      <div className="admin-header">
-        <h1>🔐 Panel Administración</h1>
-        <button className="logout-btn" onClick={() => { logout(); navigate('/login') }}>
-          Cerrar sesión
-        </button>
-      </div>
+    <div className="app-layout">
+      <NavApp />
+      <main className="app-main app-main--ancho">
+        <header className="app-cabecera">
+          <h1>Panel de administración</h1>
+          <p>Control total sobre usuarios, textos y matches.</p>
+        </header>
 
-      {/* Stats */}
-      {stats && (
-        <div className="admin-stats">
-          <div className="stat-card">
-            <div className="stat-number">{stats.usuarios}</div>
-            <div className="stat-label">Usuarios</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-number">{stats.profesionales}</div>
-            <div className="stat-label">Profesionales</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-number">{fotoPendientes.length}</div>
-            <div className="stat-label">Fotos pendientes</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-number">{stats.matches}</div>
-            <div className="stat-label">Matches</div>
-          </div>
+        {error && <div className="aviso aviso--error">{error}</div>}
+
+        <div className="stats">
+          <Stat etiqueta="Clientes" valor={stats.clientes} />
+          <Stat etiqueta="Servicios" valor={stats.servicios} />
+          <Stat etiqueta="Matches" valor={stats.matches} />
+          <Stat etiqueta="Likes" valor={stats.likes} />
+          <Stat etiqueta="Bloqueados" valor={stats.bloqueados} />
+          <Stat etiqueta="Textos por revisar" valor={stats.resumenes_pendientes} destacado />
         </div>
-      )}
 
-      {/* Tabs */}
-      <div className="admin-tabs">
-        <button
-          className={activeTab === 'dashboard' ? 'active' : ''}
-          onClick={() => setActiveTab('dashboard')}
-        >
-          📊 Dashboard
-        </button>
-        <button
-          className={activeTab === 'fotos' ? 'active' : ''}
-          onClick={() => setActiveTab('fotos')}
-        >
-          📸 Fotos ({fotoPendientes.length})
-        </button>
-        <button
-          className={activeTab === 'usuarios' ? 'active' : ''}
-          onClick={() => setActiveTab('usuarios')}
-        >
-          👥 Usuarios
-        </button>
-        <button
-          className={activeTab === 'auditoria' ? 'active' : ''}
-          onClick={() => setActiveTab('auditoria')}
-        >
-          📋 Auditoría
-        </button>
-      </div>
+        <div className="filtros">
+          <input
+            type="search"
+            placeholder="Buscar por nombre, email, ciudad, teléfono…"
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+          />
+          <select value={filtroRol} onChange={(e) => setFiltroRol(e.target.value)}>
+            <option value="">Todos los roles</option>
+            <option value="cliente">Clientes</option>
+            <option value="servicio">Servicios</option>
+            <option value="admin">Administradores</option>
+          </select>
+          <label className="campo-interruptor">
+            <input
+              type="checkbox"
+              checked={soloPendientes}
+              onChange={(e) => setSoloPendientes(e.target.checked)}
+            />
+            Solo textos por revisar
+          </label>
+          <button onClick={cargar}>Recargar</button>
+        </div>
 
-      {/* Content */}
-      <div className="admin-content">
-        {/* Dashboard */}
-        {activeTab === 'dashboard' && (
-          <div className="dashboard-section">
-            <h2>Bienvenido al Panel de Administración</h2>
-            <div className="quick-actions">
-              <div className="action-group">
-                <h3>📸 Fotos Pendientes</h3>
-                <p>Hay {fotoPendientes.length} fotos esperando validación</p>
-                <button onClick={() => setActiveTab('fotos')} className="action-btn">
-                  Ver fotos →
-                </button>
-              </div>
-              <div className="action-group">
-                <h3>👥 Gestión de Usuarios</h3>
-                <p>Bloquea, elimina o gestiona usuarios</p>
-                <button onClick={() => setActiveTab('usuarios')} className="action-btn">
-                  Ver usuarios →
-                </button>
-              </div>
-              <div className="action-group">
-                <h3>📋 Auditoría</h3>
-                <p>Revisa todas las acciones administrativas</p>
-                <button onClick={() => setActiveTab('auditoria')} className="action-btn">
-                  Ver auditoría →
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        {cargando ? (
+          <p className="mazo-vacio">Cargando…</p>
+        ) : (
+          <div className="tabla-scroll">
+            <table className="tabla-admin">
+              <thead>
+                <tr>
+                  <th>Usuario</th>
+                  <th>Rol</th>
+                  <th>Contacto</th>
+                  <th>Servicio</th>
+                  <th>Resumen</th>
+                  <th>Matches</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibles.map((u) => (
+                  <tr key={u.id} className={u.bloqueado ? 'fila-bloqueada' : ''}>
+                    <td>
+                      <div className="celda-usuario">
+                        {u.foto_url
+                          ? <img src={u.foto_url} alt="" />
+                          : <span className="sin-foto">—</span>}
+                        <div>
+                          <strong>{u.nombre || '(sin nombre)'}</strong>
+                          <small>{u.ciudad}</small>
+                        </div>
+                      </div>
+                    </td>
 
-        {/* Fotos Pendientes */}
-        {activeTab === 'fotos' && (
-          <div className="fotos-section">
-            <h2>📸 Fotos Pendientes de Validación</h2>
-            {loading ? (
-              <p>Cargando...</p>
-            ) : fotoPendientes.length === 0 ? (
-              <p className="empty">✅ No hay fotos pendientes</p>
-            ) : (
-              <div className="fotos-grid">
-                {fotoPendientes.map(foto => (
-                  <div key={foto.id} className="foto-card">
-                    <div className="foto-imagen">
-                      <img src={foto.foto_perfil_url} alt={foto.nombre} />
-                    </div>
-                    <div className="foto-info">
-                      <h3>{foto.nombre}</h3>
-                      <p>{foto.email}</p>
-                      <p className="tipo">Tipo: {foto.tipo}</p>
-                      {foto.precio_por_hora && <p>€{foto.precio_por_hora}/h</p>}
-                    </div>
-                    <div className="foto-actions">
-                      <button
-                        className="btn-aprobar"
-                        onClick={() => aprobarFoto(foto.id)}
+                    <td>
+                      <select
+                        value={u.rol}
+                        disabled={u.id === usuario.id}
+                        onChange={(e) => actualizar(u.id, { rol: e.target.value })}
                       >
-                        ✅ Aprobar
+                        {Object.entries(ETIQUETA_ROL).map(([v, t]) => (
+                          <option key={v} value={v}>{t}</option>
+                        ))}
+                      </select>
+                    </td>
+
+                    <td className="celda-contacto">
+                      <span>{u.email}</span>
+                      <small>{u.telefono}</small>
+                    </td>
+
+                    <td>
+                      {u.categoria}
+                      <small>{Number(u.precio_hora).toFixed(0)} €/h</small>
+                    </td>
+
+                    <td className="celda-resumen">
+                      {u.resumen ? (
+                        <>
+                          <p>{u.resumen}</p>
+                          <span className={`pastilla pastilla--${u.resumen_estado}`}>
+                            {u.resumen_estado}
+                          </span>
+                          <div className="botones-moderacion">
+                            <button
+                              className="btn-ok"
+                              onClick={() => actualizar(u.id, { resumen_estado: 'aprobado' })}
+                            >
+                              Aprobar
+                            </button>
+                            <button
+                              className="btn-no"
+                              onClick={() => actualizar(u.id, { resumen_estado: 'rechazado' })}
+                            >
+                              Rechazar
+                            </button>
+                          </div>
+                        </>
+                      ) : (
+                        <span className="tenue">sin texto</span>
+                      )}
+                    </td>
+
+                    <td className="celda-centro">{u.total_matches}</td>
+
+                    <td className="celda-acciones">
+                      <button onClick={() => actualizar(u.id, { bloqueado: !u.bloqueado })}>
+                        {u.bloqueado ? 'Desbloquear' : 'Bloquear'}
+                      </button>
+                      <button onClick={() => actualizar(u.id, { visible: !u.visible })}>
+                        {u.visible ? 'Ocultar' : 'Mostrar'}
                       </button>
                       <button
-                        className="btn-rechazar"
-                        onClick={() => rechazarFoto(foto.id)}
+                        className="btn-peligro"
+                        disabled={u.id === usuario.id}
+                        onClick={() => borrar(u)}
                       >
-                        ❌ Rechazar
+                        Borrar
                       </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Usuarios */}
-        {activeTab === 'usuarios' && (
-          <div className="usuarios-section">
-            <h2>👥 Todos los Usuarios</h2>
-            {loading ? (
-              <p>Cargando...</p>
-            ) : usuarios.length === 0 ? (
-              <p className="empty">Sin usuarios</p>
-            ) : (
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Email</th>
-                    <th>Teléfono</th>
-                    <th>Tipo</th>
-                    <th>Foto</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {usuarios.map(u => (
-                    <tr key={u.id}>
-                      <td><strong>{u.nombre}</strong></td>
-                      <td>{u.email}</td>
-                      <td>{u.telefono}</td>
-                      <td><span className={`badge ${u.tipo.toLowerCase()}`}>{u.tipo}</span></td>
-                      <td>{u.foto_verificada ? '✅' : '❌'}</td>
-                      <td>
-                        {u.usuario_bloqueado ? (
-                          <span className="badge bloqueado">BLOQUEADO</span>
-                        ) : (
-                          <span className="badge activo">ACTIVO</span>
-                        )}
-                      </td>
-                      <td className="acciones">
-                        {u.usuario_bloqueado ? (
-                          <button
-                            className="btn-small desbloquear"
-                            onClick={() => desbloquearUsuario(u.id)}
-                          >
-                            🔓 Desbloquear
-                          </button>
-                        ) : (
-                          <button
-                            className="btn-small bloquear"
-                            onClick={() => bloquearUsuario(u.id)}
-                          >
-                            🔒 Bloquear
-                          </button>
-                        )}
-                        <button
-                          className="btn-small eliminar"
-                          onClick={() => eliminarUsuario(u.id)}
-                        >
-                          🗑️ Eliminar
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
-        )}
-
-        {/* Auditoría */}
-        {activeTab === 'auditoria' && (
-          <div className="auditoria-section">
-            <h2>📋 Registro de Auditoría</h2>
-            {loading ? (
-              <p>Cargando...</p>
-            ) : auditoria.length === 0 ? (
-              <p className="empty">Sin registros</p>
-            ) : (
-              <div className="auditoria-list">
-                {auditoria.map(log => (
-                  <div key={log.id} className="audit-entry">
-                    <div className="audit-time">{new Date(log.creado_en).toLocaleString('es-ES')}</div>
-                    <div className="audit-action">
-                      <strong>{log.accion}</strong>
-                    </div>
-                    <div className="audit-detalles">
-                      {log.detalles}
-                    </div>
-                  </div>
                 ))}
-              </div>
-            )}
+
+                {visibles.length === 0 && (
+                  <tr>
+                    <td colSpan={7} className="celda-centro tenue">
+                      Ningún usuario coincide con el filtro.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
         )}
-      </div>
+      </main>
+    </div>
+  )
+}
+
+function Stat({ etiqueta, valor, destacado = false }) {
+  return (
+    <div className={`stat ${destacado && valor > 0 ? 'stat--alerta' : ''}`}>
+      <span className="stat-valor">{valor ?? 0}</span>
+      <span className="stat-etiqueta">{etiqueta}</span>
     </div>
   )
 }

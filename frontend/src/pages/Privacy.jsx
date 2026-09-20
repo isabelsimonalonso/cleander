@@ -1,4 +1,3 @@
-import Footer from '../components/Footer'
 import '../styles/privacy.css'
 
 export default function Privacy() {
