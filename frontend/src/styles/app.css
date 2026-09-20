@@ -127,8 +127,10 @@
   align-items: center;
 }
 
+/* `input` a secas alcanzaba también a la casilla de verificación y la
+   estiraba a 165 px, dejando el texto despegado del cuadradito. */
 .filtros select,
-.filtros input {
+.filtros input:not([type="checkbox"]) {
   flex: 1;
   min-width: 165px;
   padding: 12px 14px;
@@ -143,8 +145,24 @@
   color: #555;
 }
 
-.filtros input {
+.filtros input:not([type="checkbox"]) {
   padding-right: 14px;
+}
+
+/* La casilla ocupa lo suyo y nada más */
+.filtros .campo-interruptor {
+  flex: 0 0 auto;
+  gap: 9px;
+  white-space: nowrap;
+}
+
+.filtros .campo-interruptor input[type="checkbox"] {
+  flex: 0 0 auto;
+  width: 17px;
+  height: 17px;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
 }
 
 /* El de servicios necesita más sitio: "Alquiler de robots de limpieza" */

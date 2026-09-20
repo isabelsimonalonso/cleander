@@ -128,7 +128,6 @@ export default function Admin() {
             <option value="">Todos los roles</option>
             <option value="cliente">Clientes</option>
             <option value="servicio">Servicios</option>
-            <option value="admin">Administradores</option>
           </select>
           <label className={`campo-interruptor ${pendientes + fotosPendientes === 0 ? 'campo-interruptor--vacio' : ''}`}>
             <input
