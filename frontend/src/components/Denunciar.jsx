@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
-import { MOTIVOS_DENUNCIA } from '../lib/constantes'
+import { MOTIVOS_DENUNCIA, traducirDato } from '../lib/constantes'
+import { useIdioma } from '../lib/i18n'
 
 /**
  * Botón de denuncia con su formulario.
@@ -12,6 +13,7 @@ import { MOTIVOS_DENUNCIA } from '../lib/constantes'
  */
 export default function Denunciar({ perfil, compacto = false }) {
   const { usuario } = useAuth()
+  const { t, idioma } = useIdioma()
   const [abierto, setAbierto] = useState(false)
   const [motivo, setMotivo] = useState('')
   const [detalle, setDetalle] = useState('')
@@ -34,7 +36,7 @@ export default function Denunciar({ perfil, compacto = false }) {
     setEnviando(false)
     if (errorEnvio) {
       if (errorEnvio.code === '23505') {
-        setError('Ya denunciaste a esta persona. Estamos revisándolo.')
+        setError(t('errYaDenunciado'))
         return
       }
       setError(
@@ -50,7 +52,7 @@ export default function Denunciar({ perfil, compacto = false }) {
   if (enviada) {
     return (
       <p className="denuncia-enviada">
-        Denuncia enviada. La revisaremos lo antes posible.
+        {t('denunciaEnviada')}
       </p>
     )
   }
@@ -62,17 +64,19 @@ export default function Denunciar({ perfil, compacto = false }) {
         className={`boton-denunciar ${compacto ? 'boton-denunciar--compacto' : ''}`}
         onClick={() => setAbierto(true)}
       >
-        Denunciar este perfil
+        {t('denunciarPerfil')}
       </button>
     )
   }
 
   return (
     <form className="denuncia-formulario" onSubmit={enviar}>
-      <label className="campo-etiqueta">¿Qué ocurre con {perfil.nombre}?</label>
+      <label className="campo-etiqueta">{t('queOcurreCon', { nombre: perfil.nombre })}</label>
       <select value={motivo} onChange={(e) => setMotivo(e.target.value)} required>
-        <option value="">Elige el motivo</option>
-        {MOTIVOS_DENUNCIA.map((m) => <option key={m} value={m}>{m}</option>)}
+        <option value="">{t('eligeMotivo')}</option>
+        {MOTIVOS_DENUNCIA.map((m) => (
+          <option key={m} value={m}>{traducirDato(m, idioma)}</option>
+        ))}
       </select>
 
       <textarea
@@ -80,15 +84,15 @@ export default function Denunciar({ perfil, compacto = false }) {
         onChange={(e) => setDetalle(e.target.value)}
         maxLength={300}
         rows={3}
-        placeholder="Cuéntanos lo que ha pasado (opcional)"
+        placeholder={t('cuentanosQuePaso')}
       />
 
       {error && <span className="denuncia-error">{error}</span>}
 
       <div className="denuncia-botones">
-        <button type="button" onClick={() => setAbierto(false)}>Cancelar</button>
+        <button type="button" onClick={() => setAbierto(false)}>{t('cancelar')}</button>
         <button type="submit" className="btn-no" disabled={!motivo || enviando}>
-          {enviando ? 'Enviando…' : 'Enviar denuncia'}
+          {enviando ? t('enviando') : t('enviarDenuncia')}
         </button>
       </div>
     </form>

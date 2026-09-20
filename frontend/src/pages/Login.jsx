@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { DOMINIO_INTERNO } from '../lib/constantes'
 import Logo from '../components/Logo'
 import SelectorIdioma from '../components/SelectorIdioma'
 import { useIdioma } from '../lib/i18n'
@@ -19,8 +20,13 @@ export default function Login() {
     setError('')
     setLoading(true)
 
+    // Supabase necesita un correo, pero quien administra escribe solo
+    // "admin". Si no hay arroba, se completa con el dominio interno.
+    const escrito = email.trim()
+    const correo = escrito.includes('@') ? escrito : `${escrito}${DOMINIO_INTERNO}`
+
     const { error: errorLogin } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
+      email: correo,
       password,
     })
 
@@ -55,7 +61,7 @@ export default function Login() {
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder={t("email")}
+            placeholder={t('usuarioOEmail')}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required

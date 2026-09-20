@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { PROVINCIAS, municipiosDe } from '../lib/ubicacion'
+import { useIdioma } from '../lib/i18n'
 
 /**
  * Provincia y municipio encadenados, ambos de lista cerrada.
@@ -18,6 +19,7 @@ export default function SelectorUbicacion({
   requerido = true,
   etiquetas = true,
 }) {
+  const { t } = useIdioma()
   const [municipios, setMunicipios] = useState([])
   const [cargando, setCargando] = useState(false)
 
@@ -38,17 +40,17 @@ export default function SelectorUbicacion({
 
   return (
     <>
-      {etiquetas && <label className="campo-etiqueta">Provincia</label>}
+      {etiquetas && <label className="campo-etiqueta">{t('provincia')}</label>}
       <select
         value={provincia ?? ''}
         required={requerido}
         onChange={(e) => onChange({ provincia: e.target.value, ciudad: '' })}
       >
-        <option value="">Elige provincia</option>
+        <option value="">{t('eligeProvincia')}</option>
         {PROVINCIAS.map((p) => <option key={p} value={p}>{p}</option>)}
       </select>
 
-      {etiquetas && <label className="campo-etiqueta">Municipio</label>}
+      {etiquetas && <label className="campo-etiqueta">{t('municipio')}</label>}
       <select
         value={municipio ?? ''}
         required={requerido}
@@ -57,10 +59,10 @@ export default function SelectorUbicacion({
       >
         <option value="">
           {!provincia
-            ? 'Elige antes la provincia'
+            ? t('eligeAntesProvincia')
             : cargando
-              ? 'Cargando municipios…'
-              : `Elige municipio (${municipios.length})`}
+              ? t('cargandoMunicipios')
+              : t('eligeMunicipio', { n: municipios.length })}
         </option>
         {municipios.map((m) => <option key={m} value={m}>{m}</option>)}
       </select>

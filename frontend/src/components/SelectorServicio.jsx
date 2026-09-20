@@ -1,4 +1,5 @@
-import { GRUPOS_SERVICIOS } from '../lib/constantes'
+import { GRUPOS_SERVICIOS, traducirDato } from '../lib/constantes'
+import { useIdioma } from '../lib/i18n'
 
 /**
  * Desplegable de servicios, agrupado por bloques.
@@ -13,6 +14,8 @@ export default function SelectorServicio({
   className = '',
   placeholder = null,
 }) {
+  const { t, idioma } = useIdioma()
+
   return (
     <select
       className={className}
@@ -22,11 +25,13 @@ export default function SelectorServicio({
     >
       {placeholder !== null
         ? <option value="">{placeholder}</option>
-        : !value && <option value="">Elige un servicio</option>}
+        : !value && <option value="">{t('eligeServicio')}</option>}
 
       {GRUPOS_SERVICIOS.map(({ grupo, servicios }) => (
-        <optgroup key={grupo} label={grupo}>
-          {servicios.map((s) => <option key={s} value={s}>{s}</option>)}
+        <optgroup key={grupo} label={traducirDato(grupo, idioma)}>
+          {servicios.map((s) => (
+            <option key={s} value={s}>{traducirDato(s, idioma)}</option>
+          ))}
         </optgroup>
       ))}
     </select>

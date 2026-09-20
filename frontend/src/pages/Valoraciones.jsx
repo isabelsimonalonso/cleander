@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import NavApp from '../components/NavApp'
 import Estrellas from '../components/Estrellas'
+import { useIdioma } from '../lib/i18n'
 import '../styles/app.css'
 
 /** Ficha compacta: foto o iniciales, nombre y servicio. */
@@ -25,6 +26,7 @@ function Ficha({ persona }) {
 
 export default function Valoraciones() {
   const { usuario, refrescarValoraciones } = useAuth()
+  const { t } = useIdioma()
   const [matches, setMatches] = useState([])
   const [recibidas, setRecibidas] = useState({})   // quién me ha votado a mí
   const [cargando, setCargando] = useState(true)
@@ -50,11 +52,8 @@ export default function Valoraciones() {
     setError('')
 
     // El voto no se puede deshacer: mejor avisar antes.
-    const plural = estrellas === 1 ? 'estrella' : 'estrellas'
-    if (!confirm(
-      `Vas a valorar a ${nombre} con ${estrellas} ${plural}.\n\n` +
-      'La valoración es definitiva: no podrás cambiarla ni retirarla después.'
-    )) return
+    const unidad = t(estrellas === 1 ? 'estrella' : 'estrellas')
+    if (!confirm(t('confirmarVoto', { nombre, n: estrellas, unidad }))) return
 
     const { error: errorVoto } = await supabase
       .from('valoraciones')
@@ -62,8 +61,8 @@ export default function Valoraciones() {
 
     if (errorVoto) {
       const mensajes = {
-        '42501': 'Esa persona ha retirado su petición de valoración',
-        '23505': 'Ya la has valorado, y la valoración no se puede cambiar',
+        '42501': t('errRetiroPeticion'),
+        '23505': t('errYaValorada'),
       }
       setError(mensajes[errorVoto.code] ?? errorVoto.message)
       return
@@ -88,29 +87,26 @@ export default function Valoraciones() {
       <NavApp />
       <main className="app-main">
         <header className="app-cabecera">
-          <h1>Valoraciones</h1>
-          <p>
-            Solo puedes puntuar a quien te lo haya pedido, y una sola vez:
-            la valoración no se puede cambiar.
-          </p>
+          <h1>{t('valoraciones')}</h1>
+          <p>{t('subtituloValoraciones')}</p>
         </header>
 
         {error && <div className="aviso aviso--error">{error}</div>}
-        {cargando && <p className="mazo-vacio">Cargando…</p>}
+        {cargando && <p className="mazo-vacio">{t('cargando')}</p>}
 
         {!cargando && (
           <>
             {/* ── Te piden que les valores ───────────────────────────── */}
             <section className="bloque">
               <h2 className="bloque-titulo">
-                Te piden que les valores
+                {t('tePidenValorar')}
                 {pendientes.length > 0 && (
                   <span className="bloque-cuenta">{pendientes.length}</span>
                 )}
               </h2>
 
               {pendientes.length === 0 ? (
-                <p className="bloque-vacio">Nadie te ha pedido valoración por ahora.</p>
+                <p className="bloque-vacio">{t('nadieTePide')}</p>
               ) : (
                 pendientes.map((m) => (
                   <div className="linea-valoracion linea-valoracion--destacada" key={m.id}>
@@ -128,13 +124,13 @@ export default function Valoraciones() {
             {/* ── Ya valoradas ──────────────────────────────────────── */}
             {hechas.length > 0 && (
               <section className="bloque">
-                <h2 className="bloque-titulo">Ya has valorado</h2>
+                <h2 className="bloque-titulo">{t('yaHasValorado')}</h2>
                 {hechas.map((m) => (
                   <div className="linea-valoracion" key={m.id}>
                     <Ficha persona={m} />
                     <div className="linea-derecha">
                       <Estrellas valor={m.mi_voto} tamano={22} />
-                      <small>definitiva</small>
+                      <small>{t('definitiva')}</small>
                     </div>
                   </div>
                 ))}
@@ -143,12 +139,11 @@ export default function Valoraciones() {
 
             {/* ── Las que has pedido tú ─────────────────────────────── */}
             <section className="bloque">
-              <h2 className="bloque-titulo">Has pedido valoración a</h2>
+              <h2 className="bloque-titulo">{t('hasPedidoA')}</h2>
 
               {pedidas.length === 0 ? (
                 <p className="bloque-vacio">
-                  No has pedido ninguna. Puedes hacerlo desde cada match, en la
-                  pestaña Matches.
+                  {t('noHasPedido')}
                 </p>
               ) : (
                 pedidas.map((m) => (
@@ -158,10 +153,10 @@ export default function Valoraciones() {
                       {recibidas[m.id] ? (
                         <>
                           <Estrellas valor={recibidas[m.id]} tamano={22} />
-                          <small>te ha valorado</small>
+                          <small>{t('teHaValorado')}</small>
                         </>
                       ) : (
-                        <small className="tenue">aún no te ha valorado</small>
+                        <small className="tenue">{t('aunNoTeHaValorado')}</small>
                       )}
                     </div>
                   </div>

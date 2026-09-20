@@ -160,6 +160,13 @@ export const COPY = {
 export const CONTACTO = 'info@cleanderapp.com'
 
 /**
+ * Supabase exige un correo para iniciar sesión, pero quien administra
+ * escribe solo "admin". Si lo tecleado no lleva arroba, se completa con
+ * este dominio antes de enviarlo.
+ */
+export const DOMINIO_INTERNO = '@cleander.app'
+
+/**
  * Redes sociales del pie.
  *
  * PROVISIONAL: apuntan a la portada de cada red. Cuando existan los
@@ -171,7 +178,7 @@ export const CONTACTO = 'info@cleanderapp.com'
 export const REDES = [
   { id: 'instagram', nombre: 'Instagram', url: 'https://www.instagram.com/' },
   { id: 'tiktok', nombre: 'TikTok', url: 'https://www.tiktok.com/' },
-  { id: 'facebook', nombre: 'Facebook', url: 'https://www.facebook.com/' },
+  { id: 'correo', nombre: CONTACTO, url: `mailto:${CONTACTO}` },
 ]
 
 /** Motivos de denuncia. Lista cerrada, para poder filtrar y contar. */
@@ -185,6 +192,97 @@ export const MOTIVOS_DENUNCIA = [
   'Datos falsos',
   'Otro',
 ]
+
+
+/**
+ * Los servicios se guardan en español en la base de datos; esto es solo
+ * cómo se muestran en inglés. Así cambiar de idioma no toca los datos.
+ */
+export const SERVICIOS_EN = {
+  'Limpieza y hogar': 'Cleaning and home',
+  'Limpieza': 'Cleaning',
+  'Limpieza de cristales': 'Window cleaning',
+  'Limpieza de fin de obra': 'Post-construction cleaning',
+  'Planchado y lavandería': 'Ironing and laundry',
+  'Control de plagas': 'Pest control',
+
+  'Robótica y maquinaria en alquiler': 'Robots and machinery for hire',
+  'Alquiler de robot aspirador': 'Robot vacuum hire',
+  'Alquiler de robot fregasuelos': 'Robot mop hire',
+  'Alquiler de robot limpiacristales': 'Window-cleaning robot hire',
+  'Alquiler de robot limpiafondos de piscina': 'Pool cleaning robot hire',
+  'Alquiler de robot cortacésped': 'Robot lawnmower hire',
+  'Alquiler de aspirador industrial': 'Industrial vacuum hire',
+  'Alquiler de máquina de vapor': 'Steam cleaner hire',
+  'Alquiler de hidrolimpiadora': 'Pressure washer hire',
+  'Alquiler de abrillantadora de suelos': 'Floor polisher hire',
+  'Alquiler de limpiamoquetas': 'Carpet cleaner hire',
+  'Alquiler de deshumidificador': 'Dehumidifier hire',
+  'Alquiler de generador eléctrico': 'Generator hire',
+  'Alquiler de andamio o escalera': 'Scaffolding or ladder hire',
+  'Alquiler de herramienta eléctrica': 'Power tool hire',
+
+  'Instalaciones y averías': 'Installations and repairs',
+  'Fontanería': 'Plumbing',
+  'Electricidad': 'Electrical work',
+  'Calefacción y calderas': 'Heating and boilers',
+  'Aire acondicionado': 'Air conditioning',
+  'Cerrajería': 'Locksmith',
+  'Desatascos': 'Drain unblocking',
+  'Reparación de electrodomésticos': 'Appliance repair',
+  'Antenas y televisión': 'Aerials and TV',
+  'Informática y redes': 'IT and networks',
+  'Placas solares': 'Solar panels',
+
+  'Obra y acabados': 'Building and finishes',
+  'Albañilería': 'Bricklaying',
+  'Pintura': 'Painting',
+  'Carpintería': 'Carpentry',
+  'Escayola y pladur': 'Plaster and drywall',
+  'Suelos y parquet': 'Flooring and parquet',
+  'Ventanas y cristalería': 'Windows and glazing',
+  'Persianas y toldos': 'Blinds and awnings',
+  'Reformas integrales': 'Full renovations',
+
+  'Exteriores': 'Outdoors',
+  'Jardinería': 'Gardening',
+  'Piscinas': 'Swimming pools',
+  'Limpieza de tejados y canalones': 'Roof and gutter cleaning',
+
+  'Muebles y mudanzas': 'Furniture and removals',
+  'Montaje de muebles': 'Furniture assembly',
+  'Mudanzas': 'Removals',
+  'Portes y transporte': 'Deliveries and transport',
+  'Tapicería': 'Upholstery',
+  'Vaciado de pisos': 'House clearance',
+
+  'Cuidados a domicilio': 'Care at home',
+  'Cuidado de mayores': 'Elderly care',
+  'Cuidado de niños': 'Childcare',
+  'Cuidado de mascotas': 'Pet care',
+
+  'Otros': 'Other',
+  'Reparaciones generales': 'General repairs',
+  'Costura y arreglos de ropa': 'Sewing and clothing repairs',
+  'Cocina a domicilio': 'Home cooking',
+  'Clases particulares': 'Private lessons',
+  'Peluquería y estética a domicilio': 'Hairdressing and beauty at home',
+}
+
+export const MOTIVOS_EN = {
+  'Foto inapropiada': 'Inappropriate photo',
+  'Suplanta a otra persona': 'Impersonating someone',
+  'Acoso o amenazas': 'Harassment or threats',
+  'Intento de estafa': 'Attempted scam',
+  'Contenido sexual': 'Sexual content',
+  'Publicidad o spam': 'Advertising or spam',
+  'Datos falsos': 'False information',
+  'Otro': 'Other',
+}
+
+/** Traduce un servicio, grupo o motivo. En español se devuelve tal cual. */
+export const traducirDato = (texto, idioma) =>
+  idioma === 'en' ? (SERVICIOS_EN[texto] ?? MOTIVOS_EN[texto] ?? texto) : texto
 
 export const LIMITE_RESUMEN = 150
 export const TAM_MAX_FOTO = 5 * 1024 * 1024 // 5 MB

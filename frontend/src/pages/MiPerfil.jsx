@@ -1,31 +1,33 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase, subirFoto, borrarFotosDe } from '../lib/supabase'
-import { COPY, LIMITE_RESUMEN, unidadPrecio, unidadSugerida } from '../lib/constantes'
+import { LIMITE_RESUMEN, unidadPrecio } from '../lib/constantes'
 import { useAuth } from '../context/AuthContext'
 import NavApp from '../components/NavApp'
 import Tarjeta from '../components/Tarjeta'
 import SelectorUbicacion from '../components/SelectorUbicacion'
 import SelectorServicio from '../components/SelectorServicio'
 import SubirFoto from '../components/SubirFoto'
+import { useIdioma } from '../lib/i18n'
 import { IconoDescarga, IconoPapelera, IconoArchivar } from '../components/Iconos'
 import '../styles/app.css'
 
 const ESTADO_FOTO = {
-  pendiente: { texto: 'Pendiente de revisión — aún no se ve en tu tarjeta', clase: 'pendiente' },
-  aprobada: { texto: 'Aprobada y visible', clase: 'aprobado' },
-  rechazada: { texto: 'Rechazada por el equipo — sube otra', clase: 'rechazado' },
+  pendiente: { clave: 'fotoPendiente', clase: 'pendiente' },
+  aprobada: { clave: 'fotoAprobada', clase: 'aprobado' },
+  rechazada: { clave: 'fotoRechazada', clase: 'rechazado' },
 }
 
 const ESTADO_RESUMEN = {
-  pendiente: { texto: 'Pendiente de revisión — aún no se ve en tu tarjeta', clase: 'pendiente' },
-  aprobado: { texto: 'Aprobado y visible', clase: 'aprobado' },
-  rechazado: { texto: 'Rechazado por el equipo — edítalo y vuelve a enviarlo', clase: 'rechazado' },
+  pendiente: { clave: 'textoPendiente', clase: 'pendiente' },
+  aprobado: { clave: 'textoAprobado', clase: 'aprobado' },
+  rechazado: { clave: 'textoRechazado', clase: 'rechazado' },
 }
 
 export default function MiPerfil() {
   const { usuario, perfil, refrescarPerfil, logout, marcarDenunciasVistas } = useAuth()
   const navigate = useNavigate()
+  const { t } = useIdioma()
   const [form, setForm] = useState(null)
   const [guardando, setGuardando] = useState(false)
   const [mensaje, setMensaje] = useState('')
@@ -72,9 +74,8 @@ export default function MiPerfil() {
     return () => { activo = false }
   }, [usuario?.id])
 
-  if (!form) return <div className="pantalla-carga">Cargando…</div>
+  if (!form) return <div className="pantalla-carga">{t('cargando')}</div>
 
-  const copy = COPY[form.rol] ?? COPY.cliente
   const cambiar = (campo) => (e) =>
     setForm((prev) => ({ ...prev, [campo]: e.target.value }))
 
@@ -85,7 +86,7 @@ export default function MiPerfil() {
       await supabase.from('perfiles').update({ foto_url: url }).eq('id', usuario.id)
       setForm((prev) => ({ ...prev, foto_url: url }))
       await refrescarPerfil()
-      setMensaje('Foto actualizada')
+      setMensaje(t('fotoActualizada'))
     } catch (err) {
       setError(err.message)
     } finally {
@@ -138,7 +139,7 @@ export default function MiPerfil() {
     enlace.download = `cleanderapp-mis-datos-${new Date().toISOString().slice(0, 10)}.json`
     enlace.click()
     URL.revokeObjectURL(enlace.href)
-    setMensaje('Descarga preparada')
+    setMensaje(t('descargaLista'))
   }
 
   const borrarCuenta = async () => {
@@ -171,7 +172,7 @@ export default function MiPerfil() {
     setMensaje('')
 
     if (!form.provincia || !form.ciudad) {
-      setError('Elige tu provincia y tu municipio')
+      setError(t('errUbicacion'))
       return
     }
     setGuardando(true)
@@ -197,7 +198,7 @@ export default function MiPerfil() {
       return
     }
     await refrescarPerfil()
-    setMensaje('Cambios guardados')
+    setMensaje(t('cambiosGuardados'))
   }
 
   const estado = ESTADO_RESUMEN[form.resumen_estado] ?? ESTADO_RESUMEN.pendiente
@@ -207,8 +208,8 @@ export default function MiPerfil() {
       <NavApp />
       <main className="app-main app-main--perfil">
         <header className="app-cabecera">
-          <h1>Mi perfil</h1>
-          <p>Así te ven los demás. Tu teléfono nunca aparece sin match.</p>
+          <h1>{t('miPerfil')}</h1>
+          <p>{t('subtituloPerfil')}</p>
         </header>
 
         {error && <div className="aviso aviso--error">{error}</div>}
@@ -231,15 +232,18 @@ export default function MiPerfil() {
           <form className="perfil-formulario" onSubmit={guardar}>
             <SubirFoto
               vistaPrevia={form.foto_url}
-              estado={form.foto_url ? (ESTADO_FOTO[form.foto_estado] ?? ESTADO_FOTO.pendiente) : null}
+              estado={form.foto_url ? {
+                ...(ESTADO_FOTO[form.foto_estado] ?? ESTADO_FOTO.pendiente),
+                texto: t((ESTADO_FOTO[form.foto_estado] ?? ESTADO_FOTO.pendiente).clave),
+              } : null}
               onArchivo={cambiarFoto}
               onError={setError}
             />
 
-            <label className="campo-etiqueta">Nombre</label>
+            <label className="campo-etiqueta">{t('nombre')}</label>
             <input type="text" value={form.nombre} onChange={cambiar('nombre')} maxLength={80} required />
 
-            <label className="campo-etiqueta">WhatsApp</label>
+            <label className="campo-etiqueta">{t('whatsapp')}</label>
             <input type="tel" value={form.telefono} onChange={cambiar('telefono')} maxLength={20} required />
 
             <SelectorUbicacion
@@ -248,11 +252,11 @@ export default function MiPerfil() {
               onChange={(u) => setForm((prev) => ({ ...prev, ...u }))}
             />
 
-            <label className="campo-etiqueta">{copy.categoria}</label>
+            <label className="campo-etiqueta">{t(form.rol === 'servicio' ? 'categoriaServicio' : 'categoriaCliente')}</label>
             <SelectorServicio value={form.categoria} onChange={cambiar('categoria')} />
 
             <label className="campo-etiqueta">
-              {copy.precio.replace('hora', unidadPrecio(form.unidad_precio))} (€)
+              {t(form.rol === 'servicio' ? 'precioServicio' : 'precioCliente', { unidad: unidadPrecio(form.unidad_precio) })} (€)
             </label>
             <div className="precio-con-unidad">
               <input
@@ -262,21 +266,21 @@ export default function MiPerfil() {
                 required
               />
               <select value={form.unidad_precio ?? 'hora'} onChange={cambiar('unidad_precio')}>
-                <option value="hora">por hora</option>
-                <option value="dia">por día</option>
+                <option value="hora">{t('porHora')}</option>
+                <option value="dia">{t('porDia')}</option>
               </select>
             </div>
 
-            <label className="campo-etiqueta">Resumen</label>
+            <label className="campo-etiqueta">{t('resumen')}</label>
             <textarea
               value={form.resumen ?? ''}
               onChange={cambiar('resumen')}
               maxLength={LIMITE_RESUMEN}
               rows={3}
-              placeholder={copy.resumenPlaceholder}
+              placeholder={t(form.rol === 'servicio' ? 'resumenServicio' : 'resumenCliente', { max: LIMITE_RESUMEN })}
             />
             <span className={`estado-resumen estado-resumen--${estado.clase}`}>
-              {(form.resumen ?? '').length}/{LIMITE_RESUMEN} · {estado.texto}
+              {(form.resumen ?? '').length}/{LIMITE_RESUMEN} · {t(estado.clave)}
             </span>
 
             <label className="campo-interruptor">
@@ -285,18 +289,18 @@ export default function MiPerfil() {
                 checked={form.visible}
                 onChange={(e) => setForm((p) => ({ ...p, visible: e.target.checked }))}
               />
-              Aparecer en las búsquedas
+              {t('aparecerEnBusquedas')}
             </label>
 
             <button type="submit" disabled={guardando}>
-              {guardando ? 'Guardando…' : 'Guardar cambios'}
+              {guardando ? t('guardando') : t('guardar')}
             </button>
           </form>
 
         <div className="perfil-extra">
         {misDenuncias.length > 0 && (
           <section className="zona-denuncias">
-            <h2>Denuncias que has enviado</h2>
+            <h2>{t('denunciasEnviadas')}</h2>
             <ul>
               {misDenuncias.map((d, i) => (
                 <li key={i}>
@@ -305,16 +309,16 @@ export default function MiPerfil() {
                     {d.motivo}
                   </span>
                   <span className={`pastilla-estado pastilla-estado--${d.estado}`}>
-                    {d.estado === 'pendiente' ? 'en revisión'
-                      : d.estado === 'revisada' ? 'revisada, se tomaron medidas'
-                      : 'revisada, sin medidas'}
+                    {t(d.estado === 'pendiente' ? 'enRevision'
+                      : d.estado === 'revisada' ? 'revisadaConMedidas'
+                      : 'revisadaSinMedidas')}
                   </span>
                   <small>{new Date(d.creado_en).toLocaleDateString('es-ES')}</small>
                   {d.estado !== 'pendiente' && (
                     <button
                       className="boton-archivar"
-                      title="Quitar de la lista"
-                      aria-label="Quitar de la lista"
+                      title={t('quitarDeLista')}
+                      aria-label={t('quitarDeLista')}
                       onClick={() => archivarDenuncia(d.id)}
                     >
                       <IconoArchivar />
@@ -332,19 +336,19 @@ export default function MiPerfil() {
               type="button"
               className="accion-cuenta"
               onClick={descargarDatos}
-              title="Descarga tu perfil, matches, valoraciones y decisiones"
+              title={t('descargarDatos')}
             >
               <IconoDescarga />
-              <span>Mis datos</span>
+              <span>{t('misDatos')}</span>
             </button>
             <button
               type="button"
               className="accion-cuenta accion-cuenta--peligro"
               onClick={() => setVerBorrado(true)}
-              title="Eliminar tu cuenta y todo su contenido"
+              title={t('eliminarCuentaAviso')}
             >
               <IconoPapelera />
-              <span>Eliminar cuenta</span>
+              <span>{t('eliminarCuenta')}</span>
             </button>
           </div>
         )}
@@ -352,37 +356,35 @@ export default function MiPerfil() {
         <section className="zona-peligro">
           {!verBorrado ? null : (
           <>
-            <h2>Eliminar mi cuenta</h2>
+            <h2>{t('eliminarCuentaTitulo')}</h2>
             <p>
-              Se borrarán tu perfil, tu foto, tus matches y tus valoraciones.
-              Quien haya hecho match contigo dejará de ver tu teléfono.
-              <strong> No se puede deshacer.</strong>
+              {t('eliminarCuentaTexto')} <strong>{t('noSePuedeDeshacer')}</strong>
             </p>
             <label className="campo-etiqueta" htmlFor="confirmar-borrado">
-              Escribe <code>BORRAR</code> para confirmar
+              {t('escribeBorrar', { palabra: '' })} <code>{t('palabraBorrar')}</code>
             </label>
             <input
               id="confirmar-borrado"
               type="text"
               value={confirmacion}
               onChange={(e) => setConfirmacion(e.target.value)}
-              placeholder="BORRAR"
+              placeholder={t('palabraBorrar')}
               autoComplete="off"
             />
             <button
               type="button"
               className="boton-peligro"
-              disabled={confirmacion.trim().toUpperCase() !== 'BORRAR' || borrando}
+              disabled={confirmacion.trim().toUpperCase() !== t('palabraBorrar') || borrando}
               onClick={borrarCuenta}
             >
-              {borrando ? 'Eliminando…' : 'Eliminar mi cuenta definitivamente'}
+              {borrando ? t('eliminando') : t('eliminarDefinitivamente')}
             </button>
             <button
               type="button"
               className="boton-retirar"
               onClick={() => { setVerBorrado(false); setConfirmacion('') }}
             >
-              Cancelar
+              {t('cancelar')}
             </button>
           </>
           )}

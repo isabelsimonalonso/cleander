@@ -4,10 +4,12 @@ import { useAuth } from '../context/AuthContext'
 import NavApp from '../components/NavApp'
 import Tarjeta from '../components/Tarjeta'
 import Denunciar from '../components/Denunciar'
+import { useIdioma } from '../lib/i18n'
 import '../styles/app.css'
 
 export default function Matches() {
   const { usuario, marcarMatchesVistos } = useAuth()
+  const { t } = useIdioma()
   const [lista, setLista] = useState([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
@@ -36,9 +38,7 @@ export default function Matches() {
   /** Quitarse un match de encima: dejáis de veros el teléfono. */
   const eliminarMatch = async (m) => {
     if (!confirm(
-      `¿Eliminar tu match con ${m.nombre}?\n\n` +
-      'Dejaréis de ver vuestros teléfonos y no volverá a aparecerte en ' +
-      'Descubrir. No se puede deshacer.'
+      t('confirmarEliminarMatch', { nombre: m.nombre })
     )) return
 
     const { error: errorEliminar } = await supabase.rpc('eliminar_match', { otro: m.id })
@@ -90,19 +90,17 @@ export default function Matches() {
       <NavApp />
       <main className="app-main">
         <header className="app-cabecera">
-          <h1>Tus matches</h1>
-          <p>Aquí ya podéis veros el teléfono y hablar por WhatsApp.</p>
+          <h1>{t('tusMatches')}</h1>
+          <p>{t('subtituloMatches')}</p>
         </header>
 
         {error && <div className="aviso aviso--error">{error}</div>}
-        {cargando && <p className="mazo-vacio">Cargando…</p>}
+        {cargando && <p className="mazo-vacio">{t('cargando')}</p>}
 
         {!cargando && lista.length === 0 && (
           <div className="mazo-vacio">
-            <p>Todavía no tienes ningún match.</p>
-            <p className="tenue">
-              Hace falta que las dos partes se marquen mutuamente.
-            </p>
+            <p>{t('sinMatches')}</p>
+            <p className="tenue">{t('sinMatchesNota')}</p>
           </div>
         )}
 
@@ -115,16 +113,16 @@ export default function Matches() {
                   {yaMeValoraron[m.id] ? (
                     // Ya te ha valorado: retirar la petición no borraría su voto,
                     // así que no se ofrece para no confundir.
-                    <span>Ya te ha valorado con {yaMeValoraron[m.id]} estrellas</span>
+                    <span>{t('yaTeValoro', { n: yaMeValoraron[m.id] })}</span>
                   ) : (
                     <>
-                      <span>Petición de valoración enviada</span>
+                      <span>{t('peticionEnviada')}</span>
                       <button
                         className="boton-retirar"
                         disabled={enviando === m.id}
                         onClick={() => pedirValoracion(m.id, false)}
                       >
-                        {enviando === m.id ? 'Retirando…' : 'Retirar'}
+                        {enviando === m.id ? t('retirando') : t('retirar')}
                       </button>
                     </>
                   )}
@@ -135,7 +133,7 @@ export default function Matches() {
                   disabled={enviando === m.id}
                   onClick={() => pedirValoracion(m.id, true)}
                 >
-                  {enviando === m.id ? 'Enviando…' : 'Pedirle que me valore'}
+                  {enviando === m.id ? t('enviando') : t('pedirValoracion')}
                 </button>
               )}
               </>)}
@@ -143,7 +141,7 @@ export default function Matches() {
               <div className="acciones-match">
                 <Denunciar perfil={m} compacto />
                 <button className="boton-eliminar-match" onClick={() => eliminarMatch(m)}>
-                  Eliminar match
+                  {t('eliminarMatch')}
                 </button>
               </div>
             </Tarjeta>

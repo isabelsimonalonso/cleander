@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { TAM_MAX_FOTO } from '../lib/constantes'
+import { useIdioma } from '../lib/i18n'
 
 /**
  * Zona para la foto de perfil: se puede pulsar, arrastrar un archivo
@@ -9,18 +10,19 @@ import { TAM_MAX_FOTO } from '../lib/constantes'
  * esperar a que el servidor lo rechace.
  */
 export default function SubirFoto({ vistaPrevia, estado, onArchivo, onError }) {
+  const { t } = useIdioma()
   const entrada = useRef(null)
   const [encima, setEncima] = useState(false)
 
   const aceptar = (archivo) => {
     if (!archivo) return
     if (!archivo.type.startsWith('image/')) {
-      onError('Eso no es una imagen. Sube un JPG o un PNG.')
+      onError(t('errNoEsImagen'))
       return
     }
     if (archivo.size > TAM_MAX_FOTO) {
       const mb = (archivo.size / 1024 / 1024).toFixed(1)
-      onError(`La foto pesa ${mb} MB y el máximo son 5. Reduce su tamaño.`)
+      onError(t('errFotoPesa', { mb }))
       return
     }
     onError('')
@@ -63,16 +65,16 @@ export default function SubirFoto({ vistaPrevia, estado, onArchivo, onError }) {
       />
 
       {vistaPrevia ? (
-        <img className="zona-foto-previa" src={vistaPrevia} alt="Tu foto de perfil" />
+        <img className="zona-foto-previa" src={vistaPrevia} alt="" />
       ) : (
-        <span className="zona-foto-hueco">Sin foto</span>
+        <span className="zona-foto-hueco">{t('sinFoto')}</span>
       )}
 
       <div className="zona-foto-texto">
         <strong>
-          {encima ? 'Suelta aquí tu foto' : vistaPrevia ? 'Cambiar la foto' : 'Añade tu foto'}
+          {t(encima ? 'sueltaFoto' : vistaPrevia ? 'cambiarFoto' : 'anadeFoto')}
         </strong>
-        <small>Arrástrala, pégala o pulsa para elegirla · JPG o PNG, hasta 5 MB</small>
+        <small>{t('instruccionFoto')}</small>
         {estado && <span className={`estado-foto estado-foto--${estado.clase}`}>{estado.texto}</span>}
       </div>
     </div>

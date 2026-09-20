@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { supabase, subirFoto } from '../lib/supabase'
-import { COPY, LIMITE_RESUMEN, unidadPrecio, unidadSugerida } from '../lib/constantes'
+import { LIMITE_RESUMEN, unidadPrecio, unidadSugerida } from '../lib/constantes'
 import Logo from '../components/Logo'
+import SelectorIdioma from '../components/SelectorIdioma'
 import SelectorUbicacion from '../components/SelectorUbicacion'
 import SelectorServicio from '../components/SelectorServicio'
 import SubirFoto from '../components/SubirFoto'
+import { useIdioma } from '../lib/i18n'
 import '../styles/auth.css'
 
 export default function Registro() {
@@ -27,7 +29,7 @@ export default function Registro() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
-  const copy = COPY[rol]
+  const { t } = useIdioma()
 
   const cambiar = (campo) => (e) => {
     const valor = e.target.value
@@ -51,23 +53,23 @@ export default function Registro() {
     setError('')
 
     if (!acepto) {
-      setError('Debes aceptar el aviso legal y la política de privacidad')
+      setError(t('errCondiciones'))
       return
     }
     if (!datos.categoria) {
-      setError('Elige el servicio')
+      setError(t('errServicio'))
       return
     }
     if (!datos.provincia || !datos.ciudad) {
-      setError('Elige tu provincia y tu municipio')
+      setError(t('errUbicacion'))
       return
     }
     if (datos.password.length < 6) {
-      setError('La contraseña debe tener al menos 6 caracteres')
+      setError(t('errContrasenaCorta'))
       return
     }
     if (!/^[+\d][\d\s]{7,}$/.test(datos.telefono.trim())) {
-      setError('Escribe un teléfono de WhatsApp válido, por ejemplo +34 600 000 000')
+      setError(t('errTelefono'))
       return
     }
 
@@ -95,7 +97,7 @@ export default function Registro() {
     if (errorAlta) {
       setError(
         errorAlta.message.includes('already registered')
-          ? 'Ya existe una cuenta con ese email'
+          ? t('errCorreoUsado')
           : errorAlta.message
       )
       setLoading(false)
@@ -106,7 +108,7 @@ export default function Registro() {
     // sesión todavía y no tendría sentido seguir.
     if (!data.session) {
       setLoading(false)
-      setError('Cuenta creada. Revisa tu correo para confirmarla y luego inicia sesión.')
+      setError(t('errConfirmaCorreo'))
       return
     }
 
@@ -126,14 +128,15 @@ export default function Registro() {
 
   return (
     <div className="auth-container">
+      <SelectorIdioma flotante />
       <header className="auth-cabecera">
         <Logo variante="completo" />
-        <p>Match de servicios domésticos</p>
+        <p>{t('lema')}</p>
       </header>
 
       <div className="auth-box auth-box--ancho">
-        <h1>Crear cuenta</h1>
-        <h2>Elige si buscas un servicio o si lo ofreces</h2>
+        <h1>{t('crearCuenta')}</h1>
+        <h2>{t('eligeLado')}</h2>
 
         {error && <div className="error-message">{error}</div>}
 
@@ -143,21 +146,21 @@ export default function Registro() {
             className={rol === 'cliente' ? 'active' : ''}
             onClick={() => setRol('cliente')}
           >
-            Busco un servicio
+            {t('buscoServicio')}
           </button>
           <button
             type="button"
             className={rol === 'servicio' ? 'active' : ''}
             onClick={() => setRol('servicio')}
           >
-            Ofrezco mi servicio
+            {t('ofrezcoServicio')}
           </button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="Nombre"
+            placeholder={t("nombre")}
             value={datos.nombre}
             onChange={cambiar('nombre')}
             maxLength={80}
@@ -165,28 +168,28 @@ export default function Registro() {
           />
           <input
             type="email"
-            placeholder="Email"
+            placeholder={t("email")}
             value={datos.email}
             onChange={cambiar('email')}
             required
           />
           <input
             type="password"
-            placeholder="Contraseña (mínimo 6 caracteres)"
+            placeholder={t("contrasenaMinima")}
             value={datos.password}
             onChange={cambiar('password')}
             required
           />
           <input
             type="tel"
-            placeholder="WhatsApp (+34 600 000 000)"
+            placeholder={t("whatsappEjemplo")}
             value={datos.telefono}
             onChange={cambiar('telefono')}
             maxLength={20}
             required
           />
           <span className="campo-nota">
-            Tu teléfono permanece oculto. Solo se revela cuando hay match por ambas partes.
+            {t('telefonoOculto')}
           </span>
           <SelectorUbicacion
             provincia={datos.provincia}
@@ -194,11 +197,11 @@ export default function Registro() {
             onChange={(u) => setDatos((prev) => ({ ...prev, ...u }))}
           />
 
-          <label className="campo-etiqueta">{copy.categoria}</label>
+          <label className="campo-etiqueta">{t(rol === 'servicio' ? 'categoriaServicio' : 'categoriaCliente')}</label>
           <SelectorServicio value={datos.categoria} onChange={cambiar('categoria')} />
 
           <label className="campo-etiqueta">
-            {copy.precio.replace('hora', unidadPrecio(datos.unidad_precio))} (€)
+            {t(rol === 'servicio' ? 'precioServicio' : 'precioCliente', { unidad: unidadPrecio(datos.unidad_precio) })} (€)
           </label>
           <div className="precio-con-unidad">
             <input
@@ -212,20 +215,20 @@ export default function Registro() {
               required
             />
             <select value={datos.unidad_precio} onChange={cambiar('unidad_precio')}>
-              <option value="hora">por hora</option>
-              <option value="dia">por día</option>
+              <option value="hora">{t('porHora')}</option>
+              <option value="dia">{t('porDia')}</option>
             </select>
           </div>
 
           <textarea
-            placeholder={copy.resumenPlaceholder}
+            placeholder={t(rol === 'servicio' ? 'resumenServicio' : 'resumenCliente', { max: LIMITE_RESUMEN })}
             value={datos.resumen}
             onChange={cambiar('resumen')}
             maxLength={LIMITE_RESUMEN}
             rows={3}
           />
           <span className="campo-nota">
-            {datos.resumen.length}/{LIMITE_RESUMEN} · lo revisa el equipo antes de publicarse
+            {t('resumenNota', { n: datos.resumen.length, max: LIMITE_RESUMEN })}
           </span>
 
           <SubirFoto
@@ -241,19 +244,19 @@ export default function Registro() {
               onChange={(e) => setAcepto(e.target.checked)}
             />
             <span>
-              Soy mayor de 18 años y he leído y acepto el{' '}
+              {t('aceptoCondiciones')}{' '}
               <Link to="/privacidad" target="_blank">
-                aviso legal, las condiciones de uso y la política de privacidad
+                {t('enlaceCondiciones')}
               </Link>.
             </span>
           </label>
 
           <button type="submit" disabled={loading || !acepto}>
-            {loading ? 'Creando cuenta...' : 'Crear cuenta'}
+            {loading ? t('creandoCuenta') : t('crearCuenta')}
           </button>
         </form>
 
-        <p>¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link></p>
+        <p>{t('yaTienesCuenta')} <Link to="/login">{t('iniciaSesion')}</Link></p>
       </div>
     </div>
   )

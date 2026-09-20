@@ -1,9 +1,19 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import Estrellas from './Estrellas'
-import { unidadCorta } from '../lib/constantes'
+import { unidadCorta, traducirDato } from '../lib/constantes'
+import { useIdioma } from '../lib/i18n'
 
-const ETIQUETA_ROL = { admin: 'Administración', cliente: 'Busca servicio', servicio: 'Ofrece servicio' }
+const CLAVE_ROL = { admin: 'rolAdmin', cliente: 'rolCliente', servicio: 'rolServicio' }
+
+/** Los estados llegan en español desde la base de datos. */
+const CLAVE_ESTADO = {
+  pendiente: 'estadoPendiente',
+  aprobada: 'estadoAprobado',
+  aprobado: 'estadoAprobado',
+  rechazada: 'estadoRechazado',
+  rechazado: 'estadoRechazado',
+}
 
 function Dato({ etiqueta, children }) {
   return (
@@ -21,6 +31,7 @@ function Dato({ etiqueta, children }) {
  * incluido lo que aún no está aprobado y por tanto nadie más ve.
  */
 export default function FichaUsuario({ usuario, nombrePorId, onCerrar, onActualizar }) {
+  const { t, idioma } = useIdioma()
   const [datos, setDatos] = useState(null)
 
   useEffect(() => {
@@ -56,12 +67,12 @@ export default function FichaUsuario({ usuario, nombrePorId, onCerrar, onActuali
     ? datos.recibidas.reduce((t, v) => t + v.estrellas, 0) / datos.recibidas.length
     : 0
 
-  const fecha = (f) => new Date(f).toLocaleDateString('es-ES')
+  const fecha = (f) => new Date(f).toLocaleDateString(idioma === 'en' ? 'en-GB' : 'es-ES')
 
   return (
     <div className="modal-ficha" onClick={onCerrar}>
       <div className="modal-ficha-caja" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-ficha-cerrar" onClick={onCerrar} aria-label="Cerrar">×</button>
+        <button className="modal-ficha-cerrar" onClick={onCerrar} aria-label={t('cerrar')}>×</button>
 
         {/* ── Cabecera ──────────────────────────────────────────────── */}
         <header className="ficha-cabecera">
@@ -72,20 +83,24 @@ export default function FichaUsuario({ usuario, nombrePorId, onCerrar, onActuali
               alt=""
             />
           ) : (
-            <span className="ficha-foto ficha-foto--vacia">sin foto</span>
+            <span className="ficha-foto ficha-foto--vacia">{t('sinFoto')}</span>
           )}
           <div>
             <h2>{usuario.nombre || '(sin nombre)'}</h2>
-            <p>{ETIQUETA_ROL[usuario.rol]} · {usuario.categoria}</p>
+            <p>{t(CLAVE_ROL[usuario.rol])} · {traducirDato(usuario.categoria, idioma)}</p>
             <Estrellas valor={media} total={datos?.recibidas.length ?? 0} tamano={17} />
             <div className="ficha-etiquetas">
-              {usuario.bloqueado && <span className="pastilla pastilla--rechazada">bloqueado</span>}
-              {!usuario.visible && <span className="pastilla pastilla--pendiente">oculto</span>}
+              {usuario.bloqueado && <span className="pastilla pastilla--rechazada">{t('bloqueadoEtiqueta')}</span>}
+              {!usuario.visible && <span className="pastilla pastilla--pendiente">{t('ocultar')}</span>}
               {usuario.foto_url && usuario.foto_estado !== 'aprobada' && (
-                <span className="pastilla pastilla--pendiente">foto {usuario.foto_estado}</span>
+                <span className="pastilla pastilla--pendiente">
+                  {t('etiquetaFoto')} {t(CLAVE_ESTADO[usuario.foto_estado] ?? 'estadoPendiente')}
+                </span>
               )}
               {usuario.resumen && usuario.resumen_estado !== 'aprobado' && (
-                <span className="pastilla pastilla--pendiente">texto {usuario.resumen_estado}</span>
+                <span className="pastilla pastilla--pendiente">
+                  {t('etiquetaTexto')} {t(CLAVE_ESTADO[usuario.resumen_estado] ?? 'estadoPendiente')}
+                </span>
               )}
             </div>
           </div>
@@ -93,35 +108,37 @@ export default function FichaUsuario({ usuario, nombrePorId, onCerrar, onActuali
 
         {/* ── Datos ─────────────────────────────────────────────────── */}
         <section className="ficha-rejilla">
-          <Dato etiqueta="Email">{usuario.email}</Dato>
-          <Dato etiqueta="WhatsApp">{usuario.telefono}</Dato>
-          <Dato etiqueta="Dónde">
+          <Dato etiqueta={t('email')}>{usuario.email}</Dato>
+          <Dato etiqueta={t('whatsapp')}>{usuario.telefono}</Dato>
+          <Dato etiqueta={t('fichaDonde')}>
             {usuario.ciudad}
             {usuario.provincia && usuario.provincia !== usuario.ciudad ? `, ${usuario.provincia}` : ''}
           </Dato>
-          <Dato etiqueta="Precio">
+          <Dato etiqueta={t('fichaPrecio')}>
             {Number(usuario.precio_hora).toFixed(0)} €{unidadCorta(usuario.unidad_precio)}
           </Dato>
-          <Dato etiqueta="Alta">{fecha(usuario.creado_en)}</Dato>
-          <Dato etiqueta="Decisiones">
-            {datos ? `${datos.intereses.filter((i) => i.decision === 'like').length} sí · ${datos.intereses.filter((i) => i.decision === 'pass').length} no` : '…'}
+          <Dato etiqueta={t('fichaAlta')}>{fecha(usuario.creado_en)}</Dato>
+          <Dato etiqueta={t('fichaDecisiones')}>
+            {datos
+              ? `${datos.intereses.filter((i) => i.decision === 'like').length} ${t('fichaSi')} · ${datos.intereses.filter((i) => i.decision === 'pass').length} ${t('fichaNo')}`
+              : '…'}
           </Dato>
         </section>
 
         {/* ── Su texto ──────────────────────────────────────────────── */}
         {usuario.resumen && (
           <section className="ficha-bloque">
-            <h3>Su descripción</h3>
+            <h3>{t('fichaDescripcion')}</h3>
             <p className="ficha-resumen">«{usuario.resumen}»</p>
             <div className="botones-moderacion">
               {usuario.resumen_estado !== 'aprobado' && (
                 <button className="btn-ok" onClick={() => onActualizar(usuario.id, { resumen_estado: 'aprobado' })}>
-                  Aprobar texto
+                  {t('aprobarTexto')}
                 </button>
               )}
               {usuario.resumen_estado !== 'rechazado' && (
                 <button className="btn-no" onClick={() => onActualizar(usuario.id, { resumen_estado: 'rechazado' })}>
-                  Rechazar texto
+                  {t('rechazarTexto')}
                 </button>
               )}
             </div>
@@ -131,10 +148,10 @@ export default function FichaUsuario({ usuario, nombrePorId, onCerrar, onActuali
         {/* ── Denuncias ─────────────────────────────────────────────── */}
         {datos?.denuncias.length > 0 && (
           <section className="ficha-bloque ficha-bloque--alerta">
-            <h3>Denuncias recibidas ({datos.denuncias.length})</h3>
+            <h3>{t('fichaDenuncias', { n: datos.denuncias.length })}</h3>
             {datos.denuncias.map((d, i) => (
               <p key={i} className="ficha-denuncia">
-                <strong>{d.motivo}</strong> · {d.estado} · {fecha(d.creado_en)}
+                <strong>{traducirDato(d.motivo, idioma)}</strong> · {d.estado} · {fecha(d.creado_en)}
                 {d.detalle && <><br />«{d.detalle}»</>}
               </p>
             ))}
@@ -143,7 +160,7 @@ export default function FichaUsuario({ usuario, nombrePorId, onCerrar, onActuali
 
         {/* ── Su actividad ──────────────────────────────────────────── */}
         <section className="ficha-bloque">
-          <h3>Matches ({datos?.matches.length ?? 0})</h3>
+          <h3>{t('colMatches')} ({datos?.matches.length ?? 0})</h3>
           {datos?.matches.length ? (
             <ul className="ficha-lista">
               {datos.matches.map((m, i) => {
@@ -156,30 +173,30 @@ export default function FichaUsuario({ usuario, nombrePorId, onCerrar, onActuali
                 )
               })}
             </ul>
-          ) : <p className="tenue">Ninguno todavía.</p>}
+          ) : <p className="tenue">{t('fichaSinMatches')}</p>}
         </section>
 
         <section className="ficha-bloque">
-          <h3>Valoraciones</h3>
+          <h3>{t('valoraciones')}</h3>
           <p className="ficha-votos">
-            <strong>Recibidas:</strong>{' '}
+            <strong>{t('fichaRecibidas')}</strong>{' '}
             {datos?.recibidas.length
               ? datos.recibidas.map((v, i) => (
                   <span key={i} className="ficha-voto">
                     {v.estrellas}★ de {nombrePorId[v.autor] ?? '—'}
                   </span>
                 ))
-              : <span className="tenue">ninguna</span>}
+              : <span className="tenue">{t('fichaNinguna')}</span>}
           </p>
           <p className="ficha-votos">
-            <strong>Dadas:</strong>{' '}
+            <strong>{t('fichaDadas')}</strong>{' '}
             {datos?.dadas.length
               ? datos.dadas.map((v, i) => (
                   <span key={i} className="ficha-voto">
                     {v.estrellas}★ a {nombrePorId[v.destinatario] ?? '—'}
                   </span>
                 ))
-              : <span className="tenue">ninguna</span>}
+              : <span className="tenue">{t('fichaNinguna')}</span>}
           </p>
         </section>
       </div>

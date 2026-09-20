@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
-import { COPY } from '../lib/constantes'
+import { useIdioma } from '../lib/i18n'
 import { PROVINCIAS, municipiosDe } from '../lib/ubicacion'
 import SelectorServicio from '../components/SelectorServicio'
 import { useAuth } from '../context/AuthContext'
@@ -13,6 +13,7 @@ const UMBRAL_ARRASTRE = 110 // píxeles que hay que arrastrar para que cuente
 
 export default function Descubrir() {
   const { usuario, rol, refrescarMatchesNuevos } = useAuth()
+  const { t } = useIdioma()
   const [mazo, setMazo] = useState([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
@@ -24,7 +25,6 @@ export default function Descubrir() {
   const [saliendo, setSaliendo] = useState(null) // 'like' | 'pass'
   const inicioX = useRef(null)
 
-  const copy = COPY[rol === 'servicio' ? 'servicio' : 'cliente']
   const actual = mazo[0] ?? null
 
   const cargarMazo = useCallback(async () => {
@@ -144,8 +144,8 @@ export default function Descubrir() {
 
       <main className="app-main">
         <header className="app-cabecera">
-          <h1>{copy.descubrir}</h1>
-          <p>Desliza a la derecha si te interesa, a la izquierda si no.</p>
+          <h1>{t(rol === 'servicio' ? 'clientesQueBuscan' : 'profesionalesDisponibles')}</h1>
+          <p>{t('instruccionDeslizar')}</p>
         </header>
 
         <div className="filtros">
@@ -153,7 +153,7 @@ export default function Descubrir() {
             className="filtro-ancho"
             value={filtros.categoria}
             requerido={false}
-            placeholder="Todos los servicios"
+            placeholder={t('todosLosServicios')}
             onChange={(e) => setFiltros((f) => ({ ...f, categoria: e.target.value }))}
           />
           <select
@@ -162,7 +162,7 @@ export default function Descubrir() {
               setFiltros((f) => ({ ...f, provincia: e.target.value, municipio: '' }))
             }
           >
-            <option value="">Toda España</option>
+            <option value="">{t('todaEspana')}</option>
             {PROVINCIAS.map((p) => <option key={p} value={p}>{p}</option>)}
           </select>
           <select
@@ -171,7 +171,7 @@ export default function Descubrir() {
             onChange={(e) => setFiltros((f) => ({ ...f, municipio: e.target.value }))}
           >
             <option value="">
-              {filtros.provincia ? 'Toda la provincia' : 'Elige antes provincia'}
+              {t(filtros.provincia ? 'todaLaProvincia' : 'eligeAntesProvincia')}
             </option>
             {municipios.map((m) => <option key={m} value={m}>{m}</option>)}
           </select>
@@ -179,9 +179,9 @@ export default function Descubrir() {
             value={filtros.precio}
             onChange={(e) => setFiltros((f) => ({ ...f, precio: e.target.value }))}
           >
-            <option value="">Cualquier precio</option>
+            <option value="">{t('cualquierPrecio')}</option>
             {[10, 15, 20, 25, 30, 40, 50].map((p) => (
-              <option key={p} value={p}>Hasta {p} €</option>
+              <option key={p} value={p}>{t('hastaPrecio', { n: p })}</option>
             ))}
           </select>
         </div>
@@ -189,12 +189,12 @@ export default function Descubrir() {
         {error && <div className="aviso aviso--error">{error}</div>}
 
         <div className="mazo">
-          {cargando && <p className="mazo-vacio">Buscando…</p>}
+          {cargando && <p className="mazo-vacio">{t('buscando')}</p>}
 
           {!cargando && !actual && (
             <div className="mazo-vacio">
-              <p>No queda nadie por ver con estos filtros.</p>
-              <button onClick={cargarMazo}>Volver a buscar</button>
+              <p>{t('mazoVacio')}</p>
+              <button onClick={cargarMazo}>{t('volverABuscar')}</button>
             </div>
           )}
 
@@ -219,8 +219,8 @@ export default function Descubrir() {
                 onPointerUp={alSoltar}
                 onPointerCancel={alSoltar}
               >
-                {arrastre > 60 && <span className="sello sello--like">ME INTERESA</span>}
-                {arrastre < -60 && <span className="sello sello--pass">PASO</span>}
+                {arrastre > 60 && <span className="sello sello--like">{t('meInteresa')}</span>}
+                {arrastre < -60 && <span className="sello sello--pass">{t('paso')}</span>}
                 <Tarjeta perfil={actual} />
               </div>
             </>
@@ -238,7 +238,7 @@ export default function Descubrir() {
             <button
               className="accion accion--deshacer"
               disabled={!ultima}
-              title={ultima ? `Recuperar a ${ultima.nombre}` : 'Nada que deshacer'}
+              title={ultima ? t('deshacer', { nombre: ultima.nombre }) : t('nadaQueDeshacer')}
               onClick={deshacer}
             >
               ↺
@@ -252,12 +252,9 @@ export default function Descubrir() {
       {matchNuevo && (
         <div className="modal-match" onClick={() => setMatchNuevo(null)}>
           <div className="modal-match-caja" onClick={(e) => e.stopPropagation()}>
-            <h2>¡Es un match!</h2>
-            <p>
-              Tú y <strong>{matchNuevo.nombre}</strong> os habéis elegido.
-              Ya podéis ver vuestros teléfonos en la sección Matches.
-            </p>
-            <button onClick={() => setMatchNuevo(null)}>Seguir mirando</button>
+            <h2>{t('esUnMatch')}</h2>
+            <p>{t('textoMatch', { nombre: matchNuevo.nombre })}</p>
+            <button onClick={() => setMatchNuevo(null)}>{t('seguirMirando')}</button>
           </div>
         </div>
       )}

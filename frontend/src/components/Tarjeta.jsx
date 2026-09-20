@@ -1,4 +1,5 @@
-import { COPY, unidadCorta } from '../lib/constantes'
+import { unidadCorta, traducirDato } from '../lib/constantes'
+import { useIdioma } from '../lib/i18n'
 import Estrellas from './Estrellas'
 import IconoWhatsApp from './IconoWhatsApp'
 
@@ -24,6 +25,7 @@ function Iniciales({ nombre }) {
  *                  pero está oculto hasta que haya match.
  */
 export default function Tarjeta({ perfil, telefono = null, propio = false, children }) {
+  const { t, idioma } = useIdioma()
   if (perfil.suspendido) {
     return (
       <article className="tarjeta tarjeta--suspendida">
@@ -35,14 +37,14 @@ export default function Tarjeta({ perfil, telefono = null, propio = false, child
             <h3>{perfil.nombre}</h3>
           </div>
           <p className="tarjeta-suspendida-aviso">
-            Cuenta suspendida. Sus datos de contacto ya no están disponibles.
+            {t('cuentaSuspendidaTarjeta')}
           </p>
         </div>
       </article>
     )
   }
 
-  const copy = COPY[perfil.rol] ?? COPY.cliente
+
 
   return (
     <article className="tarjeta">
@@ -53,7 +55,7 @@ export default function Tarjeta({ perfil, telefono = null, propio = false, child
           <Iniciales nombre={perfil.nombre} />
         )}
         <span className={`tarjeta-etiqueta tarjeta-etiqueta--${perfil.rol}`}>
-          {copy.etiqueta}
+          {t(perfil.rol === 'servicio' ? 'etiquetaOfrezco' : 'etiquetaBusco')}
         </span>
       </div>
 
@@ -66,7 +68,7 @@ export default function Tarjeta({ perfil, telefono = null, propio = false, child
           </span>
         </div>
 
-        <p className="tarjeta-categoria">{perfil.categoria}</p>
+        <p className="tarjeta-categoria">{traducirDato(perfil.categoria, idioma)}</p>
         <p className="tarjeta-ciudad">
           📍 {perfil.ciudad}
           {perfil.provincia && perfil.provincia !== perfil.ciudad && (
@@ -86,9 +88,9 @@ export default function Tarjeta({ perfil, telefono = null, propio = false, child
             <span className="tarjeta-telefono-propio">
               <span className="tarjeta-telefono-linea">
                 <IconoWhatsApp size={17} />
-                {perfil.telefono || 'Sin teléfono'}
+                {perfil.telefono || t('sinFoto')}
               </span>
-              <small>Solo lo ves tú. Se revela cuando hagas match.</small>
+              <small>{t('soloLoVesTu')}</small>
             </span>
           ) : telefono ? (
             <a
@@ -106,7 +108,7 @@ export default function Tarjeta({ perfil, telefono = null, propio = false, child
                 <IconoWhatsApp size={17} />
                 +34 600 000 000
               </span>
-              <small>Visible al hacer match</small>
+              <small>{t('visibleAlMatch')}</small>
             </span>
           )}
         </div>

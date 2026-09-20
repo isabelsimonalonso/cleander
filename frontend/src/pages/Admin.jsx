@@ -1,21 +1,38 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase, borrarFotosDe } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
-import { unidadCorta } from '../lib/constantes'
+import { unidadCorta, traducirDato } from '../lib/constantes'
+import { useIdioma } from '../lib/i18n'
 import NavApp from '../components/NavApp'
 import FichaUsuario from '../components/FichaUsuario'
 import '../styles/app.css'
 import '../styles/admin.css'
 
-const ETIQUETA_ROL = { admin: 'Admin', cliente: 'Cliente', servicio: 'Servicio' }
+
 
 // El rol admin NO se concede desde aquí: solo se puede corregir si alguien
 // se registró con el lado equivocado. Para nombrar a otro administrador hay
 // que entrar en Supabase y hacerlo por SQL, a propósito.
 const ROLES_ASIGNABLES = ['cliente', 'servicio']
 
+/** Los estados llegan en español desde la base de datos. */
+const CLAVE_ESTADO = {
+  pendiente: 'estadoPendiente',
+  aprobada: 'estadoAprobado',
+  aprobado: 'estadoAprobado',
+  rechazada: 'estadoRechazado',
+  rechazado: 'estadoRechazado',
+}
+
+const CLAVE_ESTADO_DENUNCIA = {
+  pendiente: 'enRevision',
+  revisada: 'revisadaConMedidas',
+  descartada: 'revisadaSinMedidas',
+}
+
 export default function Admin() {
   const { usuario } = useAuth()
+  const { t, idioma } = useIdioma()
   const [usuarios, setUsuarios] = useState([])
   const [stats, setStats] = useState({})
   const [busqueda, setBusqueda] = useState('')
@@ -68,8 +85,7 @@ export default function Admin() {
   /** Bloquear pidiendo el motivo, que la persona leerá al intentar entrar. */
   const bloquear = async (u, motivoSugerido = '') => {
     const motivo = prompt(
-      `¿Por qué bloqueas a ${u.nombre}?\n\n` +
-      'Lo leerá en la pantalla de cuenta suspendida. Déjalo vacío si prefieres no decirlo.',
+      t('preguntaMotivoBloqueo', { nombre: u.nombre }),
       motivoSugerido
     )
     if (motivo === null) return   // ha cancelado
@@ -77,7 +93,7 @@ export default function Admin() {
   }
 
   const borrar = async (u) => {
-    if (!confirm(`Borrar definitivamente a ${u.nombre || u.email}?\n\nSe eliminarán su perfil, sus matches y sus valoraciones. No se puede deshacer.`)) {
+    if (!confirm(t('confirmarBorrado', { nombre: u.nombre || u.email }))) {
       return
     }
     // La foto va aparte: no se puede borrar desde la base de datos
@@ -144,21 +160,21 @@ export default function Admin() {
       <NavApp />
       <main className="app-main app-main--ancho">
         <header className="app-cabecera">
-          <h1>Panel de administración</h1>
-          <p>Control total sobre usuarios, textos y matches.</p>
+          <h1>{t('panelTitulo')}</h1>
+          <p>{t('panelSubtitulo')}</p>
         </header>
 
         {error && <div className="aviso aviso--error">{error}</div>}
 
         <div className="stats">
-          <Stat etiqueta="Clientes" valor={stats.clientes} />
-          <Stat etiqueta="Servicios" valor={stats.servicios} />
-          <Stat etiqueta="Matches" valor={stats.matches} />
-          <Stat etiqueta="Likes" valor={stats.likes} />
-          <Stat etiqueta="Bloqueados" valor={stats.bloqueados} />
-          <Stat etiqueta="Textos por revisar" valor={stats.resumenes_pendientes} destacado />
-          <Stat etiqueta="Fotos por revisar" valor={stats.fotos_pendientes} destacado />
-          <Stat etiqueta="Denuncias" valor={stats.denuncias_pendientes} destacado />
+          <Stat etiqueta={t('statClientes')} valor={stats.clientes} />
+          <Stat etiqueta={t('statServicios')} valor={stats.servicios} />
+          <Stat etiqueta={t('statMatches')} valor={stats.matches} />
+          <Stat etiqueta={t('statLikes')} valor={stats.likes} />
+          <Stat etiqueta={t('statBloqueados')} valor={stats.bloqueados} />
+          <Stat etiqueta={t('statTextos')} valor={stats.resumenes_pendientes} destacado />
+          <Stat etiqueta={t('statFotos')} valor={stats.fotos_pendientes} destacado />
+          <Stat etiqueta={t('statDenuncias')} valor={stats.denuncias_pendientes} destacado />
         </div>
 
         <div className="pestanas-admin">
@@ -166,13 +182,13 @@ export default function Admin() {
             className={vista === 'usuarios' ? 'activa' : ''}
             onClick={() => setVista('usuarios')}
           >
-            Usuarios
+            {t('pestanaUsuarios')}
           </button>
           <button
             className={vista === 'denuncias' ? 'activa' : ''}
             onClick={() => setVista('denuncias')}
           >
-            Denuncias
+            {t('pestanaDenuncias')}
             {stats.denuncias_pendientes > 0 && (
               <span className="contador-filtro">{stats.denuncias_pendientes}</span>
             )}
@@ -182,23 +198,23 @@ export default function Admin() {
         {vista === 'denuncias' && (
           <div className="lista-denuncias">
             {denuncias.length === 0 && (
-              <p className="bloque-vacio">No hay ninguna denuncia.</p>
+              <p className="bloque-vacio">{t('sinDenuncias')}</p>
             )}
             {denuncias.map((d) => (
               <div className={`denuncia denuncia--${d.estado}`} key={d.id}>
                 <div className="denuncia-cabecera">
-                  <strong>{d.motivo}</strong>
+                  <strong>{traducirDato(d.motivo, idioma)}</strong>
                   <span className={`pastilla pastilla--${d.estado === 'pendiente' ? 'pendiente' : d.estado === 'revisada' ? 'aprobada' : 'rechazada'}`}>
-                    {d.estado}
+                    {t(CLAVE_ESTADO_DENUNCIA[d.estado] ?? 'enRevision')}
                   </span>
                 </div>
                 <p className="denuncia-contra">
-                  Contra <strong>{d.denunciado_nombre}</strong> ({d.denunciado_email})
-                  {d.denunciado_bloqueado && <span className="pastilla pastilla--rechazada">bloqueado</span>}
+                  {t('contra')} <strong>{d.denunciado_nombre}</strong> ({d.denunciado_email})
+                  {d.denunciado_bloqueado && <span className="pastilla pastilla--rechazada">{t('bloqueadoEtiqueta')}</span>}
                 </p>
                 {d.detalle && <p className="denuncia-detalle">«{d.detalle}»</p>}
                 <small>
-                  De {d.denunciante_nombre} · {new Date(d.creado_en).toLocaleString('es-ES')}
+                  {t('de')} {d.denunciante_nombre} · {new Date(d.creado_en).toLocaleString('es-ES')}
                 </small>
                 <div className="botones-moderacion">
                   {!d.denunciado_bloqueado && (
@@ -212,16 +228,16 @@ export default function Admin() {
                         resolverDenuncia(d.id, 'revisada')
                       }}
                     >
-                      Bloquear y cerrar
+                      {t('bloquearYCerrar')}
                     </button>
                   )}
                   {d.estado === 'pendiente' && (
                     <>
                       <button onClick={() => resolverDenuncia(d.id, 'revisada')}>
-                        Marcar revisada
+                        {t('marcarRevisada')}
                       </button>
                       <button onClick={() => resolverDenuncia(d.id, 'descartada')}>
-                        Descartar
+                        {t('descartar')}
                       </button>
                     </>
                   )}
@@ -235,14 +251,14 @@ export default function Admin() {
         <div className="filtros">
           <input
             type="search"
-            placeholder="Buscar por nombre, email, ciudad, teléfono…"
+            placeholder={t('buscarUsuario')}
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
           />
           <select value={filtroRol} onChange={(e) => setFiltroRol(e.target.value)}>
-            <option value="">Todos los roles</option>
-            <option value="cliente">Clientes</option>
-            <option value="servicio">Servicios</option>
+            <option value="">{t('todosLosRoles')}</option>
+            <option value="cliente">{t('statClientes')}</option>
+            <option value="servicio">{t('statServicios')}</option>
           </select>
           <label className={`campo-interruptor ${pendientes + fotosPendientes === 0 ? 'campo-interruptor--vacio' : ''}`}>
             <input
@@ -251,29 +267,29 @@ export default function Admin() {
               disabled={pendientes + fotosPendientes === 0}
               onChange={(e) => setSoloPendientes(e.target.checked)}
             />
-            Solo pendientes de revisar
+            {t('soloPendientes')}
             <span className="contador-filtro">{pendientes + fotosPendientes}</span>
           </label>
-          <button onClick={cargar}>Recargar</button>
+          <button onClick={cargar}>{t('recargar')}</button>
         </div>
 
         )}
 
         {vista === 'usuarios' && (cargando ? (
-          <p className="mazo-vacio">Cargando…</p>
+          <p className="mazo-vacio">{t('cargando')}</p>
         ) : (
           <div className="tabla-scroll">
             <table className="tabla-admin">
               <thead>
                 <tr>
-                  <th>Usuario</th>
-                  <th>Foto</th>
-                  <th>Rol</th>
-                  <th>Contacto</th>
-                  <th>Servicio</th>
-                  <th>Resumen</th>
-                  <th>Matches</th>
-                  <th>Acciones</th>
+                  <th>{t('colUsuario')}</th>
+                  <th>{t('colFoto')}</th>
+                  <th>{t('colRol')}</th>
+                  <th>{t('colContacto')}</th>
+                  <th>{t('colServicio')}</th>
+                  <th>{t('colResumen')}</th>
+                  <th>{t('colMatches')}</th>
+                  <th>{t('colAcciones')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -302,7 +318,7 @@ export default function Admin() {
                             />
                           </a>
                           <span className={`pastilla pastilla--${u.foto_estado}`}>
-                            {u.foto_estado}
+                            {t(CLAVE_ESTADO[u.foto_estado] ?? 'estadoPendiente')}
                           </span>
                           <div className="botones-moderacion">
                             {u.foto_estado !== 'aprobada' && (
@@ -310,7 +326,7 @@ export default function Admin() {
                                 className="btn-ok"
                                 onClick={() => actualizar(u.id, { foto_estado: 'aprobada' })}
                               >
-                                Aprobar
+                                {t('aprobar')}
                               </button>
                             )}
                             {u.foto_estado !== 'rechazada' && (
@@ -318,7 +334,7 @@ export default function Admin() {
                                 className="btn-no"
                                 onClick={() => actualizar(u.id, { foto_estado: 'rechazada' })}
                               >
-                                Rechazar
+                                {t('rechazar')}
                               </button>
                             )}
                           </div>
@@ -330,14 +346,16 @@ export default function Admin() {
 
                     <td>
                       {u.rol === 'admin' ? (
-                        <span className="pastilla pastilla--admin">Admin</span>
+                        <span className="pastilla pastilla--admin">{t('rolAdmin')}</span>
                       ) : (
                         <select
                           value={u.rol}
                           onChange={(e) => actualizar(u.id, { rol: e.target.value })}
                         >
                           {ROLES_ASIGNABLES.map((v) => (
-                            <option key={v} value={v}>{ETIQUETA_ROL[v]}</option>
+                            <option key={v} value={v}>
+                              {t(v === 'cliente' ? 'statClientes' : 'statServicios')}
+                            </option>
                           ))}
                         </select>
                       )}
@@ -349,7 +367,7 @@ export default function Admin() {
                     </td>
 
                     <td>
-                      {u.categoria}
+                      {traducirDato(u.categoria, idioma)}
                       <small>{Number(u.precio_hora).toFixed(0)} €{unidadCorta(u.unidad_precio)}</small>
                     </td>
 
@@ -358,7 +376,7 @@ export default function Admin() {
                         <>
                           <p>{u.resumen}</p>
                           <span className={`pastilla pastilla--${u.resumen_estado}`}>
-                            {u.resumen_estado}
+                            {t(CLAVE_ESTADO[u.resumen_estado] ?? 'estadoPendiente')}
                           </span>
                           <div className="botones-moderacion">
                             {u.resumen_estado !== 'aprobado' && (
@@ -366,7 +384,7 @@ export default function Admin() {
                                 className="btn-ok"
                                 onClick={() => actualizar(u.id, { resumen_estado: 'aprobado' })}
                               >
-                                Aprobar
+                                {t('aprobar')}
                               </button>
                             )}
                             {u.resumen_estado !== 'rechazado' && (
@@ -374,13 +392,13 @@ export default function Admin() {
                                 className="btn-no"
                                 onClick={() => actualizar(u.id, { resumen_estado: 'rechazado' })}
                               >
-                                Rechazar
+                                {t('rechazar')}
                               </button>
                             )}
                           </div>
                         </>
                       ) : (
-                        <span className="tenue">sin texto</span>
+                        <span className="tenue">{t('sinTexto')}</span>
                       )}
                     </td>
 
@@ -388,7 +406,7 @@ export default function Admin() {
 
                     <td className="celda-acciones">
                       <button className="btn-ver" onClick={() => setFicha(u)}>
-                        Ver perfil
+                        {t('verPerfil')}
                       </button>
                       <button
                         onClick={() =>
@@ -397,17 +415,17 @@ export default function Admin() {
                             : bloquear(u)
                         }
                       >
-                        {u.bloqueado ? 'Desbloquear' : 'Bloquear'}
+                        {t(u.bloqueado ? 'desbloquear' : 'bloquear')}
                       </button>
                       <button onClick={() => actualizar(u.id, { visible: !u.visible })}>
-                        {u.visible ? 'Ocultar' : 'Mostrar'}
+                        {t(u.visible ? 'ocultar' : 'mostrar')}
                       </button>
                       <button
                         className="btn-peligro"
                         disabled={u.id === usuario.id}
                         onClick={() => borrar(u)}
                       >
-                        Borrar
+                        {t('borrar')}
                       </button>
                     </td>
                   </tr>
@@ -416,7 +434,7 @@ export default function Admin() {
                 {enPantalla.length === 0 && (
                   <tr>
                     <td colSpan={8} className="celda-centro tenue">
-                      Ningún usuario coincide con el filtro.
+                      {t('nadieCoincide')}
                     </td>
                   </tr>
                 )}
@@ -428,16 +446,16 @@ export default function Admin() {
         {vista === 'usuarios' && !cargando && totalPaginas > 1 && (
           <div className="paginador">
             <button disabled={paginaActual === 0} onClick={() => setPagina(paginaActual - 1)}>
-              Anterior
+              {t('anterior')}
             </button>
             <span>
-              {paginaActual + 1} de {totalPaginas} · {visibles.length} usuarios
+              {t('paginaDe', { actual: paginaActual + 1, total: totalPaginas, n: visibles.length })}
             </span>
             <button
               disabled={paginaActual >= totalPaginas - 1}
               onClick={() => setPagina(paginaActual + 1)}
             >
-              Siguiente
+              {t('siguiente')}
             </button>
           </div>
         )}
