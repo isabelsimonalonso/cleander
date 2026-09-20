@@ -150,5 +150,11 @@ export const COPY = {
   },
 }
 
+/**
+ * Dirección de contacto, en un solo sitio.
+ * Aparece en el aviso legal y en el mensaje de cuenta bloqueada.
+ */
+export const CONTACTO = 'info@cleanderapp.com'
+
 export const LIMITE_RESUMEN = 150
 export const TAM_MAX_FOTO = 5 * 1024 * 1024 // 5 MB

@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { CONTACTO } from '../lib/constantes'
 
 /**
  * Envuelve una ruta privada.
@@ -10,7 +11,7 @@ import { useAuth } from '../context/AuthContext'
  *   "admin"    → solo administración.
  */
 export default function ProtectedRoute({ children, acceso = 'usuarios' }) {
-  const { sesion, perfil, rol, cargando } = useAuth()
+  const { sesion, perfil, rol, cargando, logout } = useAuth()
 
   if (cargando) {
     return <div className="pantalla-carga">Cargando…</div>
@@ -22,8 +23,23 @@ export default function ProtectedRoute({ children, acceso = 'usuarios' }) {
 
   if (perfil?.bloqueado) {
     return (
-      <div className="pantalla-carga">
-        Tu cuenta está bloqueada. Escribe a soporte para revisarla.
+      <div className="pantalla-bloqueada">
+        <div className="pantalla-bloqueada-caja">
+          <h1>Cuenta suspendida</h1>
+          <p>
+            Tu cuenta ha sido suspendida y no puedes usar CleanDerApp por
+            ahora. Tu perfil no aparece en las búsquedas y quienes hicieron
+            match contigo ya no ven tus datos de contacto.
+          </p>
+          <p>
+            Si crees que es un error o quieres que revisemos la decisión,
+            escríbenos:
+          </p>
+          <a className="pantalla-bloqueada-correo" href={`mailto:${CONTACTO}`}>
+            {CONTACTO}
+          </a>
+          <button onClick={logout}>Cerrar sesión</button>
+        </div>
       </div>
     )
   }

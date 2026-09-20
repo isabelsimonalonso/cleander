@@ -1,3 +1,4 @@
+import { CONTACTO } from '../lib/constantes'
 import '../styles/privacy.css'
 
 /**
@@ -6,8 +7,6 @@ import '../styles/privacy.css'
  * Basta con cambiar esta línea por el correo real. Mientras siga entre
  * corchetes, la página avisa de que el servicio está en pruebas.
  */
-const CONTACTO = 'info@cleanderapp.com'
-
 const PENDIENTE = CONTACTO.startsWith('[')
 
 export default function Privacy() {

@@ -961,3 +961,70 @@
   border-left: 3px solid #e0e0e0;
   padding-left: 11px;
 }
+
+/* ── Pantalla de cuenta suspendida ───────────────────────────────────── */
+.pantalla-bloqueada {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+  background: white;
+}
+
+.pantalla-bloqueada-caja {
+  width: 100%;
+  max-width: 440px;
+  padding: 38px 34px;
+  border-radius: 18px;
+  border-top: 3px solid #e5484d;
+  box-shadow: 0 10px 44px rgba(229, 72, 77, 0.13);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pantalla-bloqueada-caja h1 {
+  font-size: 25px;
+  font-weight: 600;
+  color: #b4413f;
+  letter-spacing: -0.4px;
+}
+
+.pantalla-bloqueada-caja p {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: #7a7a7a;
+}
+
+.pantalla-bloqueada-correo {
+  display: block;
+  padding: 13px;
+  border-radius: 11px;
+  background: #f7fbfc;
+  color: var(--turquesa);
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.pantalla-bloqueada-correo:hover {
+  background: #eef7f9;
+  text-decoration: underline;
+}
+
+.pantalla-bloqueada-caja button {
+  padding: 12px;
+  border-radius: 11px;
+  background: #f4f4f4;
+  color: #6b6b6b;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.pantalla-bloqueada-caja button:hover {
+  background: #ebebeb;
+}
