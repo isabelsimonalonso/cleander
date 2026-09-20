@@ -59,6 +59,8 @@ export default function Admin() {
   const visibles = useMemo(() => {
     const texto = busqueda.trim().toLowerCase()
     return usuarios.filter((u) => {
+      // Tu propia fila no pinta nada aquí: no puedes moderarte ni borrarte.
+      if (u.id === usuario.id) return false
       if (filtroRol && u.rol !== filtroRol) return false
       if (soloPendientes && !(u.resumen && u.resumen_estado === 'pendiente')) return false
       if (!texto) return true
@@ -66,7 +68,7 @@ export default function Admin() {
         .filter(Boolean)
         .some((campo) => campo.toLowerCase().includes(texto))
     })
-  }, [usuarios, busqueda, filtroRol, soloPendientes])
+  }, [usuarios, busqueda, filtroRol, soloPendientes, usuario.id])
 
   return (
     <div className="app-layout">
