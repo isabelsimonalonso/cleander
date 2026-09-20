@@ -4,6 +4,7 @@ import { CATEGORIAS, COPY, LIMITE_RESUMEN, TAM_MAX_FOTO } from '../lib/constante
 import { useAuth } from '../context/AuthContext'
 import NavApp from '../components/NavApp'
 import Tarjeta from '../components/Tarjeta'
+import SelectorUbicacion from '../components/SelectorUbicacion'
 import '../styles/app.css'
 
 const ESTADO_RESUMEN = {
@@ -55,6 +56,11 @@ export default function MiPerfil() {
     e.preventDefault()
     setError('')
     setMensaje('')
+
+    if (!form.provincia || !form.ciudad) {
+      setError('Elige tu provincia y tu municipio')
+      return
+    }
     setGuardando(true)
 
     const { error: errorGuardar } = await supabase
@@ -62,7 +68,8 @@ export default function MiPerfil() {
       .update({
         nombre: form.nombre.trim(),
         telefono: form.telefono.trim(),
-        ciudad: form.ciudad.trim(),
+        provincia: form.provincia,
+        ciudad: form.ciudad,
         categoria: form.categoria,
         precio_hora: Number(form.precio_hora) || 0,
         resumen: (form.resumen ?? '').trim(),
@@ -116,8 +123,11 @@ export default function MiPerfil() {
             <label className="campo-etiqueta">WhatsApp</label>
             <input type="tel" value={form.telefono} onChange={cambiar('telefono')} maxLength={20} required />
 
-            <label className="campo-etiqueta">Ciudad</label>
-            <input type="text" value={form.ciudad} onChange={cambiar('ciudad')} maxLength={80} required />
+            <SelectorUbicacion
+              provincia={form.provincia}
+              municipio={form.ciudad}
+              onChange={(u) => setForm((prev) => ({ ...prev, ...u }))}
+            />
 
             <label className="campo-etiqueta">{copy.categoria}</label>
             <select value={form.categoria} onChange={cambiar('categoria')}>

@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { supabase, subirFoto } from '../lib/supabase'
 import { CATEGORIAS, COPY, LIMITE_RESUMEN, TAM_MAX_FOTO } from '../lib/constantes'
 import Logo from '../components/Logo'
+import SelectorUbicacion from '../components/SelectorUbicacion'
 import '../styles/auth.css'
 
 export default function Registro() {
@@ -12,6 +13,7 @@ export default function Registro() {
     email: '',
     password: '',
     telefono: '',
+    provincia: '',
     ciudad: '',
     categoria: CATEGORIAS[0],
     precio_hora: '',
@@ -50,6 +52,10 @@ export default function Registro() {
       setError('Debes aceptar el aviso legal y la política de privacidad')
       return
     }
+    if (!datos.provincia || !datos.ciudad) {
+      setError('Elige tu provincia y tu municipio')
+      return
+    }
     if (datos.password.length < 6) {
       setError('La contraseña debe tener al menos 6 caracteres')
       return
@@ -70,7 +76,8 @@ export default function Registro() {
           rol,
           nombre: datos.nombre.trim(),
           telefono: datos.telefono.trim(),
-          ciudad: datos.ciudad.trim(),
+          provincia: datos.provincia,
+          ciudad: datos.ciudad,
           categoria: datos.categoria,
           precio_hora: datos.precio_hora || '0',
           resumen: datos.resumen.trim(),
@@ -174,13 +181,10 @@ export default function Registro() {
           <span className="campo-nota">
             Tu teléfono permanece oculto. Solo se revela cuando hay match por ambas partes.
           </span>
-          <input
-            type="text"
-            placeholder="Ciudad o pueblo"
-            value={datos.ciudad}
-            onChange={cambiar('ciudad')}
-            maxLength={80}
-            required
+          <SelectorUbicacion
+            provincia={datos.provincia}
+            municipio={datos.ciudad}
+            onChange={(u) => setDatos((prev) => ({ ...prev, ...u }))}
           />
 
           <label className="campo-etiqueta">{copy.categoria}</label>

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { CATEGORIAS, COPY } from '../lib/constantes'
+import { PROVINCIAS, municipiosDe } from '../lib/ubicacion'
 import { useAuth } from '../context/AuthContext'
 import NavApp from '../components/NavApp'
 import Tarjeta from '../components/Tarjeta'
@@ -13,7 +14,8 @@ export default function Descubrir() {
   const [mazo, setMazo] = useState([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
-  const [filtros, setFiltros] = useState({ categoria: '', ciudad: '' })
+  const [filtros, setFiltros] = useState({ categoria: '', provincia: '', municipio: '' })
+  const [municipios, setMunicipios] = useState([])
   const [matchNuevo, setMatchNuevo] = useState(null)
   const [arrastre, setArrastre] = useState(0)
   const [saliendo, setSaliendo] = useState(null) // 'like' | 'pass'
@@ -27,15 +29,23 @@ export default function Descubrir() {
     setError('')
     const { data, error: errorRpc } = await supabase.rpc('descubrir', {
       filtro_categoria: filtros.categoria || null,
-      filtro_ciudad: filtros.ciudad || null,
+      filtro_provincia: filtros.provincia || null,
+      filtro_municipio: filtros.municipio || null,
       limite: 40,
     })
     if (errorRpc) setError(errorRpc.message)
     setMazo(data ?? [])
     setCargando(false)
-  }, [filtros.categoria, filtros.ciudad])
+  }, [filtros.categoria, filtros.provincia, filtros.municipio])
 
   useEffect(() => { cargarMazo() }, [cargarMazo])
+
+  // Los municipios del filtro se cargan al elegir provincia
+  useEffect(() => {
+    let activo = true
+    municipiosDe(filtros.provincia).then((l) => { if (activo) setMunicipios(l) })
+    return () => { activo = false }
+  }, [filtros.provincia])
 
   const decidir = async (decision) => {
     if (!actual || saliendo) return
@@ -123,12 +133,25 @@ export default function Descubrir() {
             <option value="">Todos los servicios</option>
             {CATEGORIAS.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
-          <input
-            type="text"
-            placeholder="Filtrar por ciudad"
-            value={filtros.ciudad}
-            onChange={(e) => setFiltros((f) => ({ ...f, ciudad: e.target.value }))}
-          />
+          <select
+            value={filtros.provincia}
+            onChange={(e) =>
+              setFiltros((f) => ({ ...f, provincia: e.target.value, municipio: '' }))
+            }
+          >
+            <option value="">Toda España</option>
+            {PROVINCIAS.map((p) => <option key={p} value={p}>{p}</option>)}
+          </select>
+          <select
+            value={filtros.municipio}
+            disabled={!filtros.provincia}
+            onChange={(e) => setFiltros((f) => ({ ...f, municipio: e.target.value }))}
+          >
+            <option value="">
+              {filtros.provincia ? 'Toda la provincia' : 'Elige antes provincia'}
+            </option>
+            {municipios.map((m) => <option key={m} value={m}>{m}</option>)}
+          </select>
         </div>
 
         {error && <div className="aviso aviso--error">{error}</div>}

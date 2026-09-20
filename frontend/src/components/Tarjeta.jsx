@@ -48,7 +48,12 @@ export default function Tarjeta({ perfil, telefono = null, propio = false, child
         </div>
 
         <p className="tarjeta-categoria">{perfil.categoria}</p>
-        <p className="tarjeta-ciudad">📍 {perfil.ciudad}</p>
+        <p className="tarjeta-ciudad">
+          📍 {perfil.ciudad}
+          {perfil.provincia && perfil.provincia !== perfil.ciudad && (
+            <span className="tarjeta-provincia">, {perfil.provincia}</span>
+          )}
+        </p>
 
         {perfil.resumen && <p className="tarjeta-resumen">{perfil.resumen}</p>}
 

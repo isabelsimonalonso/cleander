@@ -78,7 +78,7 @@ export default function Admin() {
       if (filtroRol && u.rol !== filtroRol) return false
       if (soloPendientes && !(u.resumen && u.resumen_estado === 'pendiente')) return false
       if (!texto) return true
-      return [u.nombre, u.email, u.ciudad, u.categoria, u.telefono]
+      return [u.nombre, u.email, u.ciudad, u.provincia, u.categoria, u.telefono]
         .filter(Boolean)
         .some((campo) => campo.toLowerCase().includes(texto))
     })
@@ -156,7 +156,7 @@ export default function Admin() {
                           : <span className="sin-foto">—</span>}
                         <div>
                           <strong>{u.nombre || '(sin nombre)'}</strong>
-                          <small>{u.ciudad}</small>
+                          <small>{u.ciudad}{u.provincia ? `, ${u.provincia}` : ''}</small>
                         </div>
                       </div>
                     </td>
