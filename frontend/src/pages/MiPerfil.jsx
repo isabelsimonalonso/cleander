@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase, subirFoto, borrarFotosDe } from '../lib/supabase'
-import { LIMITE_RESUMEN, unidadPrecio } from '../lib/constantes'
+import { LIMITE_RESUMEN, telefonoValido, unidadPrecio } from '../lib/constantes'
+import { mensajeError } from '../lib/errores'
 import { useAuth } from '../context/AuthContext'
 import NavApp from '../components/NavApp'
+import CambiarClave from '../components/CambiarClave'
 import Tarjeta from '../components/Tarjeta'
 import SelectorUbicacion from '../components/SelectorUbicacion'
 import SelectorServicio from '../components/SelectorServicio'
@@ -27,7 +29,7 @@ const ESTADO_RESUMEN = {
 export default function MiPerfil() {
   const { usuario, perfil, refrescarPerfil, logout, marcarDenunciasVistas } = useAuth()
   const navigate = useNavigate()
-  const { t } = useIdioma()
+  const { t, idioma } = useIdioma()
   const [form, setForm] = useState(null)
   const [guardando, setGuardando] = useState(false)
   const [mensaje, setMensaje] = useState('')
@@ -37,6 +39,7 @@ export default function MiPerfil() {
   const [borrando, setBorrando] = useState(false)
   const [verBorrado, setVerBorrado] = useState(false)
   const [misDenuncias, setMisDenuncias] = useState([])
+  const [verClave, setVerClave] = useState(false)
 
   useEffect(() => {
     if (perfil) setForm(perfil)
@@ -88,7 +91,7 @@ export default function MiPerfil() {
       await refrescarPerfil()
       setMensaje(t('fotoActualizada'))
     } catch (err) {
-      setError(err.message)
+      setError(mensajeError(err, t))
     } finally {
       setGuardando(false)
     }
@@ -100,11 +103,7 @@ export default function MiPerfil() {
       denuncia_id: id,
     })
     if (errorArchivo) {
-      setError(
-        errorArchivo.message.includes('Could not find the function')
-          ? 'Falta ejecutar supabase/21_archivar_denuncias.sql en Supabase'
-          : errorArchivo.message
-      )
+      setError(mensajeError(errorArchivo, t))
       return
     }
     setMisDenuncias((prev) => prev.filter((d) => d.id !== id))
@@ -154,11 +153,7 @@ export default function MiPerfil() {
 
     if (errorBorrado) {
       setBorrando(false)
-      setError(
-        errorBorrado.message.includes('Could not find the function')
-          ? 'Falta ejecutar supabase/11_borrar_mi_cuenta.sql en Supabase'
-          : errorBorrado.message
-      )
+      setError(mensajeError(errorBorrado, t))
       return
     }
 
@@ -173,6 +168,10 @@ export default function MiPerfil() {
 
     if (!form.provincia || !form.ciudad) {
       setError(t('errUbicacion'))
+      return
+    }
+    if (!telefonoValido(form.telefono)) {
+      setError(t('errTelefono'))
       return
     }
     setGuardando(true)
@@ -194,7 +193,7 @@ export default function MiPerfil() {
 
     setGuardando(false)
     if (errorGuardar) {
-      setError(errorGuardar.message)
+      setError(mensajeError(errorGuardar, t))
       return
     }
     await refrescarPerfil()
@@ -313,7 +312,7 @@ export default function MiPerfil() {
                       : d.estado === 'revisada' ? 'revisadaConMedidas'
                       : 'revisadaSinMedidas')}
                   </span>
-                  <small>{new Date(d.creado_en).toLocaleDateString('es-ES')}</small>
+                  <small>{new Date(d.creado_en).toLocaleDateString(idioma === 'en' ? 'en-GB' : 'es-ES')}</small>
                   {d.estado !== 'pendiente' && (
                     <button
                       className="boton-archivar"
@@ -327,6 +326,27 @@ export default function MiPerfil() {
                 </li>
               ))}
             </ul>
+          </section>
+        )}
+
+        {!verBorrado && (
+          <section className="zona-clave">
+            <h2>{t('contrasena')}</h2>
+            {verClave ? (
+              <>
+                <CambiarClave onHecho={() => {
+                  setVerClave(false)
+                  setMensaje(t('contrasenaCambiada'))
+                }} />
+                <button type="button" className="boton-retirar" onClick={() => setVerClave(false)}>
+                  {t('cancelar')}
+                </button>
+              </>
+            ) : (
+              <button type="button" className="boton-retirar" onClick={() => setVerClave(true)}>
+                {t('cambiarContrasena')}
+              </button>
+            )}
           </section>
         )}
 

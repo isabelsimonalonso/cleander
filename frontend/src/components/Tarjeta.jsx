@@ -88,7 +88,7 @@ export default function Tarjeta({ perfil, telefono = null, propio = false, child
             <span className="tarjeta-telefono-propio">
               <span className="tarjeta-telefono-linea">
                 <IconoWhatsApp size={17} />
-                {perfil.telefono || t('sinFoto')}
+                {perfil.telefono || t('sinTelefono')}
               </span>
               <small>{t('soloLoVesTu')}</small>
             </span>

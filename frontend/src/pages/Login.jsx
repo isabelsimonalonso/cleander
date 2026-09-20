@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { DOMINIO_INTERNO } from '../lib/constantes'
+import { mensajeError } from '../lib/errores'
 import Logo from '../components/Logo'
 import SelectorIdioma from '../components/SelectorIdioma'
 import { useIdioma } from '../lib/i18n'
@@ -31,11 +32,7 @@ export default function Login() {
     })
 
     if (errorLogin) {
-      setError(
-        errorLogin.message === 'Invalid login credentials'
-          ? t('credencialesMal')
-          : errorLogin.message
-      )
+      setError(mensajeError(errorLogin, t))
       setLoading(false)
       return
     }
@@ -77,6 +74,10 @@ export default function Login() {
             {loading ? t('cargando') : t('entrar')}
           </button>
         </form>
+
+        <p className="auth-olvido">
+          <Link to="/recuperar">{t('olvidoContrasena')}</Link>
+        </p>
 
         <p>{t('sinCuenta')} <Link to="/registro">{t('registrate')}</Link></p>
         <p><Link to="/sobre-nosotros">{t('queEsCleanderapp')}</Link></p>

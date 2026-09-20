@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import { MOTIVOS_DENUNCIA, traducirDato } from '../lib/constantes'
 import { useIdioma } from '../lib/i18n'
+import { mensajeError } from '../lib/errores'
 
 /**
  * Botón de denuncia con su formulario.
@@ -39,11 +40,7 @@ export default function Denunciar({ perfil, compacto = false }) {
         setError(t('errYaDenunciado'))
         return
       }
-      setError(
-        errorEnvio.message.includes('denuncias')
-          ? 'Falta ejecutar supabase/14_denuncias.sql en Supabase'
-          : errorEnvio.message
-      )
+      setError(mensajeError(errorEnvio, t))
       return
     }
     setEnviada(true)

@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import NavApp from '../components/NavApp'
 import Estrellas from '../components/Estrellas'
 import { useIdioma } from '../lib/i18n'
+import { mensajeError } from '../lib/errores'
 import '../styles/app.css'
 
 /** Ficha compacta: foto o iniciales, nombre y servicio. */
@@ -40,7 +41,7 @@ export default function Valoraciones() {
       supabase.from('valoraciones').select('autor,estrellas').eq('destinatario', usuario.id),
     ])
 
-    if (errorLista) setError(errorLista.message)
+    if (errorLista) setError(mensajeError(errorLista, t))
     setMatches(lista ?? [])
     setRecibidas(Object.fromEntries((votos ?? []).map((v) => [v.autor, v.estrellas])))
     setCargando(false)
@@ -64,7 +65,7 @@ export default function Valoraciones() {
         '42501': t('errRetiroPeticion'),
         '23505': t('errYaValorada'),
       }
-      setError(mensajes[errorVoto.code] ?? errorVoto.message)
+      setError(mensajes[errorVoto.code] ?? mensajeError(errorVoto, t))
       return
     }
     setMatches((prev) =>

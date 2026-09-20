@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { supabase, subirFoto } from '../lib/supabase'
-import { LIMITE_RESUMEN, unidadPrecio, unidadSugerida } from '../lib/constantes'
+import { LIMITE_RESUMEN, MIN_CONTRASENA, telefonoValido, unidadPrecio, unidadSugerida } from '../lib/constantes'
+import { mensajeError } from '../lib/errores'
 import Logo from '../components/Logo'
 import SelectorIdioma from '../components/SelectorIdioma'
 import SelectorUbicacion from '../components/SelectorUbicacion'
@@ -27,6 +28,7 @@ export default function Registro() {
   const [foto, setFoto] = useState(null)
   const [acepto, setAcepto] = useState(false)
   const [error, setError] = useState('')
+  const [hecho, setHecho] = useState(false)   // alta creada, falta confirmar el correo
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const { t } = useIdioma()
@@ -64,11 +66,11 @@ export default function Registro() {
       setError(t('errUbicacion'))
       return
     }
-    if (datos.password.length < 6) {
+    if (datos.password.length < MIN_CONTRASENA) {
       setError(t('errContrasenaCorta'))
       return
     }
-    if (!/^[+\d][\d\s]{7,}$/.test(datos.telefono.trim())) {
+    if (!telefonoValido(datos.telefono)) {
       setError(t('errTelefono'))
       return
     }
@@ -95,20 +97,17 @@ export default function Registro() {
     })
 
     if (errorAlta) {
-      setError(
-        errorAlta.message.includes('already registered')
-          ? t('errCorreoUsado')
-          : errorAlta.message
-      )
+      setError(mensajeError(errorAlta, t))
       setLoading(false)
       return
     }
 
-    // Si en Supabase quedara activada la confirmación por correo, no habría
-    // sesión todavía y no tendría sentido seguir.
+    // Con la confirmación por correo activada no hay sesión todavía, así que
+    // la foto no se puede subir. La cuenta SÍ está creada: se enseña como el
+    // éxito que es, no como un error, y se avisa de lo que falta.
     if (!data.session) {
       setLoading(false)
-      setError(t('errConfirmaCorreo'))
+      setHecho(true)
       return
     }
 
@@ -124,6 +123,26 @@ export default function Registro() {
     }
 
     navigate('/descubrir')
+  }
+
+  if (hecho) {
+    return (
+      <div className="auth-container">
+        <SelectorIdioma flotante />
+        <header className="auth-cabecera">
+          <Logo variante="completo" />
+          <p>{t('lema')}</p>
+        </header>
+
+        <div className="auth-box">
+          <h1>{t('cuentaCreada')}</h1>
+          <p className="auth-exito">{t('confirmaTuCorreo', { correo: datos.email.trim() })}</p>
+          <p className="campo-nota">{t('recuperarRevisaSpam')}</p>
+          {foto && <p className="campo-nota">{t('fotoTrasConfirmar')}</p>}
+          <p><Link to="/login">{t('volverAlLogin')}</Link></p>
+        </div>
+      </div>
+    )
   }
 
   return (

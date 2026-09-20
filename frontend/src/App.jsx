@@ -3,6 +3,8 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import { IdiomaProvider } from './lib/i18n'
 import Login from './pages/Login'
 import Registro from './pages/Registro'
+import Recuperar from './pages/Recuperar'
+import NuevaClave from './pages/NuevaClave'
 import Descubrir from './pages/Descubrir'
 import Matches from './pages/Matches'
 import MiPerfil from './pages/MiPerfil'
@@ -48,7 +50,54 @@ function Inicio() {
   return <Navigate to={rol === 'admin' ? '/admin' : '/descubrir'} replace />
 }
 
-export default function App() {
+/**
+ * Quien llega desde el enlace de «he olvidado la contraseña» tiene sesión,
+ * pero no queremos soltarle dentro: primero la cambia. Va por encima de las
+ * rutas porque el correo abre siempre la raíz, no una dirección concreta.
+ */
+function Rutas({ modo }) {
+  const { recuperandoClave, terminarRecuperacion } = useAuth()
+  if (recuperandoClave) return <NuevaClave onHecho={terminarRecuperacion} />
+
+  return (
+    <Routes>
+      <Route path="/" element={<Inicio />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/registro" element={<Registro />} />
+      <Route
+        path="/recuperar"
+        element={<Recuperar caducado={modo === 'caducado'} />}
+      />
+      <Route path="/privacidad" element={<Privacy />} />
+      <Route path="/sobre-nosotros" element={<Sobre />} />
+
+      <Route
+        path="/descubrir"
+        element={<ProtectedRoute acceso="usuarios"><Descubrir /></ProtectedRoute>}
+      />
+      <Route
+        path="/matches"
+        element={<ProtectedRoute acceso="usuarios"><Matches /></ProtectedRoute>}
+      />
+      <Route
+        path="/valoraciones"
+        element={<ProtectedRoute acceso="usuarios"><Valoraciones /></ProtectedRoute>}
+      />
+      <Route
+        path="/perfil"
+        element={<ProtectedRoute acceso="usuarios"><MiPerfil /></ProtectedRoute>}
+      />
+      <Route
+        path="/admin"
+        element={<ProtectedRoute acceso="admin"><Admin /></ProtectedRoute>}
+      />
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  )
+}
+
+export default function App({ modo = 'normal' }) {
   if (!configuracionValida) return <FaltaConfiguracion />
 
   return (
@@ -56,39 +105,12 @@ export default function App() {
     // y devolvería 404 al recargar en cualquier ruta que no sea la raíz.
     <HashRouter>
       <IdiomaProvider>
-      <AuthProvider>
+      <AuthProvider recuperando={modo === 'recuperar'}>
+        {/* Un enlace caducado abre la pantalla de pedir otro, no la portada */}
+        {modo === 'caducado' && <Navigate to="/recuperar" replace />}
         <div className="raiz">
           <div className="raiz-contenido">
-            <Routes>
-              <Route path="/" element={<Inicio />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/registro" element={<Registro />} />
-              <Route path="/privacidad" element={<Privacy />} />
-              <Route path="/sobre-nosotros" element={<Sobre />} />
-
-              <Route
-                path="/descubrir"
-                element={<ProtectedRoute acceso="usuarios"><Descubrir /></ProtectedRoute>}
-              />
-              <Route
-                path="/matches"
-                element={<ProtectedRoute acceso="usuarios"><Matches /></ProtectedRoute>}
-              />
-              <Route
-                path="/valoraciones"
-                element={<ProtectedRoute acceso="usuarios"><Valoraciones /></ProtectedRoute>}
-              />
-              <Route
-                path="/perfil"
-                element={<ProtectedRoute acceso="usuarios"><MiPerfil /></ProtectedRoute>}
-              />
-              <Route
-                path="/admin"
-                element={<ProtectedRoute acceso="admin"><Admin /></ProtectedRoute>}
-              />
-
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
+            <Rutas modo={modo} />
           </div>
           <Footer />
         </div>

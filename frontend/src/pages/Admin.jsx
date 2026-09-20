@@ -3,6 +3,7 @@ import { supabase, borrarFotosDe } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import { unidadCorta, traducirDato } from '../lib/constantes'
 import { useIdioma } from '../lib/i18n'
+import { mensajeError } from '../lib/errores'
 import NavApp from '../components/NavApp'
 import FichaUsuario from '../components/FichaUsuario'
 import '../styles/app.css'
@@ -53,7 +54,7 @@ export default function Admin() {
         supabase.rpc('admin_estadisticas'),
         supabase.rpc('admin_denuncias'),
       ])
-    if (errorLista) setError(errorLista.message)
+    if (errorLista) setError(mensajeError(errorLista, t))
     setUsuarios(lista ?? [])
     setStats(numeros ?? {})
     setDenuncias(denus ?? [])
@@ -67,7 +68,7 @@ export default function Admin() {
     setError('')
     const { error: errorUpd } = await supabase.from('perfiles').update(cambios).eq('id', id)
     if (errorUpd) {
-      setError(errorUpd.message)
+      setError(mensajeError(errorUpd, t))
       return
     }
     setUsuarios((prev) => prev.map((u) => (u.id === id ? { ...u, ...cambios } : u)))
@@ -77,7 +78,7 @@ export default function Admin() {
   const resolverDenuncia = async (id, estado) => {
     const { error: errorD } = await supabase
       .from('denuncias').update({ estado }).eq('id', id)
-    if (errorD) { setError(errorD.message); return }
+    if (errorD) { setError(mensajeError(errorD, t)); return }
     setDenuncias((prev) => prev.map((d) => (d.id === id ? { ...d, estado } : d)))
     supabase.rpc('admin_estadisticas').then(({ data }) => setStats(data ?? {}))
   }
@@ -101,7 +102,7 @@ export default function Admin() {
 
     const { error: errorDel } = await supabase.rpc('admin_borrar_usuario', { objetivo: u.id })
     if (errorDel) {
-      setError(errorDel.message)
+      setError(mensajeError(errorDel, t))
       return
     }
     setUsuarios((prev) => prev.filter((x) => x.id !== u.id))

@@ -5,6 +5,7 @@ import NavApp from '../components/NavApp'
 import Tarjeta from '../components/Tarjeta'
 import Denunciar from '../components/Denunciar'
 import { useIdioma } from '../lib/i18n'
+import { mensajeError } from '../lib/errores'
 import '../styles/app.css'
 
 export default function Matches() {
@@ -22,7 +23,7 @@ export default function Matches() {
       supabase.rpc('mis_matches'),
       supabase.from('valoraciones').select('autor,estrellas').eq('destinatario', usuario.id),
     ])
-    if (errorRpc) setError(errorRpc.message)
+    if (errorRpc) setError(mensajeError(errorRpc, t))
     setLista(data ?? [])
     setYaMeValoraron(Object.fromEntries((votos ?? []).map((v) => [v.autor, v.estrellas])))
     setCargando(false)
@@ -44,11 +45,7 @@ export default function Matches() {
     const { error: errorEliminar } = await supabase.rpc('eliminar_match', { otro: m.id })
 
     if (errorEliminar) {
-      setError(
-        errorEliminar.message.includes('Could not find the function')
-          ? 'Falta ejecutar supabase/15_deshacer_y_eliminar.sql en Supabase'
-          : errorEliminar.message
-      )
+      setError(mensajeError(errorEliminar, t))
       return
     }
     setLista((prev) => prev.filter((x) => x.id !== m.id))
@@ -67,15 +64,11 @@ export default function Matches() {
     setEnviando(null)
 
     if (errorPeticion) {
-      setError(
-        errorPeticion.message.includes('Could not find the function')
-          ? 'Falta ejecutar supabase/05_valoraciones_por_invitacion.sql en Supabase'
-          : errorPeticion.message
-      )
+      setError(mensajeError(errorPeticion, t))
       return
     }
     if (data === false) {
-      setError('No se encontró ese match')
+      setError(t('errMatchNoEncontrado'))
       return
     }
 

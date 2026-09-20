@@ -73,7 +73,6 @@ export const TEXTOS = {
     errUbicacion: 'Elige tu provincia y tu municipio',
     errCondiciones: 'Debes aceptar el aviso legal y la política de privacidad',
     errCorreoUsado: 'Ya existe una cuenta con ese email',
-    errConfirmaCorreo: 'Cuenta creada. Revisa tu correo para confirmarla y luego inicia sesión.',
 
     // ── Descubrir ────────────────────────────────────────────────────
     profesionalesDisponibles: 'Profesionales disponibles',
@@ -267,6 +266,46 @@ export const TEXTOS = {
     estadoRechazado: 'rechazado',
     etiquetaFoto: 'foto',
     etiquetaTexto: 'texto',
+
+    // ── Contraseñas y recuperación ──────────────────────────────────
+    olvidoContrasena: '¿Has olvidado la contraseña?',
+    recuperarTitulo: 'Recuperar el acceso',
+    recuperarSubtitulo: 'Te mandamos un enlace para poner una contraseña nueva',
+    enviarEnlace: 'Enviarme el enlace',
+    recuperarEnviado: 'Si ese correo tiene cuenta, en un momento recibirás un enlace para cambiar la contraseña.',
+    recuperarRevisaSpam: 'Si no lo ves, mira en la carpeta de correo no deseado.',
+    teAcuerdas: '¿Ya te acuerdas?',
+    volverAlLogin: 'Volver a iniciar sesión',
+
+    nuevaClaveTitulo: 'Contraseña nueva',
+    nuevaClaveSubtitulo: 'Escríbela dos veces para que no haya dudas',
+    nuevaClaveHecho: 'Listo. Tu contraseña ya está cambiada.',
+    guardarYEntrar: 'Guardar y entrar',
+
+    contrasenaNueva: 'Contraseña nueva',
+    repiteContrasena: 'Repite la contraseña',
+    guardarContrasena: 'Guardar contraseña',
+    cambiarContrasena: 'Cambiar la contraseña',
+    contrasenaCambiada: 'Contraseña cambiada',
+
+    cuentaCreada: 'Cuenta creada',
+    confirmaTuCorreo: 'Te hemos escrito a {correo}. Pincha el enlace del mensaje para confirmar la cuenta y ya podrás entrar.',
+    fotoTrasConfirmar: 'Tu foto no se ha subido todavía: añádela desde Mi perfil en cuanto entres.',
+
+    sinTelefono: 'Sin teléfono',
+
+    // ── Errores ─────────────────────────────────────────────────────
+    errGenerico: 'Algo no ha ido bien. Vuelve a intentarlo en un momento.',
+    errSinConexion: 'No hemos podido conectar. Comprueba tu conexión e inténtalo otra vez.',
+    errSinConfirmar: 'Todavía no has confirmado tu cuenta. Busca el correo que te mandamos y pincha el enlace.',
+    errCorreoInvalido: 'Esa dirección de correo no parece válida.',
+    errContrasenaDebil: 'Esa contraseña es demasiado fácil de adivinar o ha aparecido en filtraciones. Elige otra.',
+    errContrasenaIgual: 'La contraseña nueva tiene que ser distinta de la anterior.',
+    errClavesNoCoinciden: 'Las dos contraseñas no coinciden.',
+    errDemasiadosIntentos: 'Has hecho demasiados intentos seguidos. Espera un minuto y vuelve a probar.',
+    errEnlaceCaducado: 'Ese enlace ya no vale. Pide uno nuevo.',
+    errMatchNoEncontrado: 'Ese match ya no existe.',
+
   },
 
   en: {
@@ -333,7 +372,6 @@ export const TEXTOS = {
     errUbicacion: 'Choose your province and town',
     errCondiciones: 'You must accept the legal notice and privacy policy',
     errCorreoUsado: 'An account with that email already exists',
-    errConfirmaCorreo: 'Account created. Check your email to confirm it, then log in.',
 
     profesionalesDisponibles: 'Available professionals',
     clientesQueBuscan: 'Clients looking for help',
@@ -515,5 +553,45 @@ export const TEXTOS = {
     estadoRechazado: 'rejected',
     etiquetaFoto: 'photo',
     etiquetaTexto: 'text',
+
+    // ── Passwords and recovery ──────────────────────────────────────
+    olvidoContrasena: 'Forgotten your password?',
+    recuperarTitulo: 'Get back in',
+    recuperarSubtitulo: 'We will send you a link to set a new password',
+    enviarEnlace: 'Send me the link',
+    recuperarEnviado: 'If that address has an account, a link to change the password is on its way.',
+    recuperarRevisaSpam: 'If you cannot see it, check your spam folder.',
+    teAcuerdas: 'Remembered it?',
+    volverAlLogin: 'Back to log in',
+
+    nuevaClaveTitulo: 'New password',
+    nuevaClaveSubtitulo: 'Type it twice so there is no doubt',
+    nuevaClaveHecho: 'Done. Your password has been changed.',
+    guardarYEntrar: 'Save and go in',
+
+    contrasenaNueva: 'New password',
+    repiteContrasena: 'Repeat the password',
+    guardarContrasena: 'Save password',
+    cambiarContrasena: 'Change password',
+    contrasenaCambiada: 'Password changed',
+
+    cuentaCreada: 'Account created',
+    confirmaTuCorreo: 'We have written to {correo}. Click the link in the message to confirm your account and you can log in.',
+    fotoTrasConfirmar: 'Your photo has not been uploaded yet: add it from My profile once you are in.',
+
+    sinTelefono: 'No phone number',
+
+    // ── Errors ──────────────────────────────────────────────────────
+    errGenerico: 'Something went wrong. Please try again in a moment.',
+    errSinConexion: 'We could not connect. Check your connection and try again.',
+    errSinConfirmar: 'You have not confirmed your account yet. Find the email we sent and click the link.',
+    errCorreoInvalido: 'That email address does not look valid.',
+    errContrasenaDebil: 'That password is too easy to guess or has appeared in a data breach. Choose another one.',
+    errContrasenaIgual: 'The new password has to be different from the old one.',
+    errClavesNoCoinciden: 'The two passwords do not match.',
+    errDemasiadosIntentos: 'Too many attempts in a row. Wait a minute and try again.',
+    errEnlaceCaducado: 'That link is no longer valid. Ask for a new one.',
+    errMatchNoEncontrado: 'That match no longer exists.',
+
   },
 }

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { useIdioma } from '../lib/i18n'
+import { mensajeError } from '../lib/errores'
 import { PROVINCIAS, municipiosDe } from '../lib/ubicacion'
 import SelectorServicio from '../components/SelectorServicio'
 import { useAuth } from '../context/AuthContext'
@@ -37,7 +38,7 @@ export default function Descubrir() {
       precio_maximo: filtros.precio ? Number(filtros.precio) : null,
       limite: 40,
     })
-    if (errorRpc) setError(errorRpc.message)
+    if (errorRpc) setError(mensajeError(errorRpc, t))
     setMazo(data ?? [])
     setCargando(false)
   }, [filtros.categoria, filtros.provincia, filtros.municipio, filtros.precio])
@@ -62,13 +63,14 @@ export default function Descubrir() {
       .upsert({ emisor: usuario.id, receptor, decision }, { onConflict: 'emisor,receptor' })
 
     if (errorInteres) {
-      setError(errorInteres.message)
+      setError(mensajeError(errorInteres, t))
       setSaliendo(null)
       setArrastre(0)
       return
     }
 
     // ¿El trigger de la base de datos ha creado un match?
+    let huboMatch = false
     if (decision === 'like') {
       const [a, b] = [usuario.id, receptor].sort()
       const { data: match } = await supabase
@@ -78,12 +80,16 @@ export default function Descubrir() {
         .eq('usuario_b', b)
         .maybeSingle()
       if (match) {
+        huboMatch = true
         setMatchNuevo(actual)
         refrescarMatchesNuevos()
       }
     }
 
-    setUltima(actual)
+    // Un match ya hecho no se deshace desde aquí: la base de datos impide
+    // borrar el «me interesa» mientras exista, así que el botón mentiría.
+    // Para eso está «Eliminar match» en la pantalla de matches.
+    setUltima(huboMatch ? null : actual)
 
     // Damos tiempo a que se vea la animación de salida
     setTimeout(() => {
@@ -103,7 +109,7 @@ export default function Descubrir() {
       .eq('receptor', ultima.id)
 
     if (errorDeshacer) {
-      setError(errorDeshacer.message)
+      setError(mensajeError(errorDeshacer, t))
       return
     }
     setMazo((prev) => [ultima, ...prev])

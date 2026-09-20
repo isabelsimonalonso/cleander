@@ -286,3 +286,16 @@ export const traducirDato = (texto, idioma) =>
 
 export const LIMITE_RESUMEN = 150
 export const TAM_MAX_FOTO = 5 * 1024 * 1024 // 5 MB
+
+/**
+ * Longitud mínima de contraseña. Supabase rechaza menos de 6 con un error
+ * en inglés; comprobándolo aquí el aviso sale en el idioma de quien escribe.
+ */
+export const MIN_CONTRASENA = 6
+
+/**
+ * Teléfono válido: empieza por + o por dígito y tiene al menos ocho cifras.
+ * Se comprueba en el registro y al editar el perfil, porque de ese número
+ * cuelga el enlace de WhatsApp que ve quien hace match.
+ */
+export const telefonoValido = (valor) => /^[+\d][\d\s]{7,}$/.test((valor ?? '').trim())

@@ -271,3 +271,61 @@
   .auth-container { padding: 32px 16px; }
   .tipo-selector { flex-direction: column; }
 }
+
+/* ── Recuperar la contraseña ─────────────────────────────────────────── */
+.auth-olvido {
+  margin-top: -4px;
+}
+
+/* Mensaje de que algo salió bien: el alta hecha, el enlace enviado. */
+.auth-exito {
+  margin-top: 4px;
+  padding: 13px 15px;
+  border: 1px solid #cdeadf;
+  border-radius: 11px;
+  background: #f4fbf8;
+  color: #2b6a55;
+  font-size: 13.5px;
+  font-weight: 400;
+  line-height: 1.6;
+  text-align: left;
+}
+
+/* El formulario de contraseña nueva reutiliza el aspecto del resto, pero
+   también se usa dentro de Mi perfil, fuera de .auth-box. */
+.form-clave {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-clave input {
+  padding: 13px 15px;
+  border: 1px solid #e3e3e3;
+  border-radius: 11px;
+  background: white;
+  font-family: inherit;
+  font-size: 14px;
+  color: #2c2c2c;
+}
+
+.form-clave input:focus {
+  outline: none;
+  border-color: var(--turquesa);
+  box-shadow: 0 0 0 3px rgba(36, 164, 188, 0.12);
+}
+
+.form-clave button[type="submit"] {
+  align-self: flex-start;
+  padding: 11px 20px;
+  border-radius: 10px;
+  background: var(--turquesa);
+  color: white;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+.form-clave button[type="submit"]:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

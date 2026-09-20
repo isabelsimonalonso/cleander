@@ -3,13 +3,16 @@ import { supabase } from '../lib/supabase'
 
 const AuthContext = createContext(null)
 
-export function AuthProvider({ children }) {
+export function AuthProvider({ children, recuperando = false }) {
   const [sesion, setSesion] = useState(null)
   const [perfil, setPerfil] = useState(null)
   const [cargando, setCargando] = useState(true)
   const [matchesNuevos, setMatchesNuevos] = useState(0)
   const [valoracionesPendientes, setValoracionesPendientes] = useState(0)
   const [denunciasResueltas, setDenunciasResueltas] = useState(0)
+  // Cierto mientras alguien llega desde el enlace de «he olvidado la clave».
+  // Lo decide arranque.js al leer la URL, antes de que se monte nada.
+  const [recuperandoClave, setRecuperandoClave] = useState(recuperando)
 
   const cargarPerfil = useCallback(async (userId) => {
     if (!userId) {
@@ -92,8 +95,12 @@ export function AuthProvider({ children }) {
       if (activo) setCargando(false)
     })
 
-    const { data: sub } = supabase.auth.onAuthStateChange((_evento, nuevaSesion) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((evento, nuevaSesion) => {
       if (!activo) return
+      // Supabase abre sesión al pinchar el enlace del correo, pero con el
+      // único propósito de cambiar la contraseña: hasta que no lo haga, no
+      // la dejamos entrar en el resto de la aplicación.
+      if (evento === 'PASSWORD_RECOVERY') setRecuperandoClave(true)
       setSesion(nuevaSesion)
       // Ojo: llamar a supabase DENTRO de este callback puede bloquear el
       // cliente. Por eso la consulta se saca del callback con setTimeout(0).
@@ -121,6 +128,7 @@ export function AuthProvider({ children }) {
 
   const logout = useCallback(async () => {
     await supabase.auth.signOut()
+    setRecuperandoClave(false)
     setPerfil(null)
     setSesion(null)
     setMatchesNuevos(0)
@@ -148,6 +156,8 @@ export function AuthProvider({ children }) {
     refrescarValoraciones,
     denunciasResueltas,
     marcarDenunciasVistas,
+    recuperandoClave,
+    terminarRecuperacion: () => setRecuperandoClave(false),
   }
 
   return <AuthContext.Provider value={valor}>{children}</AuthContext.Provider>
