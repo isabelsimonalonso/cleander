@@ -167,12 +167,12 @@ export default function Admin() {
                   <tr key={u.id} className={u.bloqueado ? 'fila-bloqueada' : ''}>
                     <td>
                       <div className="celda-usuario">
-                        {u.foto_url && u.foto_estado === 'aprobada'
-                          ? <img src={u.foto_url} alt="" />
-                          : <span className="sin-foto">—</span>}
                         <div>
                           <strong>{u.nombre || '(sin nombre)'}</strong>
-                          <small>{u.ciudad}{u.provincia ? `, ${u.provincia}` : ''}</small>
+                          <small>
+                            {u.ciudad}
+                            {u.provincia && u.provincia !== u.ciudad ? `, ${u.provincia}` : ''}
+                          </small>
                         </div>
                       </div>
                     </td>
@@ -191,18 +191,22 @@ export default function Admin() {
                             {u.foto_estado}
                           </span>
                           <div className="botones-moderacion">
-                            <button
-                              className="btn-ok"
-                              onClick={() => actualizar(u.id, { foto_estado: 'aprobada' })}
-                            >
-                              Aprobar
-                            </button>
-                            <button
-                              className="btn-no"
-                              onClick={() => actualizar(u.id, { foto_estado: 'rechazada' })}
-                            >
-                              Rechazar
-                            </button>
+                            {u.foto_estado !== 'aprobada' && (
+                              <button
+                                className="btn-ok"
+                                onClick={() => actualizar(u.id, { foto_estado: 'aprobada' })}
+                              >
+                                Aprobar
+                              </button>
+                            )}
+                            {u.foto_estado !== 'rechazada' && (
+                              <button
+                                className="btn-no"
+                                onClick={() => actualizar(u.id, { foto_estado: 'rechazada' })}
+                              >
+                                Rechazar
+                              </button>
+                            )}
                           </div>
                         </>
                       ) : (
@@ -243,18 +247,22 @@ export default function Admin() {
                             {u.resumen_estado}
                           </span>
                           <div className="botones-moderacion">
-                            <button
-                              className="btn-ok"
-                              onClick={() => actualizar(u.id, { resumen_estado: 'aprobado' })}
-                            >
-                              Aprobar
-                            </button>
-                            <button
-                              className="btn-no"
-                              onClick={() => actualizar(u.id, { resumen_estado: 'rechazado' })}
-                            >
-                              Rechazar
-                            </button>
+                            {u.resumen_estado !== 'aprobado' && (
+                              <button
+                                className="btn-ok"
+                                onClick={() => actualizar(u.id, { resumen_estado: 'aprobado' })}
+                              >
+                                Aprobar
+                              </button>
+                            )}
+                            {u.resumen_estado !== 'rechazado' && (
+                              <button
+                                className="btn-no"
+                                onClick={() => actualizar(u.id, { resumen_estado: 'rechazado' })}
+                              >
+                                Rechazar
+                              </button>
+                            )}
                           </div>
                         </>
                       ) : (
