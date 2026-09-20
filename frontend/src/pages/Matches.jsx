@@ -11,14 +11,19 @@ export default function Matches() {
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
   const [enviando, setEnviando] = useState(null)   // id del match en curso
+  const [yaMeValoraron, setYaMeValoraron] = useState({})
 
   const cargar = useCallback(async () => {
     setCargando(true)
-    const { data, error: errorRpc } = await supabase.rpc('mis_matches')
+    const [{ data, error: errorRpc }, { data: votos }] = await Promise.all([
+      supabase.rpc('mis_matches'),
+      supabase.from('valoraciones').select('autor,estrellas').eq('destinatario', usuario.id),
+    ])
     if (errorRpc) setError(errorRpc.message)
     setLista(data ?? [])
+    setYaMeValoraron(Object.fromEntries((votos ?? []).map((v) => [v.autor, v.estrellas])))
     setCargando(false)
-  }, [])
+  }, [usuario.id])
 
   useEffect(() => { cargar() }, [cargar])
 
@@ -84,14 +89,22 @@ export default function Matches() {
             <Tarjeta key={m.id} perfil={m} telefono={m.telefono}>
               {m.he_pedido_valoracion ? (
                 <div className="invitacion-enviada">
-                  <span>Petición de valoración enviada</span>
-                  <button
-                    className="boton-retirar"
-                    disabled={enviando === m.id}
-                    onClick={() => pedirValoracion(m.id, false)}
-                  >
-                    {enviando === m.id ? 'Retirando…' : 'Retirar'}
-                  </button>
+                  {yaMeValoraron[m.id] ? (
+                    // Ya te ha valorado: retirar la petición no borraría su voto,
+                    // así que no se ofrece para no confundir.
+                    <span>Ya te ha valorado con {yaMeValoraron[m.id]} estrellas</span>
+                  ) : (
+                    <>
+                      <span>Petición de valoración enviada</span>
+                      <button
+                        className="boton-retirar"
+                        disabled={enviando === m.id}
+                        onClick={() => pedirValoracion(m.id, false)}
+                      >
+                        {enviando === m.id ? 'Retirando…' : 'Retirar'}
+                      </button>
+                    </>
+                  )}
                 </div>
               ) : (
                 <button
