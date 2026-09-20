@@ -897,6 +897,12 @@
 }
 
 /* ── Eliminar la cuenta ──────────────────────────────────────────────── */
+.zona-peligro:empty {
+  display: none;
+  padding: 0;
+  border: 0;
+}
+
 .zona-peligro {
   padding: 18px;
   border: 1px solid #f3d6d7;
@@ -1332,4 +1338,67 @@
 .nav-enlaces a.active .nav-aviso--verde {
   background: #2e9e63;
   box-shadow: 0 0 0 2px white, 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+/* ── Acciones de la cuenta, en dos botones con icono ─────────────────── */
+.acciones-cuenta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.accion-cuenta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 16px 10px;
+  border-radius: 13px;
+  background: #fbfdfd;
+  border: 1px solid #e6eef0;
+  color: var(--turquesa-oscuro);
+  font-size: 12.5px;
+  font-weight: 400;
+  line-height: 1.3;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.accion-cuenta:hover {
+  background: #eef7f9;
+  border-color: #cde4e9;
+}
+
+.accion-cuenta--peligro {
+  background: #fffafa;
+  border-color: #f3d6d7;
+  color: #b4413f;
+}
+
+.accion-cuenta--peligro:hover {
+  background: #fdf0f0;
+  border-color: #eec3c4;
+}
+
+/* Papelera de una denuncia ya resuelta */
+.boton-archivar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #b8b8b8;
+  flex-shrink: 0;
+}
+
+.boton-archivar:hover {
+  background: #fdf0f0;
+  color: #c33;
+}
+
+.zona-denuncias li {
+  padding-right: 8px;
 }

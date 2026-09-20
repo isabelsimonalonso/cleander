@@ -7,6 +7,7 @@ import NavApp from '../components/NavApp'
 import Tarjeta from '../components/Tarjeta'
 import SelectorUbicacion from '../components/SelectorUbicacion'
 import SelectorServicio from '../components/SelectorServicio'
+import { IconoDescarga, IconoPapelera, IconoArchivar } from '../components/Iconos'
 import '../styles/app.css'
 
 const ESTADO_FOTO = {
@@ -96,6 +97,22 @@ export default function MiPerfil() {
     } finally {
       setGuardando(false)
     }
+  }
+
+  /** Quitar de la lista una denuncia ya resuelta. */
+  const archivarDenuncia = async (id) => {
+    const { error: errorArchivo } = await supabase.rpc('archivar_denuncia', {
+      denuncia_id: id,
+    })
+    if (errorArchivo) {
+      setError(
+        errorArchivo.message.includes('Could not find the function')
+          ? 'Falta ejecutar supabase/21_archivar_denuncias.sql en Supabase'
+          : errorArchivo.message
+      )
+      return
+    }
+    setMisDenuncias((prev) => prev.filter((d) => d.id !== id))
   }
 
   /** Derecho de portabilidad: todo lo tuyo en un archivo. */
@@ -293,33 +310,47 @@ export default function MiPerfil() {
                       : 'revisada, sin medidas'}
                   </span>
                   <small>{new Date(d.creado_en).toLocaleDateString('es-ES')}</small>
+                  {d.estado !== 'pendiente' && (
+                    <button
+                      className="boton-archivar"
+                      title="Quitar de la lista"
+                      aria-label="Quitar de la lista"
+                      onClick={() => archivarDenuncia(d.id)}
+                    >
+                      <IconoArchivar />
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
           </section>
         )}
 
-        <section className="zona-datos">
-            <h2>Mis datos</h2>
-            <p>
-              Descarga todo lo que CleanDerApp guarda sobre ti: tu perfil, tus
-              matches, tus valoraciones y tus decisiones.
-            </p>
-            <button type="button" onClick={descargarDatos}>
-              Descargar mis datos
-            </button>
-        </section>
-
-        <section className="zona-peligro">
-          {!verBorrado ? (
+        {!verBorrado && (
+          <div className="acciones-cuenta">
             <button
               type="button"
-              className="abrir-borrado"
-              onClick={() => setVerBorrado(true)}
+              className="accion-cuenta"
+              onClick={descargarDatos}
+              title="Descarga tu perfil, matches, valoraciones y decisiones"
             >
-              Eliminar mi cuenta
+              <IconoDescarga />
+              <span>Mis datos</span>
             </button>
-          ) : (
+            <button
+              type="button"
+              className="accion-cuenta accion-cuenta--peligro"
+              onClick={() => setVerBorrado(true)}
+              title="Eliminar tu cuenta y todo su contenido"
+            >
+              <IconoPapelera />
+              <span>Eliminar cuenta</span>
+            </button>
+          </div>
+        )}
+
+        <section className="zona-peligro">
+          {!verBorrado ? null : (
           <>
             <h2>Eliminar mi cuenta</h2>
             <p>
