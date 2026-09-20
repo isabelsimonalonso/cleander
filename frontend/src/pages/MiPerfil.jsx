@@ -32,10 +32,24 @@ export default function MiPerfil() {
   const [confirmacion, setConfirmacion] = useState('')
   const [borrando, setBorrando] = useState(false)
   const [verBorrado, setVerBorrado] = useState(false)
+  const [misDenuncias, setMisDenuncias] = useState([])
 
   useEffect(() => {
     if (perfil) setForm(perfil)
   }, [perfil])
+
+  // Sus denuncias, para que sepa en qué han quedado
+  useEffect(() => {
+    if (!usuario?.id) return
+    let activo = true
+    supabase
+      .from('denuncias')
+      .select('motivo,estado,creado_en,denunciado')
+      .eq('denunciante', usuario.id)
+      .order('creado_en', { ascending: false })
+      .then(({ data }) => { if (activo) setMisDenuncias(data ?? []) })
+    return () => { activo = false }
+  }, [usuario?.id])
 
   // Las estrellas que te han puesto, para que tu vista previa enseñe lo
   // mismo que ven los demás en tu tarjeta.
@@ -263,6 +277,29 @@ export default function MiPerfil() {
         </div>
 
         <div className="perfil-extra">
+        {misDenuncias.length > 0 && (
+          <section className="zona-denuncias">
+            <h2>Denuncias que has enviado</h2>
+            <p>
+              No te decimos contra quién por privacidad, pero sí en qué ha
+              quedado cada una.
+            </p>
+            <ul>
+              {misDenuncias.map((d, i) => (
+                <li key={i}>
+                  <span>{d.motivo}</span>
+                  <span className={`pastilla-estado pastilla-estado--${d.estado}`}>
+                    {d.estado === 'pendiente' ? 'en revisión'
+                      : d.estado === 'revisada' ? 'revisada, se tomaron medidas'
+                      : 'revisada, sin medidas'}
+                  </span>
+                  <small>{new Date(d.creado_en).toLocaleDateString('es-ES')}</small>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         <section className="zona-datos">
             <h2>Mis datos</h2>
             <p>

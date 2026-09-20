@@ -65,6 +65,17 @@ export default function Admin() {
     supabase.rpc('admin_estadisticas').then(({ data }) => setStats(data ?? {}))
   }
 
+  /** Bloquear pidiendo el motivo, que la persona leerá al intentar entrar. */
+  const bloquear = async (u, motivoSugerido = '') => {
+    const motivo = prompt(
+      `¿Por qué bloqueas a ${u.nombre}?\n\n` +
+      'Lo leerá en la pantalla de cuenta suspendida. Déjalo vacío si prefieres no decirlo.',
+      motivoSugerido
+    )
+    if (motivo === null) return   // ha cancelado
+    await actualizar(u.id, { bloqueado: true, motivo_bloqueo: motivo.trim() })
+  }
+
   const borrar = async (u) => {
     if (!confirm(`Borrar definitivamente a ${u.nombre || u.email}?\n\nSe eliminarán su perfil, sus matches y sus valoraciones. No se puede deshacer.`)) {
       return
@@ -193,8 +204,11 @@ export default function Admin() {
                   {!d.denunciado_bloqueado && (
                     <button
                       className="btn-no"
-                      onClick={() => {
-                        actualizar(d.denunciado_id, { bloqueado: true })
+                      onClick={async () => {
+                        await bloquear(
+                          { id: d.denunciado_id, nombre: d.denunciado_nombre },
+                          d.motivo
+                        )
                         resolverDenuncia(d.id, 'revisada')
                       }}
                     >
@@ -376,7 +390,13 @@ export default function Admin() {
                       <button className="btn-ver" onClick={() => setFicha(u)}>
                         Ver perfil
                       </button>
-                      <button onClick={() => actualizar(u.id, { bloqueado: !u.bloqueado })}>
+                      <button
+                        onClick={() =>
+                          u.bloqueado
+                            ? actualizar(u.id, { bloqueado: false, motivo_bloqueo: '' })
+                            : bloquear(u)
+                        }
+                      >
                         {u.bloqueado ? 'Desbloquear' : 'Bloquear'}
                       </button>
                       <button onClick={() => actualizar(u.id, { visible: !u.visible })}>

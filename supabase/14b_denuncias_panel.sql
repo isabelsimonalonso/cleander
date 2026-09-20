@@ -45,4 +45,6 @@ $$;
 revoke all on function public.admin_estadisticas() from anon, public;
 grant execute on function public.admin_estadisticas() to authenticated;
 
+notify pgrst, 'reload schema';
+
 select 'panel de denuncias listo' as resultado;

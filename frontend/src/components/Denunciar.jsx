@@ -33,6 +33,10 @@ export default function Denunciar({ perfil, compacto = false }) {
 
     setEnviando(false)
     if (errorEnvio) {
+      if (errorEnvio.code === '23505') {
+        setError('Ya denunciaste a esta persona. Estamos revisándolo.')
+        return
+      }
       setError(
         errorEnvio.message.includes('denuncias')
           ? 'Falta ejecutar supabase/14_denuncias.sql en Supabase'

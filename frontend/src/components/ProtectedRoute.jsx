@@ -31,6 +31,11 @@ export default function ProtectedRoute({ children, acceso = 'usuarios' }) {
             ahora. Tu perfil no aparece en las búsquedas y quienes hicieron
             match contigo ya no ven tus datos de contacto.
           </p>
+          {perfil.motivo_bloqueo && (
+            <p className="motivo-bloqueo">
+              <strong>Motivo:</strong> {perfil.motivo_bloqueo}
+            </p>
+          )}
           <p>
             Si crees que es un error o quieres que revisemos la decisión,
             escríbenos:

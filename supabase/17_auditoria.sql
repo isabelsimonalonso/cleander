@@ -64,4 +64,6 @@ create trigger trg_auditoria_perfil
   after update on public.perfiles
   for each row execute function public.anotar_accion_admin();
 
+notify pgrst, 'reload schema';
+
 select 'registro de acciones activado' as resultado;
