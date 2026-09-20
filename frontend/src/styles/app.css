@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════════════
    CLEANDER · Estilos de la aplicación (tarjetas, navegación, perfil)
-   Paleta: turquesa #1da1b8 · verde azulado #0d9488
+   Paleta: turquesa #24a4bc · verde azulado #0d9488
    ═══════════════════════════════════════════════════════════════════════ */
 
 .raiz {
@@ -42,7 +42,7 @@
   align-items: center;
   gap: 8px;
   font-weight: 600;
-  color: #1da1b8;
+  color: #24a4bc;
   font-size: 18px;
 }
 
@@ -64,11 +64,11 @@
 
 .nav-enlaces a:hover {
   background: #f0fbfd;
-  color: #1da1b8;
+  color: #24a4bc;
 }
 
 .nav-enlaces a.active {
-  background: #1da1b8;
+  background: #24a4bc;
   color: white;
   font-weight: 500;
 }
@@ -156,7 +156,7 @@
 .tarjeta-foto {
   position: relative;
   aspect-ratio: 4 / 3;
-  background: linear-gradient(135deg, #1da1b8 0%, #0d9488 100%);
+  background: linear-gradient(135deg, #24a4bc 0%, #0d9488 100%);
 }
 
 .tarjeta-foto img {
@@ -221,7 +221,7 @@
 .tarjeta-precio {
   font-size: 20px;
   font-weight: 600;
-  color: #1da1b8;
+  color: #24a4bc;
   white-space: nowrap;
 }
 
@@ -344,7 +344,7 @@
 
 .mazo-vacio button {
   margin-top: 16px;
-  background: #1da1b8;
+  background: #24a4bc;
   color: white;
 }
 
@@ -409,7 +409,7 @@
 
 .modal-match-caja h2 {
   font-size: 30px;
-  color: #1da1b8;
+  color: #24a4bc;
   font-weight: 600;
   margin-bottom: 12px;
 }
@@ -422,7 +422,7 @@
 }
 
 .modal-match-caja button {
-  background: #1da1b8;
+  background: #24a4bc;
   color: white;
   padding: 12px 28px;
 }
@@ -478,7 +478,7 @@
 }
 
 .perfil-formulario button[type="submit"] {
-  background: #1da1b8;
+  background: #24a4bc;
   color: white;
   font-weight: 500;
   padding: 12px;

@@ -19,11 +19,11 @@
 }
 
 .privacy-content h1 {
-  color: #1da1b8;
+  color: #24a4bc;
   font-size: 38px;
   margin-bottom: 30px;
   text-align: center;
-  border-bottom: 3px solid #1da1b8;
+  border-bottom: 3px solid #24a4bc;
   padding-bottom: 15px;
   font-weight: 700;
   letter-spacing: -0.5px;
@@ -58,7 +58,7 @@
 }
 
 .privacy-content strong {
-  color: #1da1b8;
+  color: #24a4bc;
   font-weight: 600;
 }
 
@@ -66,7 +66,7 @@
   margin-top: 40px;
   padding: 20px;
   background: #f0f9fb;
-  border-left: 4px solid #1da1b8;
+  border-left: 4px solid #24a4bc;
   border-radius: 4px;
 }
 

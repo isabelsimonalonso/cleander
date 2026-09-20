@@ -107,12 +107,14 @@ export default function Registro() {
 
   return (
     <div className="auth-container">
+      <header className="auth-cabecera">
+        <Logo variante="completo" />
+        <p>Match de servicios domésticos</p>
+      </header>
+
       <div className="auth-box auth-box--ancho">
-        <div className="logo-container">
-          <Logo size={64} />
-        </div>
-        <h1>Cleander</h1>
-        <h2>Crear cuenta</h2>
+        <h1>Crear cuenta</h1>
+        <h2>Elige si buscas un servicio o si lo ofreces</h2>
 
         {error && <div className="error-message">{error}</div>}
 

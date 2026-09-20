@@ -18,7 +18,7 @@ function FaltaConfiguracion() {
   return (
     <div className="pantalla-carga">
       <div style={{ maxWidth: 460, lineHeight: 1.7 }}>
-        <h2 style={{ color: '#1da1b8', marginBottom: 12 }}>Falta configurar Supabase</h2>
+        <h2 style={{ color: '#24a4bc', marginBottom: 12 }}>Falta configurar Supabase</h2>
         <p>
           No se ha encontrado una clave válida de Supabase, así que no se puede
           entrar ni registrar a nadie.

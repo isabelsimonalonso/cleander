@@ -1,157 +1,97 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&display=swap');
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CLEANDER · Login y registro
+   Fondo blanco, logo arriba y tarjeta con filo turquesa.
+   ═══════════════════════════════════════════════════════════════════════ */
 
 .auth-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #1da1b8 0%, #0d9488 100%);
-  padding: 20px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;   /* el bloque queda centrado en la pantalla */
+  padding: 32px 20px;
+  gap: clamp(20px, 4vh, 34px);
 }
 
+/* ── Cabecera con el logo ────────────────────────────────────────────── */
+.auth-cabecera {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* El logo escala con el ancho de la pantalla, con tope arriba y abajo */
+.auth-cabecera img {
+  display: block;
+  margin: 0 auto;
+  width: clamp(150px, 42vw, 195px);
+  height: auto;
+  filter: drop-shadow(0 4px 14px rgba(36, 164, 188, 0.16));
+}
+
+/* El contenido del login se apila centrado en la página */
+.auth-container > * {
+  align-self: center;
+}
+
+.auth-cabecera p {
+  font-size: 12px;
+  color: #a0a0a0;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* ── Tarjeta del formulario ──────────────────────────────────────────── */
 .auth-box {
   background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  padding: clamp(28px, 6vw, 40px) clamp(22px, 6vw, 38px);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(36, 164, 188, 0.14);
+  border-top: 4px solid var(--turquesa);
   width: 100%;
-  max-width: 400px;
-  margin: 0 20px;
+  max-width: 420px;
 }
 
-@media (max-width: 768px) {
-  .auth-box {
-    padding: 30px 20px;
-    margin: 0 15px;
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .auth-box {
-    padding: 25px 15px;
-    margin: 0 10px;
-  }
-}
-
-.logo-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.logo-container svg {
-  filter: drop-shadow(0 4px 8px rgba(29, 161, 184, 0.2));
+.auth-box--ancho {
+  max-width: 480px;
 }
 
 .auth-box h1 {
-  text-align: center;
-  color: #1da1b8;
-  margin-bottom: 10px;
-  font-size: 42px;
-  font-family: 'Poppins', sans-serif;
+  color: var(--turquesa);
+  font-size: 25px;
   font-weight: 700;
-  letter-spacing: -0.5px;
-  line-height: 1;
+  letter-spacing: -0.4px;
+  margin-bottom: 5px;
+  text-align: center;
 }
 
 .auth-box h2 {
-  text-align: center;
-  color: #666;
-  margin-bottom: 30px;
-  font-size: 14px;
+  color: #8c8c8c;
+  font-size: 13.5px;
   font-weight: 400;
-  letter-spacing: 0;
-  text-transform: none;
+  margin-bottom: 26px;
+  text-align: center;
 }
 
-.tipo-selector {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.tipo-selector button {
-  flex: 1;
-  padding: 12px;
-  background: #f0f0f0;
-  color: #333;
-  border-radius: 8px;
-  font-weight: 500;
-  transition: all 0.3s;
-}
-
-.tipo-selector button.active {
-  background: #1da1b8;
-  color: white;
-}
-
+/* ── Campos ──────────────────────────────────────────────────────────── */
 .auth-box form {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-.auth-box input {
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
-}
-
-.auth-box input:focus {
-  border-color: #1da1b8;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.auth-box button[type="submit"] {
-  padding: 12px;
-  background: #1da1b8;
-  color: white;
-  font-weight: 600;
-  border-radius: 8px;
-  margin-top: 10px;
-}
-
-.auth-box button[type="submit"]:hover:not(:disabled) {
-  background: #1a8399;
-}
-
-.auth-box button[type="submit"]:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.error-message {
-  background: #fee;
-  color: #c33;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.auth-box p {
-  text-align: center;
-  margin-top: 20px;
-  color: #666;
-}
-
-.auth-box a {
-  color: #1da1b8;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.auth-box a:hover {
-  text-decoration: underline;
-}
-
-/* ── Ampliaciones para el formulario de registro ─────────────────────── */
-.auth-box--ancho {
-  max-width: 480px;
-}
-
+.auth-box input,
 .auth-box select,
 .auth-box textarea {
   padding: 12px;
@@ -160,13 +100,16 @@
   font-size: 16px;
   font-family: inherit;
   background: white;
-  color: #333;
+  color: var(--texto);
+  transition: border-color 0.25s, box-shadow 0.25s;
 }
 
+.auth-box input:focus,
 .auth-box select:focus,
 .auth-box textarea:focus {
-  border-color: #1da1b8;
   outline: none;
+  border-color: var(--turquesa);
+  box-shadow: 0 0 0 3px rgba(36, 164, 188, 0.12);
 }
 
 .auth-box textarea {
@@ -189,7 +132,95 @@
 
 .campo-nota {
   font-size: 12px;
-  color: #8a8a8a;
-  line-height: 1.4;
+  color: #999;
+  line-height: 1.5;
   margin-top: -8px;
+}
+
+/* ── Botones ─────────────────────────────────────────────────────────── */
+.auth-box button[type="submit"] {
+  padding: 13px;
+  background: linear-gradient(135deg, var(--turquesa) 0%, var(--turquesa-claro) 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 8px;
+  margin-top: 10px;
+  box-shadow: 0 4px 12px rgba(36, 164, 188, 0.22);
+  transition: all 0.25s;
+}
+
+.auth-box button[type="submit"]:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--turquesa-oscuro) 0%, var(--turquesa) 100%);
+  box-shadow: 0 6px 20px rgba(36, 164, 188, 0.32);
+  transform: translateY(-2px);
+}
+
+.auth-box button[type="submit"]:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Selector cliente / profesional ──────────────────────────────────── */
+.tipo-selector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.tipo-selector button {
+  flex: 1;
+  padding: 12px;
+  background: #f4f4f4;
+  color: #555;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.25s;
+}
+
+.tipo-selector button.active {
+  background: var(--turquesa);
+  color: white;
+  box-shadow: 0 4px 12px rgba(36, 164, 188, 0.24);
+}
+
+/* ── Mensajes ────────────────────────────────────────────────────────── */
+.error-message {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.auth-box > p {
+  text-align: center;
+  margin-top: 22px;
+  color: #888;
+  font-size: 13px;
+}
+
+.auth-box a {
+  color: var(--turquesa);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-box a:hover {
+  text-decoration: underline;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+/* El registro es largo: en pantallas bajas se desplaza en vez de centrarse */
+@media (max-height: 760px) {
+  .auth-container { justify-content: flex-start; }
+}
+
+@media (max-width: 420px) {
+  .auth-container { padding: 24px 14px; }
+  .tipo-selector { flex-direction: column; }
 }

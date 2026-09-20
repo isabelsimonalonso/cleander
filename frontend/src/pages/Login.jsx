@@ -36,12 +36,14 @@ export default function Login() {
 
   return (
     <div className="auth-container">
+      <header className="auth-cabecera">
+        <Logo variante="completo" />
+        <p>Match de servicios domésticos</p>
+      </header>
+
       <div className="auth-box">
-        <div className="logo-container">
-          <Logo size={80} />
-        </div>
-        <h1>Cleander</h1>
-        <h2>Iniciar sesión</h2>
+        <h1>Bienvenido</h1>
+        <h2>Inicia sesión para continuar</h2>
 
         {error && <div className="error-message">{error}</div>}
 
