@@ -16,10 +16,13 @@ function Iniciales({ nombre }) {
  * La tarjeta estilo Tinder. Sirve para los dos roles: solo cambian
  * la etiqueta de la esquina y el texto del precio.
  *
- * `telefono` llega con valor SOLO cuando hay match; si no, se pinta
- * un teléfono falso difuminado como señal de que existe pero está oculto.
+ * El teléfono se pinta de tres maneras:
+ *   · `propio`   → tu propia tarjeta: lo ves entero, sin enlace a WhatsApp.
+ *   · `telefono` → hay match: el número del otro, con botón de WhatsApp.
+ *   · ninguno    → un número falso difuminado, para indicar que existe
+ *                  pero está oculto hasta que haya match.
  */
-export default function Tarjeta({ perfil, telefono = null, children }) {
+export default function Tarjeta({ perfil, telefono = null, propio = false, children }) {
   const copy = COPY[perfil.rol] ?? COPY.cliente
 
   return (
@@ -54,7 +57,12 @@ export default function Tarjeta({ perfil, telefono = null, children }) {
         />
 
         <div className="tarjeta-telefono">
-          {telefono ? (
+          {propio ? (
+            <span className="tarjeta-telefono-propio">
+              {perfil.telefono || 'Sin teléfono'}
+              <small>Solo lo ves tú. Se revela cuando hagas match.</small>
+            </span>
+          ) : telefono ? (
             <a
               className="tarjeta-whatsapp"
               href={`https://wa.me/${telefono.replace(/[^\d]/g, '')}`}

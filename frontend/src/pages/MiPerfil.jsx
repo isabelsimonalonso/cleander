@@ -96,6 +96,7 @@ export default function MiPerfil() {
         <div className="perfil-columnas">
           <section className="perfil-vista-previa">
             <Tarjeta
+              propio
               perfil={{
                 ...form,
                 resumen: form.resumen_estado === 'aprobado' ? form.resumen : '',

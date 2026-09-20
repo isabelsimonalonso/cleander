@@ -540,3 +540,18 @@
   .nav-enlaces a { padding: 8px 10px; font-size: 14px; }
   .app-main { padding: 16px 12px 40px; }
 }
+
+/* Tu propio teléfono en «Mi perfil»: se ve entero, sin enlace a WhatsApp */
+.tarjeta-telefono-propio {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 17px;
+  color: #444;
+}
+
+.tarjeta-telefono-propio small {
+  font-size: 11.5px;
+  color: #a8a8a8;
+  font-weight: 300;
+}
