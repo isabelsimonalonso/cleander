@@ -1,12 +1,19 @@
-# Publica la web en GitHub Pages cada vez que se hace push a main.
+# Publica la web en GitHub Pages.
+#
+# ⚠️ PUBLICACIÓN AUTOMÁTICA DESACTIVADA mientras el proyecto está en pruebas.
+#    Ahora mismo solo se lanza a mano desde la pestaña Actions de GitHub
+#    ("Run workflow"), así que hacer push NO republica nada.
+#
+#    Para volver a publicar en cada push, descomenta las tres líneas de
+#    `push:` de aquí abajo.
 #
 # La configuración de Supabase se lee de frontend/.env.production, que está
 # en el repositorio a propósito (ver la explicación dentro de ese archivo).
 name: Desplegar en GitHub Pages
 
 on:
-  push:
-    branches: [main]
+  # push:
+  #   branches: [main]
   workflow_dispatch:
 
 permissions:
