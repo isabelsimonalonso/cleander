@@ -31,7 +31,8 @@ export default function Login() {
       return
     }
 
-    navigate('/descubrir')
+    // La portada decide el destino: el admin va a su panel, el resto a descubrir.
+    navigate('/')
   }
 
   return (

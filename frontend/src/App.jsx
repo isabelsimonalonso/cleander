@@ -37,11 +37,12 @@ function FaltaConfiguracion() {
   )
 }
 
-/** La portada decide a dónde vas según si tienes sesión abierta. */
+/** La portada decide a dónde vas: sin sesión al login, con sesión a tu sitio. */
 function Inicio() {
-  const { sesion, cargando } = useAuth()
+  const { sesion, rol, cargando } = useAuth()
   if (cargando) return <div className="pantalla-carga">Cargando…</div>
-  return sesion ? <Navigate to="/descubrir" replace /> : <Login />
+  if (!sesion) return <Login />
+  return <Navigate to={rol === 'admin' ? '/admin' : '/descubrir'} replace />
 }
 
 export default function App() {
@@ -62,19 +63,19 @@ export default function App() {
 
               <Route
                 path="/descubrir"
-                element={<ProtectedRoute><Descubrir /></ProtectedRoute>}
+                element={<ProtectedRoute acceso="usuarios"><Descubrir /></ProtectedRoute>}
               />
               <Route
                 path="/matches"
-                element={<ProtectedRoute><Matches /></ProtectedRoute>}
+                element={<ProtectedRoute acceso="usuarios"><Matches /></ProtectedRoute>}
               />
               <Route
                 path="/perfil"
-                element={<ProtectedRoute><MiPerfil /></ProtectedRoute>}
+                element={<ProtectedRoute acceso="usuarios"><MiPerfil /></ProtectedRoute>}
               />
               <Route
                 path="/admin"
-                element={<ProtectedRoute soloAdmin><Admin /></ProtectedRoute>}
+                element={<ProtectedRoute acceso="admin"><Admin /></ProtectedRoute>}
               />
 
               <Route path="*" element={<Navigate to="/" replace />} />
