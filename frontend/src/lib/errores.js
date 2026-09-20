@@ -16,6 +16,7 @@ const PATRONES = [
   [/password should contain at least/i, 'errContrasenaCorta'],
   [/password.*(weak|compromised|pwned|leaked)/i, 'errContrasenaDebil'],
   [/same as the old|should be different/i, 'errContrasenaIgual'],
+  [/reauthentication|not recently|session.*old/i, 'errVuelveAEntrar'],
   [/invalid.*email|email address.*invalid/i, 'errCorreoInvalido'],
   [/rate limit|too many requests|for security purposes/i, 'errDemasiadosIntentos'],
   [/expired|invalid token|token has|otp/i, 'errEnlaceCaducado'],
