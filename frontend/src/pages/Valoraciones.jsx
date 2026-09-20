@@ -46,18 +46,26 @@ export default function Valoraciones() {
 
   useEffect(() => { cargar() }, [cargar])
 
-  const votar = async (destinatario, estrellas) => {
+  const votar = async (destinatario, estrellas, nombre) => {
     setError('')
+
+    // El voto no se puede deshacer: mejor avisar antes.
+    const plural = estrellas === 1 ? 'estrella' : 'estrellas'
+    if (!confirm(
+      `Vas a valorar a ${nombre} con ${estrellas} ${plural}.\n\n` +
+      'La valoración es definitiva: no podrás cambiarla ni retirarla después.'
+    )) return
+
     const { error: errorVoto } = await supabase
       .from('valoraciones')
-      .upsert({ autor: usuario.id, destinatario, estrellas }, { onConflict: 'autor,destinatario' })
+      .insert({ autor: usuario.id, destinatario, estrellas })
 
     if (errorVoto) {
-      setError(
-        errorVoto.code === '42501'
-          ? 'Esa persona ha retirado su petición de valoración'
-          : errorVoto.message
-      )
+      const mensajes = {
+        '42501': 'Esa persona ha retirado su petición de valoración',
+        '23505': 'Ya la has valorado, y la valoración no se puede cambiar',
+      }
+      setError(mensajes[errorVoto.code] ?? errorVoto.message)
       return
     }
     setMatches((prev) =>
@@ -81,7 +89,10 @@ export default function Valoraciones() {
       <main className="app-main">
         <header className="app-cabecera">
           <h1>Valoraciones</h1>
-          <p>Solo puedes puntuar a quien te lo haya pedido.</p>
+          <p>
+            Solo puedes puntuar a quien te lo haya pedido, y una sola vez:
+            la valoración no se puede cambiar.
+          </p>
         </header>
 
         {error && <div className="aviso aviso--error">{error}</div>}
@@ -104,7 +115,11 @@ export default function Valoraciones() {
                 pendientes.map((m) => (
                   <div className="linea-valoracion linea-valoracion--destacada" key={m.id}>
                     <Ficha persona={m} />
-                    <Estrellas valor={0} onVotar={(n) => votar(m.id, n)} tamano={26} />
+                    <Estrellas
+                      valor={0}
+                      onVotar={(n) => votar(m.id, n, m.nombre)}
+                      tamano={26}
+                    />
                   </div>
                 ))
               )}
@@ -118,12 +133,8 @@ export default function Valoraciones() {
                   <div className="linea-valoracion" key={m.id}>
                     <Ficha persona={m} />
                     <div className="linea-derecha">
-                      <Estrellas
-                        valor={m.mi_voto}
-                        onVotar={m.puedo_valorar ? (n) => votar(m.id, n) : null}
-                        tamano={22}
-                      />
-                      {m.puedo_valorar && <small>pulsa para cambiarlo</small>}
+                      <Estrellas valor={m.mi_voto} tamano={22} />
+                      <small>definitiva</small>
                     </div>
                   </div>
                 ))}
