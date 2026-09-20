@@ -724,3 +724,114 @@
   cursor: wait;
   text-decoration: none;
 }
+
+/* ── Sección de valoraciones ─────────────────────────────────────────── */
+.bloque {
+  margin-bottom: 34px;
+}
+
+.bloque-titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #6b6b6b;
+  letter-spacing: 0.2px;
+}
+
+.bloque-cuenta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 21px;
+  height: 21px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #e5484d;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.bloque-vacio {
+  padding: 18px;
+  border-radius: 12px;
+  background: #fafbfb;
+  color: #a8a8a8;
+  font-size: 13.5px;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.linea-valoracion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 3px 14px rgba(20, 40, 50, 0.07);
+}
+
+.linea-valoracion--destacada {
+  border-left: 3px solid var(--turquesa);
+}
+
+.linea-derecha {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.linea-derecha small {
+  font-size: 11px;
+  color: #a8a8a8;
+  font-weight: 300;
+}
+
+.ficha {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.ficha img,
+.ficha-iniciales {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.ficha-iniciales {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--turquesa) 0%, var(--verde) 100%);
+  color: white;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.ficha strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  color: #2a2a2a;
+}
+
+.ficha small {
+  display: block;
+  font-size: 12px;
+  color: #9b9b9b;
+  font-weight: 300;
+}

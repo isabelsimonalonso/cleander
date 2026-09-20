@@ -5,6 +5,7 @@ import Registro from './pages/Registro'
 import Descubrir from './pages/Descubrir'
 import Matches from './pages/Matches'
 import MiPerfil from './pages/MiPerfil'
+import Valoraciones from './pages/Valoraciones'
 import Admin from './pages/Admin'
 import Privacy from './pages/Privacy'
 import Footer from './components/Footer'
@@ -68,6 +69,10 @@ export default function App() {
               <Route
                 path="/matches"
                 element={<ProtectedRoute acceso="usuarios"><Matches /></ProtectedRoute>}
+              />
+              <Route
+                path="/valoraciones"
+                element={<ProtectedRoute acceso="usuarios"><Valoraciones /></ProtectedRoute>}
               />
               <Route
                 path="/perfil"

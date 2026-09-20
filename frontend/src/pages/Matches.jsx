@@ -3,7 +3,6 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import NavApp from '../components/NavApp'
 import Tarjeta from '../components/Tarjeta'
-import Estrellas from '../components/Estrellas'
 import '../styles/app.css'
 
 export default function Matches() {
@@ -58,20 +57,6 @@ export default function Matches() {
     )
   }
 
-  const votar = async (destinatario, estrellas) => {
-    const { error: errorVoto } = await supabase
-      .from('valoraciones')
-      .upsert({ autor: usuario.id, destinatario, estrellas }, { onConflict: 'autor,destinatario' })
-
-    if (errorVoto) {
-      setError(errorVoto.message)
-      return
-    }
-    // Reflejamos el voto al momento sin esperar a recargar todo
-    setLista((prev) =>
-      prev.map((m) => (m.id === destinatario ? { ...m, mi_voto: estrellas } : m))
-    )
-  }
 
   return (
     <div className="app-layout">
@@ -97,19 +82,6 @@ export default function Matches() {
         <div className="rejilla">
           {lista.map((m) => (
             <Tarjeta key={m.id} perfil={m} telefono={m.telefono}>
-              <div className="votacion">
-                <span>
-                  {m.puedo_valorar
-                    ? `${m.nombre.split(' ')[0]} te pide que le valores`
-                    : 'Aún no te ha pedido valoración'}
-                </span>
-                <Estrellas
-                  valor={m.mi_voto ?? 0}
-                  onVotar={m.puedo_valorar ? (n) => votar(m.id, n) : null}
-                  tamano={22}
-                />
-              </div>
-
               {m.he_pedido_valoracion ? (
                 <div className="invitacion-enviada">
                   <span>Petición de valoración enviada</span>
