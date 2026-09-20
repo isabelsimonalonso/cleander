@@ -1,5 +1,6 @@
 export const CATEGORIAS = [
   'Limpieza',
+  'Alquiler de robots de limpieza',
   'Fontanería',
   'Electricidad',
   'Aire acondicionado',

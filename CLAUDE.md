@@ -86,8 +86,8 @@ el frontend:
 
 ## Opciones predefinidas
 Categorías (en `src/lib/constantes.js`, deben coincidir con lo que se guarda):
-Limpieza · Fontanería · Electricidad · Aire acondicionado ·
-Reparaciones generales · Jardinería · Pintura · Mudanzas
+Limpieza · Alquiler de robots de limpieza · Fontanería · Electricidad ·
+Aire acondicionado · Reparaciones generales · Jardinería · Pintura · Mudanzas
 
 ## Moderación
 El único texto libre es el **resumen** (máx. 150 caracteres). Nace como
