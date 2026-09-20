@@ -367,3 +367,215 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* ── Ficha completa de un usuario ────────────────────────────────────── */
+.btn-ver {
+  background: #e3f4f7 !important;
+  color: #1b8299 !important;
+  font-weight: 500 !important;
+}
+
+.modal-ficha {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(30, 45, 50, 0.55);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 32px 16px;
+  overflow-y: auto;
+}
+
+.modal-ficha-caja {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  background: white;
+  border-radius: 18px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+.modal-ficha-cerrar {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f2f2f2;
+  color: #888;
+  font-size: 20px;
+  line-height: 1;
+  padding: 0;
+}
+
+.ficha-cabecera {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.ficha-foto {
+  width: 96px;
+  height: 96px;
+  border-radius: 14px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 3px solid transparent;
+}
+
+.ficha-foto--vacia {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f2f2f2;
+  color: #b0b0b0;
+  font-size: 12px;
+  font-weight: 300;
+}
+
+.ficha-cabecera h2 {
+  font-size: 21px;
+  font-weight: 500;
+  color: #2a2a2a;
+  letter-spacing: -0.3px;
+}
+
+.ficha-cabecera p {
+  font-size: 13.5px;
+  font-weight: 300;
+  color: #8a8a8a;
+  margin: 3px 0 7px;
+}
+
+.ficha-etiquetas {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 9px;
+}
+
+.ficha-rejilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  padding: 18px;
+  border-radius: 12px;
+  background: #fafbfb;
+}
+
+.ficha-dato span {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  color: #a0a0a0;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 3px;
+}
+
+.ficha-dato strong {
+  font-size: 14px;
+  font-weight: 400;
+  color: #3a3a3a;
+  word-break: break-word;
+}
+
+.ficha-bloque {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.ficha-bloque h3 {
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b6b6b;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.ficha-bloque--alerta {
+  padding: 16px;
+  border-radius: 12px;
+  background: #fffafa;
+  border-left: 3px solid #e5484d;
+}
+
+.ficha-bloque--alerta h3 { color: #b4413f; }
+
+.ficha-resumen {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #fafbfb;
+  font-size: 14px;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.55;
+  color: #555;
+}
+
+.ficha-denuncia {
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: #6b6b6b;
+}
+
+.ficha-lista {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ficha-lista li {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 13px;
+  border-radius: 9px;
+  background: #fafbfb;
+  font-size: 13.5px;
+  font-weight: 300;
+  color: #4a4a4a;
+}
+
+.ficha-lista small {
+  color: #a8a8a8;
+  font-size: 11.5px;
+}
+
+.ficha-votos {
+  font-size: 13.5px;
+  font-weight: 300;
+  color: #6b6b6b;
+  line-height: 1.9;
+}
+
+.ficha-votos strong {
+  font-weight: 500;
+  color: #4a4a4a;
+}
+
+.ficha-voto {
+  display: inline-block;
+  margin-right: 7px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #f2f7f8;
+  font-size: 12.5px;
+  color: #1b8299;
+}
+
+@media (max-width: 520px) {
+  .modal-ficha { padding: 16px 10px; }
+  .modal-ficha-caja { padding: 22px 18px; }
+}

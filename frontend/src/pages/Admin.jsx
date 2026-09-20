@@ -3,6 +3,7 @@ import { supabase, borrarFotosDe } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import { unidadCorta } from '../lib/constantes'
 import NavApp from '../components/NavApp'
+import FichaUsuario from '../components/FichaUsuario'
 import '../styles/app.css'
 import '../styles/admin.css'
 
@@ -23,6 +24,7 @@ export default function Admin() {
   const [denuncias, setDenuncias] = useState([])
   const [vista, setVista] = useState('usuarios')   // usuarios | denuncias
   const [pagina, setPagina] = useState(0)
+  const [ficha, setFicha] = useState(null)   // usuario abierto en detalle
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
 
@@ -112,6 +114,11 @@ export default function Admin() {
         .some((campo) => campo.toLowerCase().includes(texto))
     })
   }, [usuarios, busqueda, filtroRol, soloPendientes, usuario.id])
+
+  const nombrePorId = useMemo(
+    () => Object.fromEntries(usuarios.map((u) => [u.id, u.nombre])),
+    [usuarios]
+  )
 
   const POR_PAGINA = 25
   const totalPaginas = Math.max(1, Math.ceil(visibles.length / POR_PAGINA))
@@ -366,6 +373,9 @@ export default function Admin() {
                     <td className="celda-centro">{u.total_matches}</td>
 
                     <td className="celda-acciones">
+                      <button className="btn-ver" onClick={() => setFicha(u)}>
+                        Ver perfil
+                      </button>
                       <button onClick={() => actualizar(u.id, { bloqueado: !u.bloqueado })}>
                         {u.bloqueado ? 'Desbloquear' : 'Bloquear'}
                       </button>
@@ -412,6 +422,15 @@ export default function Admin() {
           </div>
         )}
       </main>
+
+      {ficha && (
+        <FichaUsuario
+          usuario={usuarios.find((u) => u.id === ficha.id) ?? ficha}
+          nombrePorId={nombrePorId}
+          onCerrar={() => setFicha(null)}
+          onActualizar={actualizar}
+        />
+      )}
     </div>
   )
 }
