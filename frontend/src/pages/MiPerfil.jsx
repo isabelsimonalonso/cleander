@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase, subirFoto } from '../lib/supabase'
+import { supabase, subirFoto, borrarFotosDe } from '../lib/supabase'
 import { COPY, LIMITE_RESUMEN, TAM_MAX_FOTO, unidadPrecio } from '../lib/constantes'
 import { useAuth } from '../context/AuthContext'
 import NavApp from '../components/NavApp'
@@ -84,6 +84,10 @@ export default function MiPerfil() {
   const borrarCuenta = async () => {
     setError('')
     setBorrando(true)
+
+    // Primero la foto: después del borrado ya no habría sesión con la
+    // que pedirle a Storage que la quite.
+    await borrarFotosDe(usuario.id)
 
     const { error: errorBorrado } = await supabase.rpc('borrar_mi_cuenta')
 

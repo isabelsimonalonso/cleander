@@ -938,3 +938,26 @@
   color: #bfa4a5;
   cursor: not-allowed;
 }
+
+/* ── Cuenta suspendida ───────────────────────────────────────────────── */
+.tarjeta--suspendida {
+  opacity: 0.72;
+}
+
+.tarjeta--suspendida .tarjeta-foto {
+  background: linear-gradient(135deg, #9aa5a8 0%, #7a8588 100%);
+  filter: grayscale(1);
+}
+
+.tarjeta--suspendida .tarjeta-cabecera h3 {
+  color: #7a7a7a;
+}
+
+.tarjeta-suspendida-aviso {
+  font-size: 13.5px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: #8a8a8a;
+  border-left: 3px solid #e0e0e0;
+  padding-left: 11px;
+}

@@ -24,6 +24,24 @@ function Iniciales({ nombre }) {
  *                  pero está oculto hasta que haya match.
  */
 export default function Tarjeta({ perfil, telefono = null, propio = false, children }) {
+  if (perfil.suspendido) {
+    return (
+      <article className="tarjeta tarjeta--suspendida">
+        <div className="tarjeta-foto">
+          <Iniciales nombre={perfil.nombre} />
+        </div>
+        <div className="tarjeta-cuerpo">
+          <div className="tarjeta-cabecera">
+            <h3>{perfil.nombre}</h3>
+          </div>
+          <p className="tarjeta-suspendida-aviso">
+            Cuenta suspendida. Sus datos de contacto ya no están disponibles.
+          </p>
+        </div>
+      </article>
+    )
+  }
+
   const copy = COPY[perfil.rol] ?? COPY.cliente
 
   return (

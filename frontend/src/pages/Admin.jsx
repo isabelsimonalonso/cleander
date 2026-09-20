@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { supabase } from '../lib/supabase'
+import { supabase, borrarFotosDe } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import { unidadCorta } from '../lib/constantes'
 import NavApp from '../components/NavApp'
@@ -53,6 +53,9 @@ export default function Admin() {
     if (!confirm(`Borrar definitivamente a ${u.nombre || u.email}?\n\nSe eliminarán su perfil, sus matches y sus valoraciones. No se puede deshacer.`)) {
       return
     }
+    // La foto va aparte: no se puede borrar desde la base de datos
+    await borrarFotosDe(u.id)
+
     const { error: errorDel } = await supabase.rpc('admin_borrar_usuario', { objetivo: u.id })
     if (errorDel) {
       setError(errorDel.message)

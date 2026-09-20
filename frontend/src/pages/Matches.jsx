@@ -87,6 +87,7 @@ export default function Matches() {
         <div className="rejilla">
           {lista.map((m) => (
             <Tarjeta key={m.id} perfil={m} telefono={m.telefono}>
+              {m.suspendido ? null : (<>
               {m.he_pedido_valoracion ? (
                 <div className="invitacion-enviada">
                   {yaMeValoraron[m.id] ? (
@@ -115,6 +116,7 @@ export default function Matches() {
                   {enviando === m.id ? 'Enviando…' : 'Pedirle que me valore'}
                 </button>
               )}
+              </>)}
             </Tarjeta>
           ))}
         </div>

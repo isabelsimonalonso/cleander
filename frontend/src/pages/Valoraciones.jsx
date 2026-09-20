@@ -76,11 +76,11 @@ export default function Valoraciones() {
 
   const { pendientes, hechas, pedidas } = useMemo(() => ({
     // Me piden que les valore y aún no lo he hecho
-    pendientes: matches.filter((m) => m.puedo_valorar && !m.mi_voto),
+    pendientes: matches.filter((m) => m.puedo_valorar && !m.mi_voto && !m.suspendido),
     // Ya les he votado
     hechas: matches.filter((m) => m.mi_voto),
     // Les he pedido yo que me valoren
-    pedidas: matches.filter((m) => m.he_pedido_valoracion),
+    pedidas: matches.filter((m) => m.he_pedido_valoracion && !m.suspendido),
   }), [matches])
 
   return (

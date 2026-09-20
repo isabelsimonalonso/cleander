@@ -31,10 +31,30 @@ export async function subirFoto(file, usuarioId) {
 
   const { error } = await supabase.storage
     .from('fotos')
-    .upload(ruta, file, { upsert: true, contentType: file.type })
+    // cacheControl corto a propósito: al borrar una cuenta, la copia que
+    // guarda la red de distribución caduca en minutos en vez de en una hora.
+    .upload(ruta, file, { upsert: true, contentType: file.type, cacheControl: '300' })
 
   if (error) throw error
 
   const { data } = supabase.storage.from('fotos').getPublicUrl(ruta)
   return data.publicUrl
+}
+
+/**
+ * Borra todas las fotos de un usuario.
+ *
+ * Tiene que pasar por la API de Storage: Supabase prohíbe borrar de sus
+ * tablas de almacenamiento con SQL, así que no puede hacerse dentro de
+ * las funciones de la base de datos.
+ *
+ * Quien lo llama debe ser el dueño de la carpeta o la administración.
+ */
+export async function borrarFotosDe(usuarioId) {
+  const { data, error } = await supabase.storage.from('fotos').list(usuarioId)
+  if (error || !data?.length) return
+
+  await supabase.storage
+    .from('fotos')
+    .remove(data.map((f) => `${usuarioId}/${f.name}`))
 }
