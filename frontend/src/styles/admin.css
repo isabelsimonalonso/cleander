@@ -227,3 +227,26 @@
 .campo-interruptor--vacio .contador-filtro {
   background: #c8c8c8;
 }
+
+/* ── Moderación de fotos ─────────────────────────────────────────────── */
+.celda-foto {
+  min-width: 130px;
+}
+
+.foto-moderar {
+  display: block;
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  border: 3px solid transparent;
+}
+
+.foto-moderar--pendiente { border-color: #f0c040; }
+.foto-moderar--aprobada  { border-color: #4caf7d; }
+.foto-moderar--rechazada { border-color: #e5484d; opacity: 0.45; }
+
+.pastilla--pendiente { background: #fff3cd; color: #8a6d00; }
+.pastilla--aprobada  { background: #d8f5e5; color: #1b7a48; }
+.pastilla--rechazada { background: #fde2e2; color: #c33; }

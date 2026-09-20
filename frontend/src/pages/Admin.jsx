@@ -64,6 +64,13 @@ export default function Admin() {
 
   // Cuántos textos esperan revisión, contando solo las filas que se listan.
   // Va en la etiqueta de la casilla para que se vea qué hará al marcarla.
+  const fotosPendientes = useMemo(
+    () => usuarios.filter(
+      (u) => u.id !== usuario.id && u.foto_url && u.foto_estado === 'pendiente'
+    ).length,
+    [usuarios, usuario.id]
+  )
+
   const pendientes = useMemo(
     () => usuarios.filter(
       (u) => u.id !== usuario.id && u.resumen && u.resumen_estado === 'pendiente'
@@ -77,7 +84,11 @@ export default function Admin() {
       // Tu propia fila no pinta nada aquí: no puedes moderarte ni borrarte.
       if (u.id === usuario.id) return false
       if (filtroRol && u.rol !== filtroRol) return false
-      if (soloPendientes && !(u.resumen && u.resumen_estado === 'pendiente')) return false
+      if (soloPendientes) {
+        const textoPend = u.resumen && u.resumen_estado === 'pendiente'
+        const fotoPend = u.foto_url && u.foto_estado === 'pendiente'
+        if (!textoPend && !fotoPend) return false
+      }
       if (!texto) return true
       return [u.nombre, u.email, u.ciudad, u.provincia, u.categoria, u.telefono]
         .filter(Boolean)
@@ -103,6 +114,7 @@ export default function Admin() {
           <Stat etiqueta="Likes" valor={stats.likes} />
           <Stat etiqueta="Bloqueados" valor={stats.bloqueados} />
           <Stat etiqueta="Textos por revisar" valor={stats.resumenes_pendientes} destacado />
+          <Stat etiqueta="Fotos por revisar" valor={stats.fotos_pendientes} destacado />
         </div>
 
         <div className="filtros">
@@ -118,15 +130,15 @@ export default function Admin() {
             <option value="servicio">Servicios</option>
             <option value="admin">Administradores</option>
           </select>
-          <label className={`campo-interruptor ${pendientes === 0 ? 'campo-interruptor--vacio' : ''}`}>
+          <label className={`campo-interruptor ${pendientes + fotosPendientes === 0 ? 'campo-interruptor--vacio' : ''}`}>
             <input
               type="checkbox"
               checked={soloPendientes}
-              disabled={pendientes === 0}
+              disabled={pendientes + fotosPendientes === 0}
               onChange={(e) => setSoloPendientes(e.target.checked)}
             />
-            Solo textos por revisar
-            <span className="contador-filtro">{pendientes}</span>
+            Solo pendientes de revisar
+            <span className="contador-filtro">{pendientes + fotosPendientes}</span>
           </label>
           <button onClick={cargar}>Recargar</button>
         </div>
@@ -139,6 +151,7 @@ export default function Admin() {
               <thead>
                 <tr>
                   <th>Usuario</th>
+                  <th>Foto</th>
                   <th>Rol</th>
                   <th>Contacto</th>
                   <th>Servicio</th>
@@ -152,7 +165,7 @@ export default function Admin() {
                   <tr key={u.id} className={u.bloqueado ? 'fila-bloqueada' : ''}>
                     <td>
                       <div className="celda-usuario">
-                        {u.foto_url
+                        {u.foto_url && u.foto_estado === 'aprobada'
                           ? <img src={u.foto_url} alt="" />
                           : <span className="sin-foto">—</span>}
                         <div>
@@ -160,6 +173,39 @@ export default function Admin() {
                           <small>{u.ciudad}{u.provincia ? `, ${u.provincia}` : ''}</small>
                         </div>
                       </div>
+                    </td>
+
+                    <td className="celda-foto">
+                      {u.foto_url ? (
+                        <>
+                          <a href={u.foto_url} target="_blank" rel="noopener noreferrer">
+                            <img
+                              className={`foto-moderar foto-moderar--${u.foto_estado}`}
+                              src={u.foto_url}
+                              alt={`Foto de ${u.nombre}`}
+                            />
+                          </a>
+                          <span className={`pastilla pastilla--${u.foto_estado}`}>
+                            {u.foto_estado}
+                          </span>
+                          <div className="botones-moderacion">
+                            <button
+                              className="btn-ok"
+                              onClick={() => actualizar(u.id, { foto_estado: 'aprobada' })}
+                            >
+                              Aprobar
+                            </button>
+                            <button
+                              className="btn-no"
+                              onClick={() => actualizar(u.id, { foto_estado: 'rechazada' })}
+                            >
+                              Rechazar
+                            </button>
+                          </div>
+                        </>
+                      ) : (
+                        <span className="tenue">sin foto</span>
+                      )}
                     </td>
 
                     <td>
@@ -236,7 +282,7 @@ export default function Admin() {
 
                 {visibles.length === 0 && (
                   <tr>
-                    <td colSpan={7} className="celda-centro tenue">
+                    <td colSpan={8} className="celda-centro tenue">
                       Ningún usuario coincide con el filtro.
                     </td>
                   </tr>

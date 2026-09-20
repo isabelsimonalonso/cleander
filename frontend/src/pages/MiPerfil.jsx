@@ -8,6 +8,12 @@ import SelectorUbicacion from '../components/SelectorUbicacion'
 import SelectorServicio from '../components/SelectorServicio'
 import '../styles/app.css'
 
+const ESTADO_FOTO = {
+  pendiente: { texto: 'Pendiente de revisión — aún no se ve en tu tarjeta', clase: 'pendiente' },
+  aprobada: { texto: 'Aprobada y visible', clase: 'aprobado' },
+  rechazada: { texto: 'Rechazada por el equipo — sube otra', clase: 'rechazado' },
+}
+
 const ESTADO_RESUMEN = {
   pendiente: { texto: 'Pendiente de revisión — aún no se ve en tu tarjeta', clase: 'pendiente' },
   aprobado: { texto: 'Aprobado y visible', clase: 'aprobado' },
@@ -126,6 +132,7 @@ export default function MiPerfil() {
               perfil={{
                 ...form,
                 resumen: form.resumen_estado === 'aprobado' ? form.resumen : '',
+                foto_url: form.foto_estado === 'aprobada' ? form.foto_url : null,
                 valoracion_media: valoracion.media,
                 total_valoraciones: valoracion.total,
               }}
@@ -135,6 +142,11 @@ export default function MiPerfil() {
           <form className="perfil-formulario" onSubmit={guardar}>
             <label className="campo-etiqueta">Foto</label>
             <input type="file" accept="image/*" onChange={cambiarFoto} />
+            {form.foto_url && (
+              <span className={`estado-resumen estado-resumen--${(ESTADO_FOTO[form.foto_estado] ?? ESTADO_FOTO.pendiente).clase}`}>
+                {(ESTADO_FOTO[form.foto_estado] ?? ESTADO_FOTO.pendiente).texto}
+              </span>
+            )}
 
             <label className="campo-etiqueta">Nombre</label>
             <input type="text" value={form.nombre} onChange={cambiar('nombre')} maxLength={80} required />
