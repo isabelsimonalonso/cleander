@@ -127,6 +127,7 @@ export default function Descubrir() {
 
         <div className="filtros">
           <select
+            className="filtro-ancho"
             value={filtros.categoria}
             onChange={(e) => setFiltros((f) => ({ ...f, categoria: e.target.value }))}
           >

@@ -134,6 +134,13 @@
   line-height: 1.6;
 }
 
+/* Hueco para la flecha del desplegable */
+.auth-box select,
+.perfil-formulario select {
+  padding-right: 38px;
+  text-overflow: ellipsis;
+}
+
 /* Chrome pinta los campos autocompletados de azul; lo devolvemos a blanco */
 .auth-box input:-webkit-autofill,
 .auth-box input:-webkit-autofill:hover,
