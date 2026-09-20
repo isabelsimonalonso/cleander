@@ -189,6 +189,8 @@ export const TEXTOS = {
     // ── Pie ──────────────────────────────────────────────────────────
     derechosReservados: '© {anyo} CleanDerApp. Todos los derechos reservados.',
     avisoLegalEnlace: 'Aviso legal y privacidad',
+    sobreNosotros: 'Sobre nosotros',
+    queEsCleanderapp: '¿Qué es CleanDerApp?',
 
     // ── Según el rol ─────────────────────────────────────────────────
     precioCliente: 'Pago por {unidad}',
@@ -438,6 +440,8 @@ export const TEXTOS = {
 
     derechosReservados: '© {anyo} CleanDerApp. All rights reserved.',
     avisoLegalEnlace: 'Legal notice and privacy',
+    sobreNosotros: 'About us',
+    queEsCleanderapp: 'What is CleanDerApp?',
 
     precioCliente: 'I pay per {unidad}',
     precioServicio: 'I charge per {unidad}',

@@ -9,6 +9,7 @@ import MiPerfil from './pages/MiPerfil'
 import Valoraciones from './pages/Valoraciones'
 import Admin from './pages/Admin'
 import Privacy from './pages/Privacy'
+import Sobre from './pages/Sobre'
 import Footer from './components/Footer'
 import ProtectedRoute from './components/ProtectedRoute'
 import { configuracionValida } from './lib/supabase'
@@ -63,6 +64,7 @@ export default function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/registro" element={<Registro />} />
               <Route path="/privacidad" element={<Privacy />} />
+              <Route path="/sobre-nosotros" element={<Sobre />} />
 
               <Route
                 path="/descubrir"

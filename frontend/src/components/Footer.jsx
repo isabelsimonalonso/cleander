@@ -57,6 +57,8 @@ export default function Footer() {
         <p>{t('derechosReservados', { anyo })}</p>
 
         <div className="footer-links">
+          <Link to="/sobre-nosotros">{t('sobreNosotros')}</Link>
+          <span className="separator">·</span>
           <Link to="/privacidad">{t('avisoLegalEnlace')}</Link>
         </div>
       </div>

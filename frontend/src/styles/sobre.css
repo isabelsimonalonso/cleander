@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CLEANDERAPP · Sobre nosotros
+   Única página con texto largo que se ve sin sesión.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.sobre-container {
+  position: relative;
+  min-height: 100vh;
+  background: white;
+  padding: 0 20px 56px;
+}
+
+.sobre-cabecera {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 56px 0 40px;
+  text-align: center;
+}
+
+.sobre-entradilla {
+  max-width: 540px;
+  font-size: clamp(16px, 2.4vw, 19px);
+  font-weight: 300;
+  line-height: 1.6;
+  color: #7a7a7a;
+}
+
+.sobre-contenido {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.sobre-contenido h1 {
+  margin-bottom: 34px;
+  font-size: clamp(25px, 4vw, 31px);
+  font-weight: 600;
+  letter-spacing: -0.6px;
+  color: var(--turquesa);
+  text-align: center;
+}
+
+.sobre-seccion {
+  margin-bottom: 34px;
+}
+
+.sobre-seccion h2 {
+  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #2a2a2a;
+  letter-spacing: -0.2px;
+}
+
+.sobre-seccion p {
+  margin-bottom: 11px;
+  font-size: 15.5px;
+  font-weight: 300;
+  line-height: 1.75;
+  color: #5a5a5a;
+}
+
+/* Los tres pasos, numerados en turquesa */
+.sobre-pasos {
+  list-style: none;
+  counter-reset: paso;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 6px;
+}
+
+.sobre-pasos li {
+  counter-increment: paso;
+  position: relative;
+  padding: 16px 18px 16px 58px;
+  border-radius: 14px;
+  background: #fafbfb;
+}
+
+.sobre-pasos li::before {
+  content: counter(paso);
+  position: absolute;
+  left: 18px;
+  top: 16px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--turquesa);
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sobre-pasos strong {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #2a2a2a;
+}
+
+.sobre-pasos span {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: #7a7a7a;
+}
+
+.sobre-correo {
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 11px;
+  background: #f2f7f8;
+  color: var(--turquesa);
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.sobre-correo:hover {
+  background: #e6f2f5;
+}
+
+/* ── Llamada final ───────────────────────────────────────────────────── */
+.sobre-acciones {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 44px;
+  padding-top: 32px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.sobre-boton {
+  padding: 14px 30px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--turquesa) 0%, var(--turquesa-claro) 100%);
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: 0 6px 18px rgba(36, 164, 188, 0.24);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.sobre-boton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 9px 26px rgba(36, 164, 188, 0.32);
+}
+
+.sobre-enlace {
+  color: var(--turquesa);
+  font-size: 14.5px;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.sobre-enlace:hover { text-decoration: underline; }
+
+@media (max-width: 480px) {
+  .sobre-cabecera { padding: 36px 0 28px; }
+}
