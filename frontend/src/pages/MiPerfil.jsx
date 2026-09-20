@@ -43,10 +43,7 @@ export default function MiPerfil() {
     if (!usuario?.id) return
     let activo = true
     supabase
-      .from('denuncias')
-      .select('motivo,estado,creado_en,denunciado')
-      .eq('denunciante', usuario.id)
-      .order('creado_en', { ascending: false })
+      .rpc('mis_denuncias')
       .then(({ data }) => { if (activo) setMisDenuncias(data ?? []) })
     return () => { activo = false }
   }, [usuario?.id])
@@ -278,14 +275,13 @@ export default function MiPerfil() {
         {misDenuncias.length > 0 && (
           <section className="zona-denuncias">
             <h2>Denuncias que has enviado</h2>
-            <p>
-              No te decimos contra quién por privacidad, pero sí en qué ha
-              quedado cada una.
-            </p>
             <ul>
               {misDenuncias.map((d, i) => (
                 <li key={i}>
-                  <span>{d.motivo}</span>
+                  <span className="denuncia-contra-quien">
+                    <strong>{d.contra}</strong>
+                    {d.motivo}
+                  </span>
                   <span className={`pastilla-estado pastilla-estado--${d.estado}`}>
                     {d.estado === 'pendiente' ? 'en revisión'
                       : d.estado === 'revisada' ? 'revisada, se tomaron medidas'
