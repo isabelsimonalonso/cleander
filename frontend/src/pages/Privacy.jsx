@@ -3,20 +3,12 @@ import '../styles/privacy.css'
 /**
  * Aviso legal, condiciones de uso y política de privacidad.
  *
- * IMPORTANTE: rellena TITULAR antes de abrir la web al público. La Ley
- * 34/2002 (LSSI-CE, art. 10) obliga a identificar a quien presta el
- * servicio con nombre, NIF y una dirección de contacto reales.
+ * Basta con cambiar esta línea por el correo real. Mientras siga entre
+ * corchetes, la página avisa de que el servicio está en pruebas.
  */
-const TITULAR = {
-  nombre: '[NOMBRE O RAZÓN SOCIAL]',
-  nif: '[NIF / CIF]',
-  domicilio: '[DOMICILIO]',
-  email: '[CORREO DE CONTACTO]',
-}
+const CONTACTO = '[CORREO DE CONTACTO]'
 
-/** Mientras queden huecos por rellenar, la página lo advierte en vez de
- *  mostrar corchetes sueltos como si fuera una plantilla a medio hacer. */
-const PENDIENTE = Object.values(TITULAR).some((v) => v.startsWith('['))
+const PENDIENTE = CONTACTO.startsWith('[')
 
 export default function Privacy() {
   const hoy = new Date().toLocaleDateString('es-ES')
@@ -30,9 +22,8 @@ export default function Privacy() {
           <section className="aviso-pendiente">
             <p>
               <strong>Servicio en pruebas.</strong> CleanDerApp no está abierta al público
-              y todavía no presta servicio a usuarios reales. Los datos identificativos
-              del titular y el correo de contacto se publicarán antes de su puesta en
-              funcionamiento, conforme al artículo 10 de la Ley 34/2002.
+              y todavía no presta servicio a usuarios reales. La dirección de contacto
+              se publicará antes de su puesta en funcionamiento.
             </p>
           </section>
         )}
@@ -46,18 +37,18 @@ export default function Privacy() {
         </section>
 
         <section>
-          <h2>1. Titular del servicio</h2>
+          <h2>1. Contacto</h2>
+          <p>
+            Para cualquier comunicación relativa a la Plataforma —denuncias de
+            contenido, ejercicio de derechos sobre tus datos o cualquier incidencia—
+            la dirección de contacto es:
+          </p>
           {PENDIENTE ? (
             <p className="tenue-legal">
-              Pendiente de publicar antes de la apertura al público: nombre o razón
-              social, NIF, domicilio y correo electrónico de contacto.
+              Pendiente de publicar antes de la apertura al público.
             </p>
           ) : (
-            <p>
-              <strong>{TITULAR.nombre}</strong> · NIF {TITULAR.nif}<br />
-              Domicilio: {TITULAR.domicilio}<br />
-              Contacto: <strong>{TITULAR.email}</strong>
-            </p>
+            <p><strong>{CONTACTO}</strong></p>
           )}
           <p>
             En adelante, «CleanDerApp» o «la Plataforma». El uso de la Plataforma implica
@@ -128,7 +119,7 @@ export default function Privacy() {
           </p>
           <p>
             Si detectas contenido ilícito, falso u ofensivo, comunícalo a{' '}
-            <strong>{TITULAR.email}</strong> indicando el perfil afectado y el motivo. Una vez
+            <strong>{CONTACTO}</strong> indicando el perfil afectado y el motivo. Una vez
             tengamos conocimiento efectivo, retiraremos el contenido o bloquearemos la
             cuenta con la mayor brevedad posible.
           </p>
@@ -181,7 +172,10 @@ export default function Privacy() {
 
         <section>
           <h2>7. Datos personales que se tratan</h2>
-          <p>Responsable del tratamiento: {TITULAR.nombre}, con los datos del apartado 1.</p>
+          <p>
+            Las consultas sobre el tratamiento de datos se atienden en la dirección de
+            contacto del apartado 1.
+          </p>
           <p>Se tratan los siguientes datos, todos facilitados por el usuario:</p>
           <ul>
             <li>Nombre</li>
@@ -262,7 +256,7 @@ export default function Privacy() {
           <h2>12. Derechos del usuario</h2>
           <p>
             Puedes ejercer los derechos de acceso, rectificación, supresión, oposición,
-            limitación y portabilidad escribiendo a <strong>{TITULAR.email}</strong>, indicando el
+            limitación y portabilidad escribiendo a <strong>{CONTACTO}</strong>, indicando el
             derecho que ejercitas y acreditando tu identidad. Responderemos en el plazo de
             un mes.
           </p>

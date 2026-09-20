@@ -145,16 +145,18 @@ segunda y haz lo mismo: aparecerá el aviso de match y los dos teléfonos.
 Mientras solo pruebas tú, nada de esto corre prisa. En cuanto se registre la
 primera persona real, es obligatorio:
 
-- [ ] **Datos del titular.** Rellenar `TITULAR` en
-      `frontend/src/pages/Privacy.jsx`: nombre o razón social, NIF, domicilio
-      y correo. Lo exige el artículo 10 de la Ley 34/2002 (LSSI-CE), y su
-      ausencia es infracción leve, sancionable con hasta 30.000 €.
-      Mientras queden sin rellenar, la página legal avisa de que el servicio
-      está en pruebas en lugar de mostrar los huecos.
-- [ ] **Correo de contacto operativo.** Es donde llegan las denuncias de
-      contenido ilícito y los derechos de protección de datos. Sin un buzón
-      atendido, la exención de responsabilidad del artículo 16 LSSI-CE
-      —la que te protege de lo que publiquen los usuarios— no se sostiene.
+- [ ] **Correo de contacto.** Cambiar `CONTACTO` en
+      `frontend/src/pages/Privacy.jsx` por una dirección real y atendida.
+      Es donde llegan las denuncias de contenido ilícito y los derechos de
+      protección de datos. Sin un buzón atendido, la exención de
+      responsabilidad del artículo 16 LSSI-CE —la que protege de lo que
+      publiquen los usuarios— no se sostiene. Mientras siga entre corchetes,
+      la página legal avisa de que el servicio está en pruebas.
+- [ ] **Identificación del titular.** El artículo 10 de la Ley 34/2002
+      (LSSI-CE) exige publicar además nombre o razón social, NIF y domicilio,
+      y el artículo 13 del RGPD exige identificar a quien responde de los
+      datos. Se ha decidido publicar solo el correo; queda anotado como
+      riesgo asumido.
 - [ ] **Cambiar la contraseña de `admin@cleander.app`**, desde
       Supabase → *Authentication → Users*.
 - [ ] **Borrar las cuentas de prueba** (`cliente@` y `servicio@`) desde el
