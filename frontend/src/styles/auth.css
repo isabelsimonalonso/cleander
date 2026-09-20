@@ -13,7 +13,7 @@
   align-items: center;
   justify-content: center;
   padding: 48px 24px;
-  gap: clamp(28px, 5vh, 46px);
+  gap: clamp(22px, 3.2vh, 32px);
 }
 
 /* ── Logo ────────────────────────────────────────────────────────────── */
@@ -21,24 +21,25 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 13px;
   text-align: center;
 }
 
-/* Escala con la pantalla: nunca menor de 200 ni mayor de 280 */
-.auth-cabecera img {
+/* Aprox. la mitad del ancho de la tarjeta, que es lo que cuadra a la vista.
+   Sin ancho en línea en el JSX, o este clamp no se aplicaría. */
+.logo-completo {
   display: block;
-  width: clamp(200px, 52vw, 280px);
+  width: clamp(185px, 48vw, 235px);
   height: auto;
   filter: drop-shadow(0 6px 20px rgba(36, 164, 188, 0.14));
 }
 
 .auth-cabecera p {
   margin: 0;
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 400;
-  color: #a8a8a8;
-  letter-spacing: 3.4px;
+  color: #adadad;
+  letter-spacing: 2.4px;
   text-transform: uppercase;
 }
 
@@ -60,16 +61,16 @@
 .auth-box h1 {
   margin-bottom: 8px;
   color: var(--turquesa);
-  font-size: 29px;
+  font-size: 25px;
   font-weight: 600;
-  letter-spacing: -0.6px;
+  letter-spacing: -0.5px;
   text-align: center;
 }
 
 .auth-box h2 {
-  margin-bottom: 34px;
+  margin-bottom: 30px;
   color: #9b9b9b;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 300;
   letter-spacing: 0.2px;
   text-align: center;
@@ -114,6 +115,16 @@
 .auth-box textarea {
   resize: vertical;
   line-height: 1.6;
+}
+
+/* Chrome pinta los campos autocompletados de azul; lo devolvemos a blanco */
+.auth-box input:-webkit-autofill,
+.auth-box input:-webkit-autofill:hover,
+.auth-box input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--texto);
+  -webkit-box-shadow: 0 0 0 40px white inset;
+  box-shadow: 0 0 0 40px white inset;
+  transition: background-color 9999s ease-in-out 0s;
 }
 
 .auth-box input[type="file"] {
