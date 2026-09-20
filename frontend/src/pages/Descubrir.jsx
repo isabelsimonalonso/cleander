@@ -96,7 +96,9 @@ export default function Descubrir() {
   const desplazamiento = saliendo === 'like' ? 600 : saliendo === 'pass' ? -600 : arrastre
   const estiloTarjeta = {
     transform: `translateX(${desplazamiento}px) rotate(${desplazamiento / 22}deg)`,
-    transition: inicioX.current === null ? 'transform .22s ease-out' : 'none',
+    transition: inicioX.current === null
+      ? 'transform .22s ease-out, opacity .22s ease-out'
+      : 'none',
     opacity: saliendo ? 0 : 1,
   }
 
@@ -142,12 +144,16 @@ export default function Descubrir() {
             <>
               {/* La siguiente tarjeta asoma por detrás para dar sensación de mazo */}
               {mazo[1] && (
-                <div className="mazo-fondo">
+                <div className="mazo-fondo" key={`fondo-${mazo[1].id}`}>
                   <Tarjeta perfil={mazo[1]} />
                 </div>
               )}
 
+              {/* La `key` es imprescindible: sin ella React reutiliza este mismo
+                  elemento para la tarjeta siguiente, y el navegador la anima
+                  "de vuelta" desde donde salió volando la anterior. */}
               <div
+                key={actual.id}
                 className="mazo-frente"
                 style={estiloTarjeta}
                 onPointerDown={alPulsar}
