@@ -313,13 +313,21 @@
 }
 
 .tarjeta-telefono-oculto small {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tarjeta-telefono-oculto small {
   font-size: 12px;
   color: #aaa;
   font-weight: 300;
 }
 
 .tarjeta-whatsapp {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
   background: #25d366;
   color: white;
   padding: 10px 16px;
@@ -548,6 +556,21 @@
   gap: 3px;
   font-size: 17px;
   color: #444;
+}
+
+/* Icono y número en la misma línea, bien alineados verticalmente */
+.tarjeta-telefono-linea {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tarjeta-telefono-propio .icono-whatsapp {
+  color: #25d366;
+}
+
+.tarjeta-telefono-oculto .icono-whatsapp {
+  color: #9aa5a8;
 }
 
 .tarjeta-telefono-propio small {

@@ -1,5 +1,6 @@
 import { COPY } from '../lib/constantes'
 import Estrellas from './Estrellas'
+import IconoWhatsApp from './IconoWhatsApp'
 
 /** Iniciales como recurso cuando alguien no ha subido foto. */
 function Iniciales({ nombre }) {
@@ -59,7 +60,10 @@ export default function Tarjeta({ perfil, telefono = null, propio = false, child
         <div className="tarjeta-telefono">
           {propio ? (
             <span className="tarjeta-telefono-propio">
-              {perfil.telefono || 'Sin teléfono'}
+              <span className="tarjeta-telefono-linea">
+                <IconoWhatsApp size={17} />
+                {perfil.telefono || 'Sin teléfono'}
+              </span>
               <small>Solo lo ves tú. Se revela cuando hagas match.</small>
             </span>
           ) : telefono ? (
@@ -69,12 +73,16 @@ export default function Tarjeta({ perfil, telefono = null, propio = false, child
               target="_blank"
               rel="noopener noreferrer"
             >
-              💬 {telefono}
+              <IconoWhatsApp size={19} />
+              {telefono}
             </a>
           ) : (
             <span className="tarjeta-telefono-oculto" aria-label="Teléfono oculto hasta el match">
-              <span className="pixelado">+34 600 000 000</span>
-              <small>🔒 visible al hacer match</small>
+              <span className="tarjeta-telefono-linea pixelado">
+                <IconoWhatsApp size={17} />
+                +34 600 000 000
+              </span>
+              <small>Visible al hacer match</small>
             </span>
           )}
         </div>
