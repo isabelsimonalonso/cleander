@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase, subirFoto } from '../lib/supabase'
 import { COPY, LIMITE_RESUMEN, TAM_MAX_FOTO, unidadPrecio } from '../lib/constantes'
 import { useAuth } from '../context/AuthContext'
@@ -21,12 +22,15 @@ const ESTADO_RESUMEN = {
 }
 
 export default function MiPerfil() {
-  const { usuario, perfil, refrescarPerfil } = useAuth()
+  const { usuario, perfil, refrescarPerfil, logout } = useAuth()
+  const navigate = useNavigate()
   const [form, setForm] = useState(null)
   const [guardando, setGuardando] = useState(false)
   const [mensaje, setMensaje] = useState('')
   const [error, setError] = useState('')
   const [valoracion, setValoracion] = useState({ media: 0, total: 0 })
+  const [confirmacion, setConfirmacion] = useState('')
+  const [borrando, setBorrando] = useState(false)
 
   useEffect(() => {
     if (perfil) setForm(perfil)
@@ -75,6 +79,26 @@ export default function MiPerfil() {
     } finally {
       setGuardando(false)
     }
+  }
+
+  const borrarCuenta = async () => {
+    setError('')
+    setBorrando(true)
+
+    const { error: errorBorrado } = await supabase.rpc('borrar_mi_cuenta')
+
+    if (errorBorrado) {
+      setBorrando(false)
+      setError(
+        errorBorrado.message.includes('Could not find the function')
+          ? 'Falta ejecutar supabase/11_borrar_mi_cuenta.sql en Supabase'
+          : errorBorrado.message
+      )
+      return
+    }
+
+    await logout()
+    navigate('/login')
   }
 
   const guardar = async (e) => {
@@ -198,6 +222,34 @@ export default function MiPerfil() {
               {guardando ? 'Guardando…' : 'Guardar cambios'}
             </button>
           </form>
+
+          <section className="zona-peligro">
+            <h2>Eliminar mi cuenta</h2>
+            <p>
+              Se borrarán tu perfil, tu foto, tus matches y tus valoraciones.
+              Quien haya hecho match contigo dejará de ver tu teléfono.
+              <strong> No se puede deshacer.</strong>
+            </p>
+            <label className="campo-etiqueta" htmlFor="confirmar-borrado">
+              Escribe <code>BORRAR</code> para confirmar
+            </label>
+            <input
+              id="confirmar-borrado"
+              type="text"
+              value={confirmacion}
+              onChange={(e) => setConfirmacion(e.target.value)}
+              placeholder="BORRAR"
+              autoComplete="off"
+            />
+            <button
+              type="button"
+              className="boton-peligro"
+              disabled={confirmacion.trim().toUpperCase() !== 'BORRAR' || borrando}
+              onClick={borrarCuenta}
+            >
+              {borrando ? 'Eliminando…' : 'Eliminar mi cuenta definitivamente'}
+            </button>
+          </section>
         </div>
       </main>
     </div>

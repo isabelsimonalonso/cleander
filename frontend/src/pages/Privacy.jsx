@@ -255,10 +255,15 @@ export default function Privacy() {
         <section>
           <h2>12. Derechos del usuario</h2>
           <p>
-            Puedes ejercer los derechos de acceso, rectificación, supresión, oposición,
-            limitación y portabilidad escribiendo a <strong>{CONTACTO}</strong>, indicando el
-            derecho que ejercitas y acreditando tu identidad. Responderemos en el plazo de
-            un mes.
+            <strong>Supresión:</strong> puedes eliminar tu cuenta tú misma en cualquier
+            momento, sin pedir permiso ni dar explicaciones, desde «Mi perfil». El
+            borrado es inmediato y arrastra tu perfil, tu fotografía, tus matches y
+            tus valoraciones.
+          </p>
+          <p>
+            Para el resto de derechos —acceso, rectificación, oposición, limitación y
+            portabilidad— escribe a <strong>{CONTACTO}</strong> indicando cuál ejercitas
+            y acreditando tu identidad. Responderemos en el plazo de un mes.
           </p>
           <p>
             Si consideras que tus datos no se han tratado correctamente, puedes reclamar

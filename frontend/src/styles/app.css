@@ -870,3 +870,71 @@
   color: #b0b0b0;
   font-weight: 300;
 }
+
+/* ── Eliminar la cuenta ──────────────────────────────────────────────── */
+.zona-peligro {
+  margin-top: 26px;
+  padding: 22px;
+  border: 1px solid #f3d6d7;
+  border-radius: 14px;
+  background: #fffafa;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.zona-peligro h2 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #b4413f;
+}
+
+.zona-peligro p {
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: #7a6a6a;
+}
+
+.zona-peligro code {
+  padding: 1px 6px;
+  border-radius: 5px;
+  background: #f3e3e3;
+  color: #b4413f;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.zona-peligro input {
+  padding: 11px 13px;
+  border: 1px solid #e8d2d2;
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: inherit;
+  letter-spacing: 1px;
+}
+
+.zona-peligro input:focus {
+  outline: none;
+  border-color: #e5484d;
+  box-shadow: 0 0 0 3px rgba(229, 72, 77, 0.10);
+}
+
+.boton-peligro {
+  padding: 13px;
+  border-radius: 10px;
+  background: #e5484d;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.boton-peligro:hover:not(:disabled) {
+  background: #c93b40;
+}
+
+.boton-peligro:disabled {
+  background: #ecd5d6;
+  color: #bfa4a5;
+  cursor: not-allowed;
+}
