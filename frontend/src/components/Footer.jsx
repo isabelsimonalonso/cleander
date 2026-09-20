@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { REDES } from '../lib/constantes'
+import { useIdioma } from '../lib/i18n'
 
 /** Glifos oficiales, dibujados para que hereden el color y pesen nada. */
 const ICONOS = {
@@ -24,14 +25,14 @@ const ICONOS = {
 
 export default function Footer() {
   const anyo = new Date().getFullYear()
-  const activas = REDES.filter((r) => r.url)
+  const { t } = useIdioma()
 
   return (
     <footer className="footer">
       <div className="footer-content">
-        {activas.length > 0 && (
-          <div className="footer-redes">
-            {activas.map((r) => (
+        <div className="footer-redes">
+          {REDES.map((r) =>
+            r.url ? (
               <a
                 key={r.id}
                 href={r.url}
@@ -42,14 +43,19 @@ export default function Footer() {
               >
                 {ICONOS[r.id]}
               </a>
-            ))}
-          </div>
-        )}
+            ) : (
+              // Sin dirección todavía: se ve pero no lleva a ningún sitio
+              <span key={r.id} className="red-pendiente" title={`${r.nombre} · pendiente`}>
+                {ICONOS[r.id]}
+              </span>
+            )
+          )}
+        </div>
 
-        <p>© {anyo} CleanDerApp. Todos los derechos reservados.</p>
+        <p>{t('derechosReservados', { anyo })}</p>
 
         <div className="footer-links">
-          <Link to="/privacidad">Aviso legal y privacidad</Link>
+          <Link to="/privacidad">{t('avisoLegalEnlace')}</Link>
         </div>
       </div>
     </footer>

@@ -160,14 +160,18 @@ export const COPY = {
 export const CONTACTO = 'info@cleanderapp.com'
 
 /**
- * Redes sociales del pie. Pon la dirección de cada una cuando la tengas;
- * las que estén vacías no se muestran, así no hay iconos que no llevan
- * a ninguna parte.
+ * Redes sociales del pie.
+ *
+ * PROVISIONAL: apuntan a la portada de cada red. Cuando existan los
+ * perfiles de CleanDerApp, sustituir por su dirección concreta, del
+ * estilo https://www.instagram.com/cleanderapp/
+ *
+ * Una dirección vacía oculta ese icono.
  */
 export const REDES = [
-  { id: 'instagram', nombre: 'Instagram', url: '' },
-  { id: 'tiktok', nombre: 'TikTok', url: '' },
-  { id: 'facebook', nombre: 'Facebook', url: '' },
+  { id: 'instagram', nombre: 'Instagram', url: 'https://www.instagram.com/' },
+  { id: 'tiktok', nombre: 'TikTok', url: 'https://www.tiktok.com/' },
+  { id: 'facebook', nombre: 'Facebook', url: 'https://www.facebook.com/' },
 ]
 
 /** Motivos de denuncia. Lista cerrada, para poder filtrar y contar. */

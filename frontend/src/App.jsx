@@ -1,5 +1,6 @@
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './context/AuthContext'
+import { IdiomaProvider } from './lib/i18n'
 import Login from './pages/Login'
 import Registro from './pages/Registro'
 import Descubrir from './pages/Descubrir'
@@ -41,7 +42,7 @@ function FaltaConfiguracion() {
 /** La portada decide a dónde vas: sin sesión al login, con sesión a tu sitio. */
 function Inicio() {
   const { sesion, rol, cargando } = useAuth()
-  if (cargando) return <div className="pantalla-carga">Cargando…</div>
+  if (cargando) return <div className="pantalla-carga">…</div>
   if (!sesion) return <Login />
   return <Navigate to={rol === 'admin' ? '/admin' : '/descubrir'} replace />
 }
@@ -53,6 +54,7 @@ export default function App() {
     // HashRouter (rutas con #) porque GitHub Pages sirve archivos estáticos
     // y devolvería 404 al recargar en cualquier ruta que no sea la raíz.
     <HashRouter>
+      <IdiomaProvider>
       <AuthProvider>
         <div className="raiz">
           <div className="raiz-contenido">
@@ -89,6 +91,7 @@ export default function App() {
           <Footer />
         </div>
       </AuthProvider>
+      </IdiomaProvider>
     </HashRouter>
   )
 }

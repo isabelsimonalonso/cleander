@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { CONTACTO } from '../lib/constantes'
+import { useIdioma } from '../lib/i18n'
 
 /**
  * Envuelve una ruta privada.
@@ -12,9 +13,10 @@ import { CONTACTO } from '../lib/constantes'
  */
 export default function ProtectedRoute({ children, acceso = 'usuarios' }) {
   const { sesion, perfil, rol, cargando, logout } = useAuth()
+  const { t } = useIdioma()
 
   if (cargando) {
-    return <div className="pantalla-carga">Cargando…</div>
+    return <div className="pantalla-carga">{t('cargando')}</div>
   }
 
   if (!sesion) {
@@ -25,25 +27,18 @@ export default function ProtectedRoute({ children, acceso = 'usuarios' }) {
     return (
       <div className="pantalla-bloqueada">
         <div className="pantalla-bloqueada-caja">
-          <h1>Cuenta suspendida</h1>
-          <p>
-            Tu cuenta ha sido suspendida y no puedes usar CleanDerApp por
-            ahora. Tu perfil no aparece en las búsquedas y quienes hicieron
-            match contigo ya no ven tus datos de contacto.
-          </p>
+          <h1>{t('cuentaSuspendida')}</h1>
+          <p>{t('textoSuspension')}</p>
           {perfil.motivo_bloqueo && (
             <p className="motivo-bloqueo">
-              <strong>Motivo:</strong> {perfil.motivo_bloqueo}
+              <strong>{t('motivo')}</strong> {perfil.motivo_bloqueo}
             </p>
           )}
-          <p>
-            Si crees que es un error o quieres que revisemos la decisión,
-            escríbenos:
-          </p>
+          <p>{t('siCreesError')}</p>
           <a className="pantalla-bloqueada-correo" href={`mailto:${CONTACTO}`}>
             {CONTACTO}
           </a>
-          <button onClick={logout}>Cerrar sesión</button>
+          <button onClick={logout}>{t('cerrarSesion')}</button>
         </div>
       </div>
     )

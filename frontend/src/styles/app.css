@@ -1518,3 +1518,54 @@
   width: 18px;
   height: 18px;
 }
+
+/* ── Conmutador de idioma ────────────────────────────────────────────── */
+.selector-idioma {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 9px;
+  background: #f2f4f4;
+}
+
+.selector-idioma button {
+  padding: 4px 9px;
+  border-radius: 7px;
+  background: transparent;
+  color: #9a9a9a;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  transition: all 0.2s;
+}
+
+.selector-idioma button:hover { color: var(--turquesa); }
+
+.selector-idioma button.activo {
+  background: white;
+  color: var(--turquesa);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.10);
+}
+
+/* En login y registro, arriba a la derecha */
+.selector-idioma--flotante {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: transparent;
+}
+
+/* Red social sin dirección todavía */
+.red-pendiente {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.4);
+  cursor: default;
+}
+
+.red-pendiente svg { width: 18px; height: 18px; }
