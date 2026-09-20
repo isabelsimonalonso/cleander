@@ -3,23 +3,26 @@ import { createClient } from '@supabase/supabase-js'
 const url = import.meta.env.VITE_SUPABASE_URL
 const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-if (!url || !anonKey) {
-  // Fallo temprano y con un mensaje claro: es el error nº1 al desplegar.
-  console.error(
-    'Faltan las variables de Supabase. Copia frontend/.env.example a ' +
-    'frontend/.env y rellena VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY.'
-  )
-}
+// Las claves `anon` de Supabase son JWT y siempre empiezan por "eyJ".
+// Así distinguimos una clave de verdad del texto de ejemplo del .env.
+export const configuracionValida =
+  Boolean(url) && url.startsWith('http') && Boolean(anonKey) && anonKey.startsWith('eyJ')
 
-export const supabase = createClient(url ?? '', anonKey ?? '', {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-    // GitHub Pages usa rutas con # y no hay login por redirección:
-    // desactivarlo evita que Supabase intente leer el hash de la URL.
-    detectSessionInUrl: false,
-  },
-})
+// Valores de reserva para que createClient no reviente y la app pueda
+// mostrar un mensaje explicando qué falta, en vez de una pantalla en blanco.
+export const supabase = createClient(
+  configuracionValida ? url : 'https://pendiente-de-configurar.supabase.co',
+  configuracionValida ? anonKey : 'pendiente-de-configurar',
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      // GitHub Pages usa rutas con # y no hay login por redirección:
+      // desactivarlo evita que Supabase intente leer el hash de la URL.
+      detectSessionInUrl: false,
+    },
+  }
+)
 
 /** Sube una foto al bucket `fotos` y devuelve su URL pública. */
 export async function subirFoto(file, usuarioId) {
