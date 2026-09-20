@@ -9,6 +9,7 @@ export function AuthProvider({ children }) {
   const [cargando, setCargando] = useState(true)
   const [matchesNuevos, setMatchesNuevos] = useState(0)
   const [valoracionesPendientes, setValoracionesPendientes] = useState(0)
+  const [denunciasResueltas, setDenunciasResueltas] = useState(0)
 
   const cargarPerfil = useCallback(async (userId) => {
     if (!userId) {
@@ -50,6 +51,22 @@ export function AuthProvider({ children }) {
     )
   }, [])
 
+  /** Denuncias mías que la administración ya ha resuelto y aún no he visto. */
+  const refrescarDenuncias = useCallback(async () => {
+    const { data, error } = await supabase.rpc('denuncias_resueltas')
+    setDenunciasResueltas(error ? 0 : (data ?? 0))
+  }, [])
+
+  /** Al abrir Mi perfil se dan por vistas y el aviso verde desaparece. */
+  const marcarDenunciasVistas = useCallback(async (userId) => {
+    if (!userId) return
+    await supabase
+      .from('perfiles')
+      .update({ denuncias_vistas_en: new Date().toISOString() })
+      .eq('id', userId)
+    setDenunciasResueltas(0)
+  }, [])
+
   /** Al entrar en Matches se dan todos por vistos y el aviso desaparece. */
   const marcarMatchesVistos = useCallback(async (userId) => {
     if (!userId) return
@@ -70,6 +87,7 @@ export function AuthProvider({ children }) {
       if (data.session) {
         await refrescarMatchesNuevos()
         await refrescarValoraciones()
+        await refrescarDenuncias()
       }
       if (activo) setCargando(false)
     })
@@ -85,9 +103,11 @@ export function AuthProvider({ children }) {
         if (nuevaSesion) {
           await refrescarMatchesNuevos()
           await refrescarValoraciones()
+          await refrescarDenuncias()
         } else {
           setMatchesNuevos(0)
           setValoracionesPendientes(0)
+          setDenunciasResueltas(0)
         }
         if (activo) setCargando(false)
       }, 0)
@@ -97,7 +117,7 @@ export function AuthProvider({ children }) {
       activo = false
       sub.subscription.unsubscribe()
     }
-  }, [cargarPerfil, refrescarMatchesNuevos, refrescarValoraciones])
+  }, [cargarPerfil, refrescarMatchesNuevos, refrescarValoraciones, refrescarDenuncias])
 
   const logout = useCallback(async () => {
     await supabase.auth.signOut()
@@ -105,6 +125,7 @@ export function AuthProvider({ children }) {
     setSesion(null)
     setMatchesNuevos(0)
     setValoracionesPendientes(0)
+    setDenunciasResueltas(0)
   }, [])
 
   const refrescarPerfil = useCallback(
@@ -125,6 +146,8 @@ export function AuthProvider({ children }) {
     marcarMatchesVistos,
     valoracionesPendientes,
     refrescarValoraciones,
+    denunciasResueltas,
+    marcarDenunciasVistas,
   }
 
   return <AuthContext.Provider value={valor}>{children}</AuthContext.Provider>

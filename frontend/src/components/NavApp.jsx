@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import Logo from './Logo'
 
 export default function NavApp() {
-  const { rol, logout, matchesNuevos, valoracionesPendientes } = useAuth()
+  const { rol, logout, matchesNuevos, valoracionesPendientes, denunciasResueltas } = useAuth()
   const navigate = useNavigate()
   const esAdmin = rol === 'admin'
 
@@ -42,7 +42,17 @@ export default function NavApp() {
                 </span>
               )}
             </NavLink>
-            <NavLink to="/perfil">Mi perfil</NavLink>
+            <NavLink to="/perfil" className="nav-con-aviso">
+              Mi perfil
+              {denunciasResueltas > 0 && (
+                <span
+                  className="nav-aviso nav-aviso--verde"
+                  aria-label={`${denunciasResueltas} denuncias resueltas`}
+                >
+                  {denunciasResueltas}
+                </span>
+              )}
+            </NavLink>
           </>
         )}
       </div>

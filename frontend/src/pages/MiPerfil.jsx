@@ -22,7 +22,7 @@ const ESTADO_RESUMEN = {
 }
 
 export default function MiPerfil() {
-  const { usuario, perfil, refrescarPerfil, logout } = useAuth()
+  const { usuario, perfil, refrescarPerfil, logout, marcarDenunciasVistas } = useAuth()
   const navigate = useNavigate()
   const [form, setForm] = useState(null)
   const [guardando, setGuardando] = useState(false)
@@ -37,6 +37,11 @@ export default function MiPerfil() {
   useEffect(() => {
     if (perfil) setForm(perfil)
   }, [perfil])
+
+  // Con solo abrir esta pantalla, el aviso verde se apaga
+  useEffect(() => {
+    marcarDenunciasVistas(usuario?.id)
+  }, [marcarDenunciasVistas, usuario?.id])
 
   // Sus denuncias, para que sepa en qué han quedado
   useEffect(() => {
