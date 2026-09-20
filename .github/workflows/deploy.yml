@@ -1,4 +1,7 @@
 # Publica la web en GitHub Pages cada vez que se hace push a main.
+#
+# La configuración de Supabase se lee de frontend/.env.production, que está
+# en el repositorio a propósito (ver la explicación dentro de ese archivo).
 name: Desplegar en GitHub Pages
 
 on:
@@ -33,11 +36,17 @@ jobs:
 
       - name: Construir
         working-directory: frontend
-        env:
-          # Se leen de: repositorio → Settings → Secrets and variables → Actions
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: npm run build
+
+      - name: Comprobar que la web lleva la configuración de Supabase
+        working-directory: frontend
+        run: |
+          if ! grep -rq "supabase.co" dist/assets/*.js; then
+            echo "::error::La web se ha construido sin la URL de Supabase."
+            echo "Revisa frontend/.env.production"
+            exit 1
+          fi
+          echo "Configuración de Supabase incluida en la web."
 
       - uses: actions/configure-pages@v5
 

@@ -71,26 +71,23 @@ Abre <http://localhost:3000>
 
 ### 4. Publicar en GitHub Pages
 
-**4.1 · Guardar las claves como secretos del repositorio**
-
-*GitHub → tu repo → Settings → Secrets and variables → Actions → New repository secret*
-
-| Nombre | Valor |
-|---|---|
-| `VITE_SUPABASE_URL` | `https://ldsaeokmzadlsqzqanib.supabase.co` |
-| `VITE_SUPABASE_ANON_KEY` | tu clave `anon public` |
-
-**4.2 · Activar Pages**
+**4.1 · Activar Pages** (una sola vez)
 
 *Settings → Pages → Build and deployment → Source:* **GitHub Actions**
 
-**4.3 · Publicar**
+**4.2 · Publicar**
 
 Con cada `push` a `main`, la acción compila y publica sola. La web queda en:
 
 ```
 https://isabelsimonalonso.github.io/cleander/
 ```
+
+La configuración de Supabase para la web publicada vive en
+`frontend/.env.production`, dentro del repositorio. No hace falta configurar
+secretos: la clave `anon` viaja dentro del JavaScript que descarga cualquier
+visitante, así que es pública la escondas o no. Lo que la hace inofensiva es
+RLS. Para rotarla, edita ese archivo y haz push.
 
 ---
 
