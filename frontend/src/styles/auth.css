@@ -123,9 +123,10 @@
 }
 
 @media (max-width: 420px) {
-  .auth-reclamo { padding: 18px 20px; }
-  .auth-reclamo-preguntas { font-size: 17px; }
+  .auth-reclamo { padding: 12px 18px; }
+  .auth-reclamo-preguntas { font-size: 16.5px; }
 }
+
 
 .auth-box {
   width: 100%;
@@ -563,4 +564,39 @@
 .form-clave button[type="submit"]:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+/*
+ * En el teléfono, para que la portada entre de una vez y no haya que
+ * deslizar hasta los enlaces del final. Se recorta de donde no duele:
+ * aire, no tamaño de letra ni alto de los campos, que se tocan con el
+ * dedo y por debajo de 44 px se fallan.
+ */
+@media (max-width: 520px) {
+  .auth-container {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    gap: 10px;
+  }
+
+  .auth-portada .logo-completo-icono,
+  .logo-completo-icono { width: clamp(62px, 17vw, 78px); }
+  .logo-completo-nombre { font-size: clamp(24px, 6.4vw, 28px); }
+  .auth-cabecera { gap: 9px; }
+
+  .auth-reclamo-texto { font-size: 13.5px; line-height: 1.5; }
+  .auth-reclamo-claves { margin-top: 8px; gap: 4px 18px; }
+
+  .auth-box { padding: 21px 20px 21px; }
+  .auth-box form { gap: 13px; }
+  .auth-box input { padding: 13px 15px; }
+  .auth-box button[type="submit"] { margin-top: 10px; padding: 14px; }
+
+  .auth-alta {
+    margin-top: 16px;
+    padding-top: 15px;
+    gap: 9px;
+  }
+
+  .auth-box a.auth-secundario { padding: 12px; }
 }
