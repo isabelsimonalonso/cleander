@@ -2,8 +2,15 @@
 --  27_usuario_demo.sql — dos cuentas para mirar la web por dentro
 -- ═══════════════════════════════════════════════════════════════════════
 --
---      usuario: democliente     contraseña: 123456
---      usuario: demoservicio    contraseña: 123456
+--      usuario: democliente
+--      usuario: demoservicio
+--
+--  LA CONTRASEÑA NO ESTÁ AQUÍ, y no es un descuido. Este archivo está en
+--  un repositorio público: cualquiera que lo lea podría entrar como un
+--  usuario normal, deslizar, hacer match con una persona real y ver su
+--  teléfono. Así que el script crea las cuentas sin contraseña utilizable
+--  y tú le pones una con las dos líneas del paso 6, que se pegan sueltas
+--  en Supabase y no se guardan en ningún sitio.
 --
 --  Se escriben así, sin arroba: el login completa el dominio cuando lo
 --  tecleado no lleva ninguna (Login.jsx:26, DOMINIO_INTERNO), que es lo
@@ -28,21 +35,25 @@
 --  Se puede repetir las veces que haga falta: empieza borrando las
 --  anteriores. Si se te olvida la contraseña, lo vuelves a ejecutar.
 --
---  ── Por qué 123456 puede estar escrito aquí ────────────────────────────
 --  La web exige ocho caracteres con letras y números, pero esa regla solo
---  corre al registrarse o al cambiar la contraseña. Aquí se escribe el
---  hash directamente, así que no se aplica y `123456` entra bien.
---  Escribirlo en el repositorio no añade riesgo: el riesgo es la
---  contraseña en sí. Por eso importa lo de abajo.
+--  corre al registrarse o al cambiar la contraseña desde la web. El paso 6
+--  escribe el hash directamente, así que ahí vale cualquier cosa; aun así,
+--  elige una decente.
 --
 --  ⚠  OJO CON EL DOMINIO. Estas dos cuentas comparten @cleander.app con
 --     `admin@cleander.app`. Por eso aquí NUNCA se filtra por dominio,
 --     siempre por los dos correos exactos. Un `like '%@cleander.app'` se
 --     llevaría por delante tu cuenta de administración.
 --
---  ⚠  BORRA ESTAS DOS CUENTAS ANTES DE ABRIR LA WEB AL PÚBLICO.
---     Son usuarios normales: quien las use desliza, hace match y ve el
---     teléfono de quien le corresponda. El `delete` está al final.
+--  Nacen INVISIBLES, y es la otra mitad de la protección: su tarjeta no
+--  sale en el mazo de nadie, así que nadie puede darles a «me gusta»,
+--  así que el trigger nunca crea un match, así que nunca enseñan el
+--  teléfono de una persona real. Ellas sí ven a los demás con normalidad,
+--  que es para lo que sirven.
+--
+--  Si alguna vez las pones visibles desde Mi perfil, esa protección se
+--  cae y vuelven a ser dos usuarios corrientes. No lo hagas con la web
+--  abierta.
 -- ═══════════════════════════════════════════════════════════════════════
 
 
@@ -92,7 +103,9 @@ nuevos as (
     'authenticated',
     'authenticated',
     q.correo,
-    extensions.crypt('123456', extensions.gen_salt('bf')),
+    -- Todavía no es un hash válido: ninguna contraseña puede coincidir.
+    -- La de verdad la pone el paso 6.
+    'sin-contrasena-' || gen_random_uuid()::text,
     now(), now(), now(),
     '{"provider":"email","providers":["email"]}'::jsonb,
     jsonb_build_object(
@@ -166,10 +179,27 @@ $tokens$;
 update public.perfiles p
    set resumen_estado = 'aprobado',
        foto_estado    = 'aprobada',
-       provincia      = 'Madrid'
+       provincia      = 'Madrid',
+       visible        = false        -- ver la cabecera: esto es protección
   from auth.users u
  where u.id = p.id
    and u.email in ('democliente@cleander.app', 'demoservicio@cleander.app');
+
+
+-- ── 6 · LA CONTRASEÑA — hazlo aparte, no lo guardes ────────────────────
+--
+--  Copia estas dos líneas en el editor SQL de Supabase, cambia la palabra
+--  del medio por la contraseña que quieras y ejecútalas. No las escribas
+--  en este archivo ni en ningún otro del repositorio.
+--
+--  Hasta que no lo hagas, las dos cuentas existen pero no dejan entrar.
+--
+--  Si se te olvida la contraseña, repites estas dos líneas con otra. No
+--  hay que borrar nada ni volver a empezar.
+--
+--  update auth.users
+--     set encrypted_password = extensions.crypt('TU-CONTRASEÑA', extensions.gen_salt('bf'))
+--   where email in ('democliente@cleander.app', 'demoservicio@cleander.app');
 
 
 -- ═══════════════════════════════════════════════════════════════════════
