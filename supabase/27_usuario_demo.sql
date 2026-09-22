@@ -106,6 +106,43 @@ select
   now(), now(), now()
 from nuevos n;
 
+-- ── Por qué esto hace falta ────────────────────────────────────────────
+--
+--  GoTrue, el servicio de login de Supabase, lee varias columnas de token
+--  de `auth.users` como texto, sin admitir nulos. Cuando la cuenta se crea
+--  desde el panel esas columnas nacen vacías (''), pero creándola por SQL
+--  se quedan a NULL, y entonces pasa lo peor posible: la cuenta existe, la
+--  contraseña es correcta, y aun así el login falla.
+--
+--  Cuáles son exactamente cambia de una versión de Supabase a otra, así
+--  que en vez de escribirlas a mano se recorren las que existan de verdad
+--  en esta base de datos. Lo que no exista, se ignora.
+do $tokens$
+declare
+  columna text;
+begin
+  foreach columna in array array[
+    'confirmation_token', 'recovery_token', 'email_change',
+    'email_change_token_new', 'email_change_token_current',
+    'phone_change', 'phone_change_token', 'reauthentication_token'
+  ]
+  loop
+    if exists (
+      select 1 from information_schema.columns
+       where table_schema = 'auth'
+         and table_name   = 'users'
+         and column_name  = columna
+    ) then
+      execute format(
+        'update auth.users set %1$I = coalesce(%1$I, %2$L)
+          where email in (select correo from demo_correos)',
+        columna, ''
+      );
+    end if;
+  end loop;
+end
+$tokens$;
+
 -- El trigger de alta es el de 01_esquema.sql y no conoce `provincia`,
 -- que llegó después. Y el resumen nace siempre en moderación.
 update public.perfiles p
