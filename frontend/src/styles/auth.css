@@ -359,6 +359,79 @@
   .tipo-selector { flex-direction: column; }
 }
 
+
+/* ── La portada en dos columnas ───────────────────────────────────────
+ *
+ * Solo en la portada (por eso la clase aparte: el registro y recuperar
+ * siguen en una columna) y solo cuando hay ancho de sobra. Apilado en
+ * una columna de 440 px, en un monitor se desaprovechaban dos tercios de
+ * la pantalla y la página parecía un móvil estirado.
+ *
+ * A la izquierda, qué es esto. A la derecha, entra aquí. Son dos cosas
+ * distintas y ahora se ven como tales.
+ */
+@media (min-width: 1060px) {
+  .auth-portada {
+    display: grid;
+    grid-template-columns: minmax(330px, 470px) 420px;
+    grid-template-areas:
+      "cabecera caja"
+      "reclamo  caja";
+    grid-template-rows: auto auto;
+    justify-content: center;
+    align-content: center;
+    column-gap: 72px;
+    row-gap: 20px;
+  }
+
+  .auth-portada .auth-cabecera {
+    grid-area: cabecera;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .auth-portada .logo-completo {
+    align-items: flex-start;
+  }
+
+  .auth-portada .auth-reclamo {
+    grid-area: reclamo;
+    max-width: none;
+    padding: 24px 28px;
+    text-align: left;
+  }
+
+  /* Las dos preguntas son el titular: en columna y en grande, que es lo
+     primero que tiene que leerse al entrar. */
+  .auth-portada .auth-reclamo-preguntas {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    margin-bottom: 13px;
+    font-size: 27px;
+    letter-spacing: -0.8px;
+    line-height: 1.15;
+  }
+
+  .auth-portada .auth-reclamo-texto {
+    font-size: 14.5px;
+    max-width: 38ch;
+  }
+
+  .auth-portada .auth-reclamo-claves {
+    justify-content: flex-start;
+    margin-top: 17px;
+  }
+
+  /* La caja se centra respecto a la columna de al lado, no respecto al
+     logo, que es más corta. */
+  .auth-portada .auth-box {
+    grid-area: caja;
+    align-self: center;
+    max-width: none;
+  }
+}
+
 /* ── Recuperar la contraseña ─────────────────────────────────────────── */
 .auth-olvido {
   margin-top: -4px;
