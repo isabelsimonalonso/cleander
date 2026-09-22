@@ -169,15 +169,11 @@ export const DOMINIO_INTERNO = '@cleander.app'
 /**
  * Redes sociales del pie.
  *
- * PROVISIONAL: apuntan a la portada de cada red. Cuando existan los
- * perfiles de CleanDerApp, sustituir por su dirección concreta, del
- * estilo https://www.instagram.com/cleanderapp/
- *
  * Una dirección vacía oculta ese icono.
  */
 export const REDES = [
-  { id: 'instagram', nombre: 'Instagram', url: 'https://www.instagram.com/' },
-  { id: 'tiktok', nombre: 'TikTok', url: 'https://www.tiktok.com/' },
+  { id: 'instagram', nombre: 'Instagram', url: 'https://www.instagram.com/_cleanderapp_/' },
+  { id: 'tiktok', nombre: 'TikTok', url: 'https://www.tiktok.com/@cleanderapp' },
   { id: 'correo', nombre: CONTACTO, url: `mailto:${CONTACTO}` },
 ]
 
