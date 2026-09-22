@@ -54,7 +54,8 @@ export default function Login() {
           <span>{t('reclamoNecesitas')}</span>
           <span>{t('reclamoOfreces')}</span>
         </p>
-        <p className="auth-reclamo-texto">{t('reclamoTexto')}</p>
+        <p className="auth-reclamo-texto">{t('reclamoQueEs')}</p>
+        <p className="auth-reclamo-texto">{t('reclamoComoVa')}</p>
         <ul className="auth-reclamo-claves">
           <li>{t('reclamoGratis')}</li>
           <li>{t('reclamoSinComisiones')}</li>

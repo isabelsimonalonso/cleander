@@ -99,6 +99,11 @@
   color: #6f6f6f;
 }
 
+/* Punto y aparte: la idea por un lado, cómo funciona por otro. */
+.auth-reclamo-texto + .auth-reclamo-texto {
+  margin-top: 7px;
+}
+
 /* Sin separadores: en el móvil las tres claves no caben en una línea, y
    cualquier punto entre ellas acababa abriendo la línea de abajo. El aire
    y las versalitas separan de sobra. */
