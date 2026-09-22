@@ -41,7 +41,7 @@ export const TEXTOS = {
     reclamoSinComisiones: 'Sin comisiones',
     reclamoSinIntermediarios: 'Sin intermediarios',
     bienvenido: 'Bienvenido',
-    accede: 'Accede',
+    accede: 'Acceso',
     cifraServicios: 'servicios',
     cifraCategorias: 'categorías',
     cifraProvincias: 'provincias',
