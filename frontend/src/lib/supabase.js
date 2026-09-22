@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { encogerFoto } from './imagen'
 
 const url = import.meta.env.VITE_SUPABASE_URL
 const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -24,16 +25,24 @@ export const supabase = createClient(
   }
 )
 
-/** Sube una foto al bucket `fotos` y devuelve su URL pública. */
+/**
+ * Sube una foto al bucket `fotos` y devuelve su URL pública.
+ *
+ * Antes de subirla la encoge (ver `lib/imagen.js`). Sin eso, una foto de
+ * móvil ocupa entre 3 y 5 MB y se descarga entera cada vez que alguien
+ * desliza esa tarjeta, que es lo que agota el plan gratuito de Supabase.
+ */
 export async function subirFoto(file, usuarioId) {
-  const extension = (file.name.split('.').pop() || 'jpg').toLowerCase()
+  const foto = await encogerFoto(file)
+
+  const extension = (foto.name.split('.').pop() || 'jpg').toLowerCase()
   const ruta = `${usuarioId}/perfil-${Date.now()}.${extension}`
 
   const { error } = await supabase.storage
     .from('fotos')
     // cacheControl corto a propósito: al borrar una cuenta, la copia que
     // guarda la red de distribución caduca en minutos en vez de en una hora.
-    .upload(ruta, file, { upsert: true, contentType: file.type, cacheControl: '300' })
+    .upload(ruta, foto, { upsert: true, contentType: foto.type, cacheControl: '300' })
 
   if (error) throw error
 
