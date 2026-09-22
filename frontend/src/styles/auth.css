@@ -99,6 +99,9 @@
   color: #6f6f6f;
 }
 
+/* Sin separadores: en el móvil las tres claves no caben en una línea, y
+   cualquier punto entre ellas acababa abriendo la línea de abajo. El aire
+   y las versalitas separan de sobra. */
 .auth-reclamo-claves {
   list-style: none;
   margin: 15px 0 0;
@@ -106,20 +109,12 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 6px 13px;
+  gap: 5px 22px;
   font-size: 10.5px;
   font-weight: 500;
   letter-spacing: 1.6px;
   text-transform: uppercase;
   color: #93b4bc;
-}
-
-/* El punto separador solo entre claves, y nunca al empezar una línea
-   nueva cuando la lista se parte en el móvil: por eso va dentro del li. */
-.auth-reclamo-claves li + li::before {
-  content: '·';
-  margin-right: 13px;
-  color: #c6dfe6;
 }
 
 @media (max-width: 420px) {
@@ -328,9 +323,30 @@
 }
 
 /* ── Responsive ──────────────────────────────────────────────────────── */
-/* El registro es largo: si la ventana es baja, se desplaza en vez de centrarse */
-@media (max-height: 820px) {
-  .auth-container { justify-content: flex-start; }
+/*
+ * Si la ventana es baja, la portada se desplaza en vez de centrarse y todo
+ * se aprieta. El límite es 940px y no 820: con la franja de arriba, en un
+ * portátil normal el botón de entrar se quedaba cortado por abajo, y con
+ * él los enlaces de recuperar la contraseña y de registrarse, que es justo
+ * lo que tiene que ver quien llega por primera vez.
+ */
+@media (max-height: 940px) {
+  .auth-container {
+    justify-content: flex-start;
+    padding-top: 28px;
+    padding-bottom: 28px;
+    gap: 16px;
+  }
+
+  .logo-completo-icono { width: clamp(78px, 20vw, 96px); }
+  .logo-completo-nombre { font-size: clamp(26px, 6vw, 31px); }
+
+  .auth-reclamo { padding: 15px 24px; }
+  .auth-reclamo-preguntas { font-size: 17px; margin-bottom: 7px; }
+  .auth-reclamo-texto { font-size: 13.5px; }
+  .auth-reclamo-claves { margin-top: 11px; }
+
+  .auth-box { padding-top: 28px; padding-bottom: 30px; }
 }
 
 @media (max-width: 430px) {
