@@ -385,9 +385,7 @@
     column-gap: clamp(32px, 4vw, 64px);
     row-gap: 16px;
     width: 100%;
-    max-width: 1340px;
-    margin: 0 auto;
-    padding: 24px clamp(20px, 2.8vw, 44px);
+    padding: 24px clamp(20px, 2.8vw, 60px);
   }
 
   /* El logo va centrado sobre el panel que tiene debajo, no pegado al
@@ -428,7 +426,8 @@
   }
 
   .auth-portada .auth-reclamo-texto {
-    font-size: clamp(14.5px, 1.15vw, 16.5px);
+    font-size: clamp(14.5px, 1.15vw, 17px);
+    max-width: 60ch;
   }
 
   .auth-portada .auth-reclamo-claves {
