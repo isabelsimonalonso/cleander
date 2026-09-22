@@ -373,31 +373,40 @@
 @media (min-width: 1060px) {
   .auth-portada {
     display: grid;
-    grid-template-columns: minmax(330px, 470px) 420px;
+    grid-template-columns: minmax(340px, 560px) minmax(380px, 440px);
     grid-template-areas:
       "cabecera caja"
       "reclamo  caja";
     grid-template-rows: auto auto;
     justify-content: center;
     align-content: center;
-    column-gap: 72px;
-    row-gap: 20px;
+    column-gap: 52px;
+    row-gap: 16px;
+    padding: 24px 28px;
   }
 
+  /* El logo va centrado sobre el panel que tiene debajo, no pegado al
+     borde: el icono es más estrecho que el nombre y de lado quedaba
+     descolgado. */
   .auth-portada .auth-cabecera {
     grid-area: cabecera;
-    align-items: flex-start;
-    text-align: left;
+    align-items: center;
+    text-align: center;
+    gap: 9px;
   }
 
-  .auth-portada .logo-completo {
-    align-items: flex-start;
+  .auth-portada .logo-completo-icono {
+    width: clamp(72px, 8vw, 100px);
+  }
+
+  .auth-portada .logo-completo-nombre {
+    font-size: clamp(27px, 2.6vw, 34px);
   }
 
   .auth-portada .auth-reclamo {
     grid-area: reclamo;
     max-width: none;
-    padding: 24px 28px;
+    padding: 21px 26px;
     text-align: left;
   }
 
@@ -406,9 +415,9 @@
   .auth-portada .auth-reclamo-preguntas {
     flex-direction: column;
     align-items: flex-start;
-    gap: 2px;
-    margin-bottom: 13px;
-    font-size: 27px;
+    gap: 1px;
+    margin-bottom: 11px;
+    font-size: 25px;
     letter-spacing: -0.8px;
     line-height: 1.15;
   }
@@ -420,7 +429,18 @@
 
   .auth-portada .auth-reclamo-claves {
     justify-content: flex-start;
-    margin-top: 17px;
+    margin-top: 14px;
+  }
+
+  /* La caja manda su propio aire: en dos columnas no compite con nada
+     por el alto y no hace falta que sea generosa. */
+  .auth-portada .auth-box {
+    padding: 26px 28px;
+  }
+
+  .auth-portada .auth-alta {
+    margin-top: 19px;
+    padding-top: 17px;
   }
 
   /* La caja se centra respecto a la columna de al lado, no respecto al
