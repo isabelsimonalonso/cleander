@@ -2,17 +2,7 @@ import { unidadCorta, traducirDato } from '../lib/constantes'
 import { useIdioma } from '../lib/i18n'
 import Estrellas from './Estrellas'
 import IconoWhatsApp from './IconoWhatsApp'
-
-/** Iniciales como recurso cuando alguien no ha subido foto. */
-function Iniciales({ nombre }) {
-  const letras = (nombre || '?')
-    .split(' ')
-    .slice(0, 2)
-    .map((p) => p[0])
-    .join('')
-    .toUpperCase()
-  return <div className="tarjeta-iniciales">{letras}</div>
-}
+import IconoCategoria from './IconoCategoria'
 
 /**
  * La tarjeta estilo Tinder. Sirve para los dos roles: solo cambian
@@ -30,7 +20,7 @@ export default function Tarjeta({ perfil, telefono = null, propio = false, child
     return (
       <article className="tarjeta tarjeta--suspendida">
         <div className="tarjeta-foto">
-          <Iniciales nombre={perfil.nombre} />
+          <IconoCategoria categoria={perfil.categoria} />
         </div>
         <div className="tarjeta-cuerpo">
           <div className="tarjeta-cabecera">
@@ -52,7 +42,7 @@ export default function Tarjeta({ perfil, telefono = null, propio = false, child
         {perfil.foto_url ? (
           <img src={perfil.foto_url} alt={perfil.nombre} loading="lazy" />
         ) : (
-          <Iniciales nombre={perfil.nombre} />
+          <IconoCategoria categoria={perfil.categoria} />
         )}
         <span className={`tarjeta-etiqueta tarjeta-etiqueta--${perfil.rol}`}>
           {t(perfil.rol === 'servicio' ? 'etiquetaOfrezco' : 'etiquetaBusco')}

@@ -97,6 +97,29 @@ export default function MiPerfil() {
     }
   }
 
+  /**
+   * Volver al icono del oficio. Se borra el archivo del almacén además de
+   * la referencia: si solo se quitara la fila, la foto seguiría colgada
+   * en una URL pública.
+   *
+   * `trg_proteger_perfil` deja el estado en 'aprobada' al ver que no hay
+   * foto (10_moderacion_fotos.sql:43), así que no pasa por moderación.
+   */
+  const quitarFoto = async () => {
+    setGuardando(true)
+    try {
+      await borrarFotosDe(usuario.id)
+      await supabase.from('perfiles').update({ foto_url: null }).eq('id', usuario.id)
+      setForm((prev) => ({ ...prev, foto_url: null, foto_estado: 'aprobada' }))
+      await refrescarPerfil()
+      setMensaje(t('fotoQuitada'))
+    } catch (err) {
+      setError(mensajeError(err, t))
+    } finally {
+      setGuardando(false)
+    }
+  }
+
   /** Quitar de la lista una denuncia ya resuelta. */
   const archivarDenuncia = async (id) => {
     const { error: errorArchivo } = await supabase.rpc('archivar_denuncia', {
@@ -235,7 +258,9 @@ export default function MiPerfil() {
                 ...(ESTADO_FOTO[form.foto_estado] ?? ESTADO_FOTO.pendiente),
                 texto: t((ESTADO_FOTO[form.foto_estado] ?? ESTADO_FOTO.pendiente).clave),
               } : null}
+              categoria={form.categoria}
               onArchivo={cambiarFoto}
+              onQuitar={quitarFoto}
               onError={setError}
             />
 

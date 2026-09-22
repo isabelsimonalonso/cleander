@@ -220,16 +220,20 @@
   user-select: none;
 }
 
-.tarjeta-iniciales {
+/* Sin foto, el hueco lo ocupa el icono del oficio (IconoCategoria). */
+.tarjeta-icono {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 56px;
-  font-weight: 300;
-  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.tarjeta-icono svg {
+  width: 38%;
+  max-width: 120px;
+  height: auto;
 }
 
 .tarjeta-etiqueta {
@@ -1448,6 +1452,43 @@
   color: #b0b0b0;
   font-size: 11px;
   font-weight: 300;
+}
+
+/* El icono del oficio, con el mismo fondo que tendrá en la tarjeta. */
+.zona-foto-icono {
+  width: 62px;
+  height: 62px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: linear-gradient(135deg, #24a4bc 0%, #0d9488 100%);
+}
+
+.zona-foto-icono .tarjeta-icono svg {
+  width: 56%;
+}
+
+.zona-foto-nota {
+  color: #999;
+}
+
+/* Discreto a propósito: la foto de verdad funciona mejor que el icono,
+   así que se ofrece sin invitar a ello. */
+.zona-foto-quitar {
+  align-self: flex-start;
+  margin-top: 3px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--turquesa-oscuro);
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.zona-foto-quitar:hover {
+  color: var(--turquesa);
 }
 
 .zona-foto-texto {

@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { TAM_MAX_FOTO } from '../lib/constantes'
 import { useIdioma } from '../lib/i18n'
+import IconoCategoria from './IconoCategoria'
 
 /**
  * Zona para la foto de perfil: se puede pulsar, arrastrar un archivo
@@ -8,8 +9,12 @@ import { useIdioma } from '../lib/i18n'
  *
  * Valida aquí el tipo y el tamaño para dar un mensaje claro en vez de
  * esperar a que el servidor lo rechace.
+ *
+ * La foto no es obligatoria: quien no ponga ninguna sale con el icono de
+ * su oficio. Aquí se ve cuál le toca antes de decidir, y quien ya haya
+ * subido una puede volver al icono sin tener que borrarse la cuenta.
  */
-export default function SubirFoto({ vistaPrevia, estado, onArchivo, onError }) {
+export default function SubirFoto({ vistaPrevia, estado, categoria, onArchivo, onQuitar, onError }) {
   const { t } = useIdioma()
   const entrada = useRef(null)
   const [encima, setEncima] = useState(false)
@@ -67,7 +72,9 @@ export default function SubirFoto({ vistaPrevia, estado, onArchivo, onError }) {
       {vistaPrevia ? (
         <img className="zona-foto-previa" src={vistaPrevia} alt="" />
       ) : (
-        <span className="zona-foto-hueco">{t('sinFoto')}</span>
+        <div className="zona-foto-icono">
+          <IconoCategoria categoria={categoria} />
+        </div>
       )}
 
       <div className="zona-foto-texto">
@@ -76,6 +83,20 @@ export default function SubirFoto({ vistaPrevia, estado, onArchivo, onError }) {
         </strong>
         <small>{t('instruccionFoto')}</small>
         {estado && <span className={`estado-foto estado-foto--${estado.clase}`}>{estado.texto}</span>}
+
+        {vistaPrevia ? (
+          <button
+            type="button"
+            className="zona-foto-quitar"
+            // El contenedor entero abre el explorador de archivos; sin
+            // esto, quitar la foto acabaría pidiendo otra.
+            onClick={(e) => { e.stopPropagation(); onQuitar() }}
+          >
+            {t('usarIcono')}
+          </button>
+        ) : (
+          <small className="zona-foto-nota">{t('sinFotoIcono')}</small>
+        )}
       </div>
     </div>
   )
