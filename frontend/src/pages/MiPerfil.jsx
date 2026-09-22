@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase, subirFoto, borrarFotosDe } from '../lib/supabase'
-import { LIMITE_RESUMEN, telefonoValido, unidadPrecio } from '../lib/constantes'
+import { LIMITE_RESUMEN, esSanitario, telefonoValido, unidadPrecio } from '../lib/constantes'
 import { mensajeError } from '../lib/errores'
 import { useAuth } from '../context/AuthContext'
 import NavApp from '../components/NavApp'
@@ -278,6 +278,9 @@ export default function MiPerfil() {
 
             <label className="campo-etiqueta">{t(form.rol === 'servicio' ? 'categoriaServicio' : 'categoriaCliente')}</label>
             <SelectorServicio value={form.categoria} onChange={cambiar('categoria')} />
+            {form.rol === 'servicio' && esSanitario(form.categoria) && (
+              <p className="campo-nota campo-nota--aviso">{t('avisoSanitario')}</p>
+            )}
 
             <label className="campo-etiqueta">
               {t(form.rol === 'servicio' ? 'precioServicio' : 'precioCliente', { unidad: unidadPrecio(form.unidad_precio) })} (€)

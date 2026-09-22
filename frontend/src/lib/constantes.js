@@ -189,6 +189,17 @@ const SERVICIOS_ALQUILER = new Set(
 
 export const esAlquiler = (categoria) => SERVICIOS_ALQUILER.has(categoria)
 
+/**
+ * Profesiones sanitarias: quien las ejerce tiene que estar colegiado y
+ * llevar el seguro obligatorio. La web no lo comprueba —no puede—, así
+ * que avisa a quien se anuncia y lo dice en las condiciones.
+ */
+const SERVICIOS_SANITARIOS = new Set(
+  GRUPOS_SERVICIOS.find((g) => g.grupo.startsWith('Salud'))?.servicios ?? []
+)
+
+export const esSanitario = (categoria) => SERVICIOS_SANITARIOS.has(categoria)
+
 /** Lo que se propone al elegir servicio; luego cada uno lo cambia. */
 export const unidadSugerida = (categoria) => (esAlquiler(categoria) ? 'dia' : 'hora')
 

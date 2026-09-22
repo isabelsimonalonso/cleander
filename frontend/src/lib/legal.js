@@ -81,9 +81,10 @@ export const LEGAL = {
           'Ofrecer o solicitar servicios ilegales, o cualquier servicio de naturaleza sexual.',
           'Usar la Plataforma para acosar, amenazar, estafar o enviar publicidad no solicitada.',
           'Emplear los teléfonos obtenidos mediante un match para un fin distinto de contactar sobre el servicio, o cederlos a terceros.',
+          'Ofrecer servicios sanitarios —fisioterapia, podología, enfermería y análogos— u otros oficios regulados sin la titulación, la colegiación y el seguro de responsabilidad civil que la ley exija en cada caso.',
           'Extraer datos de forma automatizada o intentar vulnerar las medidas de seguridad.',
         ],
-        cierre: ['Recomendamos adoptar las precauciones habituales al tratar con desconocidos: acordar las condiciones por escrito, desconfiar de pagos por adelantado y no facilitar datos bancarios ni documentación personal.'],
+        cierre: ['La Plataforma no comprueba titulaciones, colegiaciones, seguros ni habilitaciones: quien se anuncia responde de cumplir los requisitos de su oficio, y quien contrata puede y debe pedírselos.', 'Recomendamos adoptar las precauciones habituales al tratar con desconocidos: acordar las condiciones por escrito, desconfiar de pagos por adelantado y no facilitar datos bancarios ni documentación personal.'],
       },
       {
         titulo: '6. Limitación de responsabilidad',
@@ -243,9 +244,10 @@ export const LEGAL = {
           'Offering or requesting unlawful services, or any service of a sexual nature.',
           'Using the Platform to harass, threaten, defraud or send unsolicited advertising.',
           'Using phone numbers obtained through a match for any purpose other than discussing the service, or passing them on to third parties.',
+          'Offering healthcare services — physiotherapy, chiropody, nursing and the like — or other regulated occupations without the qualifications, professional registration and liability insurance required by law in each case.',
           'Extracting data by automated means or attempting to circumvent security measures.',
         ],
-        cierre: ['We recommend taking the usual precautions when dealing with strangers: agree terms in writing, be wary of upfront payments, and do not share bank details or personal documents.'],
+        cierre: ['The Platform does not verify qualifications, professional registration, insurance or authorisations: whoever advertises is responsible for meeting the requirements of their occupation, and whoever hires may and should ask for them.', 'We recommend taking the usual precautions when dealing with strangers: agree terms in writing, be wary of upfront payments, and do not share bank details or personal documents.'],
       },
       {
         titulo: '6. Limitation of liability',

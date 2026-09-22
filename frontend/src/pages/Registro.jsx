@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { supabase, subirFoto } from '../lib/supabase'
-import { LIMITE_RESUMEN, contrasenaValida, telefonoValido, unidadPrecio, unidadSugerida } from '../lib/constantes'
+import { LIMITE_RESUMEN, contrasenaValida, esSanitario, telefonoValido, unidadPrecio, unidadSugerida } from '../lib/constantes'
 import { mensajeError } from '../lib/errores'
 import Logo from '../components/Logo'
 import SelectorIdioma from '../components/SelectorIdioma'
@@ -218,6 +218,9 @@ export default function Registro() {
 
           <label className="campo-etiqueta">{t(rol === 'servicio' ? 'categoriaServicio' : 'categoriaCliente')}</label>
           <SelectorServicio value={datos.categoria} onChange={cambiar('categoria')} />
+          {rol === 'servicio' && esSanitario(datos.categoria) && (
+            <p className="campo-nota campo-nota--aviso">{t('avisoSanitario')}</p>
+          )}
 
           <label className="campo-etiqueta">
             {t(rol === 'servicio' ? 'precioServicio' : 'precioCliente', { unidad: unidadPrecio(datos.unidad_precio) })} (€)
