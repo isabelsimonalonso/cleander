@@ -49,8 +49,21 @@ export const GRUPOS_SERVICIOS = [
       'Desatascos',
       'Reparación de electrodomésticos',
       'Antenas y televisión',
-      'Informática y redes',
       'Placas solares',
+    ],
+  },
+  {
+    // Lo que se contrata de verdad tiene nombre concreto: nadie busca
+    // «inteligencia artificial» a secas, busca que alguien le enseñe a
+    // usarla o que le deje andando el altavoz que compró.
+    grupo: 'Tecnología en casa',
+    servicios: [
+      'Informática y redes',
+      'Domótica y asistentes de voz',
+      'Cámaras y videovigilancia',
+      'Clases de informática e internet',
+      'Ayuda con trámites online',
+      'Clases de inteligencia artificial',
     ],
   },
   {
@@ -85,11 +98,60 @@ export const GRUPOS_SERVICIOS = [
     ],
   },
   {
+    grupo: 'Vehículos a domicilio',
+    servicios: [
+      'Lavado de coche a domicilio',
+      'Limpieza de tapicería y interiores',
+      'Pulido y tratamiento de pintura',
+      'Mecánica ligera a domicilio',
+      'Cambio de neumáticos o batería',
+      'Lavado de moto, furgoneta o autocaravana',
+      'Llevar el coche a la ITV o al taller',
+    ],
+  },
+  {
     grupo: 'Cuidados a domicilio',
     servicios: [
       'Cuidado de mayores',
       'Cuidado de niños',
+    ],
+  },
+  {
+    // Estaba dentro de «Cuidados a domicilio», pero la peluquería canina y
+    // el paseo son oficios distintos, con precio y perfil distintos.
+    grupo: 'Mascotas',
+    servicios: [
       'Cuidado de mascotas',
+      'Peluquería canina a domicilio',
+      'Baño y aseo de mascotas',
+      'Paseo de perros',
+      'Adiestramiento canino',
+      'Alojamiento de mascotas',
+    ],
+  },
+  {
+    grupo: 'Belleza a domicilio',
+    servicios: [
+      'Peluquería y estética a domicilio',
+      'Barbería a domicilio',
+      'Maquillaje y peinado para eventos',
+      'Manicura y pedicura',
+      'Uñas esculpidas y esmaltado semipermanente',
+      'Cejas y pestañas',
+      'Depilación',
+    ],
+  },
+  {
+    // Profesiones sanitarias: el titular debe estar colegiado. La web no lo
+    // comprueba, así que el aviso va en las condiciones, no aquí.
+    grupo: 'Salud y bienestar a domicilio',
+    servicios: [
+      'Fisioterapia a domicilio',
+      'Masaje y relajación',
+      'Entrenador personal a domicilio',
+      'Yoga y pilates a domicilio',
+      'Podología a domicilio',
+      'Enfermería a domicilio',
     ],
   },
   {
@@ -99,7 +161,6 @@ export const GRUPOS_SERVICIOS = [
       'Costura y arreglos de ropa',
       'Cocina a domicilio',
       'Clases particulares',
-      'Peluquería y estética a domicilio',
     ],
   },
 ]
@@ -227,8 +288,15 @@ export const SERVICIOS_EN = {
   'Desatascos': 'Drain unblocking',
   'Reparación de electrodomésticos': 'Appliance repair',
   'Antenas y televisión': 'Aerials and TV',
-  'Informática y redes': 'IT and networks',
   'Placas solares': 'Solar panels',
+
+  'Tecnología en casa': 'Technology at home',
+  'Informática y redes': 'IT and networks',
+  'Domótica y asistentes de voz': 'Smart home and voice assistants',
+  'Cámaras y videovigilancia': 'Cameras and CCTV',
+  'Clases de informática e internet': 'Computer and internet lessons',
+  'Ayuda con trámites online': 'Help with online paperwork',
+  'Clases de inteligencia artificial': 'Artificial intelligence lessons',
 
   'Obra y acabados': 'Building and finishes',
   'Albañilería': 'Bricklaying',
@@ -252,17 +320,49 @@ export const SERVICIOS_EN = {
   'Tapicería': 'Upholstery',
   'Vaciado de pisos': 'House clearance',
 
+  'Vehículos a domicilio': 'Vehicles at home',
+  'Lavado de coche a domicilio': 'Car washing at home',
+  'Limpieza de tapicería y interiores': 'Upholstery and interior cleaning',
+  'Pulido y tratamiento de pintura': 'Paint polishing and treatment',
+  'Mecánica ligera a domicilio': 'Light mechanics at home',
+  'Cambio de neumáticos o batería': 'Tyre or battery replacement',
+  'Lavado de moto, furgoneta o autocaravana': 'Motorbike, van or motorhome washing',
+  'Llevar el coche a la ITV o al taller': 'Car taken to the MOT or garage',
+
   'Cuidados a domicilio': 'Care at home',
   'Cuidado de mayores': 'Elderly care',
   'Cuidado de niños': 'Childcare',
+
+  'Mascotas': 'Pets',
   'Cuidado de mascotas': 'Pet care',
+  'Peluquería canina a domicilio': 'Dog grooming at home',
+  'Baño y aseo de mascotas': 'Pet bathing and grooming',
+  'Paseo de perros': 'Dog walking',
+  'Adiestramiento canino': 'Dog training',
+  'Alojamiento de mascotas': 'Pet boarding',
+
+  'Belleza a domicilio': 'Beauty at home',
+  'Peluquería y estética a domicilio': 'Hairdressing and beauty at home',
+  'Barbería a domicilio': 'Barber at home',
+  'Maquillaje y peinado para eventos': 'Make-up and hair for events',
+  'Manicura y pedicura': 'Manicure and pedicure',
+  'Uñas esculpidas y esmaltado semipermanente': 'Nail extensions and gel polish',
+  'Cejas y pestañas': 'Brows and lashes',
+  'Depilación': 'Waxing',
+
+  'Salud y bienestar a domicilio': 'Health and wellbeing at home',
+  'Fisioterapia a domicilio': 'Physiotherapy at home',
+  'Masaje y relajación': 'Massage and relaxation',
+  'Entrenador personal a domicilio': 'Personal trainer at home',
+  'Yoga y pilates a domicilio': 'Yoga and pilates at home',
+  'Podología a domicilio': 'Chiropody at home',
+  'Enfermería a domicilio': 'Nursing at home',
 
   'Otros': 'Other',
   'Reparaciones generales': 'General repairs',
   'Costura y arreglos de ropa': 'Sewing and clothing repairs',
   'Cocina a domicilio': 'Home cooking',
   'Clases particulares': 'Private lessons',
-  'Peluquería y estética a domicilio': 'Hairdressing and beauty at home',
 }
 
 export const MOTIVOS_EN = {

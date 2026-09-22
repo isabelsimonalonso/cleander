@@ -6,7 +6,7 @@ import { GRUPOS_SERVICIOS } from '../lib/constantes'
  *
  * Se resuelve en tres pasos, para que nunca falte:
  *   1. la categoría exacta,
- *   2. si no, el grupo al que pertenece (los ocho de GRUPOS_SERVICIOS),
+ *   2. si no, el grupo al que pertenece (los trece de GRUPOS_SERVICIOS),
  *   3. si no, una llave inglesa.
  *
  * Así, el día que añadas una categoría nueva a `constantes.js`, la tarjeta
@@ -305,6 +305,168 @@ const FIGURAS = {
       <path d="M20 4h-5.5A2.5 2.5 0 0 0 12 6.5v14a2.5 2.5 0 0 1 2.5-2.5H20z" />
     </g>
   ),
+  coche: (
+    <g {...T}>
+      <path d="M4 16v-3l2.2-4.4A2 2 0 0 1 8 7.5h8a2 2 0 0 1 1.8 1.1L20 13v3z" />
+      <line x1="4" y1="13" x2="20" y2="13" />
+      <circle cx="8" cy="17.5" r="1.6" />
+      <circle cx="16" cy="17.5" r="1.6" />
+    </g>
+  ),
+  rueda: (
+    <g {...T}>
+      <circle cx="12" cy="12" r="8.5" />
+      <circle cx="12" cy="12" r="3.5" />
+      <line x1="12" y1="3.5" x2="12" y2="8.5" />
+      <line x1="12" y1="15.5" x2="12" y2="20.5" />
+      <line x1="3.5" y1="12" x2="8.5" y2="12" />
+      <line x1="15.5" y1="12" x2="20.5" y2="12" />
+    </g>
+  ),
+  brillo: (
+    <g {...T}>
+      <path d="M10 2.5l1.7 4.8 4.8 1.7-4.8 1.7L10 15.5 8.3 10.7 3.5 9l4.8-1.7z" />
+      <path d="M17.5 13.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z" />
+    </g>
+  ),
+  banera: (
+    <g {...T}>
+      <path d="M3.5 11h17v3.2a4.3 4.3 0 0 1-4.3 4.3H7.8A4.3 4.3 0 0 1 3.5 14.2z" />
+      <path d="M7 11V6.8a2.3 2.3 0 0 1 4.6 0" />
+      <line x1="6.5" y1="18.5" x2="5.5" y2="20.5" />
+      <line x1="17.5" y1="18.5" x2="18.5" y2="20.5" />
+    </g>
+  ),
+  correa: (
+    <g {...T}>
+      <circle cx="5" cy="4.2" r="1.7" />
+      <path d="M5 6c0 4 2.5 5.5 5 7s3.2 3.2 3.2 5.2" />
+      <circle cx="16" cy="17.5" r="3.4" />
+    </g>
+  ),
+  hueso: (
+    <g {...T}>
+      <path d="M7.8 8.2a2.3 2.3 0 1 0-2.1 3.4l6.6 6.6a2.3 2.3 0 1 0 3.4 2.1 2.3 2.3 0 1 0 2.1-3.4L11.2 6.1a2.3 2.3 0 1 0-3.4 2.1z" />
+    </g>
+  ),
+  caseta: (
+    <g {...T}>
+      <path d="M3.5 11 12 4l8.5 7" />
+      <path d="M5.5 10v10h13V10" />
+      <path d="M9.5 20v-4.2a2.5 2.5 0 0 1 5 0V20" />
+    </g>
+  ),
+  altavoz: (
+    <g {...T}>
+      <rect x="7" y="4.5" width="10" height="15" rx="4" />
+      <circle cx="12" cy="9.5" r="1.9" />
+      <line x1="9.2" y1="14.5" x2="14.8" y2="14.5" />
+      <line x1="9.8" y1="17" x2="14.2" y2="17" />
+    </g>
+  ),
+  camara: (
+    <g {...T}>
+      <path d="M3.5 8.8l12.6-3.4 1.6 5.8-12.6 3.4z" />
+      <path d="M17.7 10.2l3.3-1.4v5.3l-3.3-1.4" />
+      <line x1="6.5" y1="14.2" x2="7.6" y2="18.5" />
+      <line x1="4.5" y1="19" x2="10.5" y2="19" />
+    </g>
+  ),
+  portatil: (
+    <g {...T}>
+      <rect x="4" y="5" width="16" height="10.5" rx="1.5" />
+      <line x1="2.5" y1="18.5" x2="21.5" y2="18.5" />
+    </g>
+  ),
+  documento: (
+    <g {...T}>
+      <path d="M6 3.5h7.5L18 8v12.5H6z" />
+      <path d="M13.5 3.5V8H18" />
+      <path d="M9 14.5l2 2 4-4.5" />
+    </g>
+  ),
+  chip: (
+    <g {...T}>
+      <rect x="7.5" y="7.5" width="9" height="9" rx="1.5" />
+      <rect x="10.5" y="10.5" width="3" height="3" />
+      <line x1="10" y1="4" x2="10" y2="7.5" />
+      <line x1="14" y1="4" x2="14" y2="7.5" />
+      <line x1="10" y1="16.5" x2="10" y2="20" />
+      <line x1="14" y1="16.5" x2="14" y2="20" />
+      <line x1="4" y1="10" x2="7.5" y2="10" />
+      <line x1="4" y1="14" x2="7.5" y2="14" />
+      <line x1="16.5" y1="10" x2="20" y2="10" />
+      <line x1="16.5" y1="14" x2="20" y2="14" />
+    </g>
+  ),
+  pintalabios: (
+    <g {...T}>
+      <rect x="8.8" y="11" width="6.4" height="9.5" rx="1" />
+      <path d="M10 11V6.4l3.4-2.4a.9.9 0 0 1 1.4.7V11" />
+    </g>
+  ),
+  esmalte: (
+    <g {...T}>
+      <path d="M8 10.5h8v8.6a1.5 1.5 0 0 1-1.5 1.4h-5A1.5 1.5 0 0 1 8 19.1z" />
+      <rect x="10.2" y="3" width="3.6" height="4" rx="1" />
+      <line x1="12" y1="7" x2="12" y2="10.5" />
+    </g>
+  ),
+  ceja: (
+    <g {...T}>
+      <path d="M5.5 7.5c2.2-1.8 5.4-2.2 8.5-1.2" />
+      <path d="M3 14.5s3.6-4.3 9-4.3 9 4.3 9 4.3-3.6 4.3-9 4.3-9-4.3-9-4.3z" />
+      <circle cx="12" cy="14.5" r="2" />
+    </g>
+  ),
+  cera: (
+    <g {...T}>
+      <path d="M5 11.5h10.5v6A3.5 3.5 0 0 1 12 21H8.5A3.5 3.5 0 0 1 5 17.5z" />
+      <path d="M8 8.8c0-1.2 1-1.2 1-2.4M12.5 8.8c0-1.2 1-1.2 1-2.4" />
+      <path d="M18.2 21 20.5 6.5l-2-.4L17 21z" />
+    </g>
+  ),
+  camilla: (
+    <g {...T}>
+      <rect x="3" y="10.5" width="18" height="3.5" rx="1.5" />
+      <line x1="5.5" y1="14" x2="5.5" y2="20.5" />
+      <line x1="18.5" y1="14" x2="18.5" y2="20.5" />
+      <circle cx="8.5" cy="6.2" r="2.2" />
+      <path d="M5.8 10.5c0-1.7 1.2-2.8 2.7-2.8s2.7 1.1 2.7 2.8" />
+    </g>
+  ),
+  pesa: (
+    <g {...T}>
+      <line x1="4.5" y1="12" x2="19.5" y2="12" />
+      <rect x="5" y="8.5" width="3" height="7" rx="1" />
+      <rect x="16" y="8.5" width="3" height="7" rx="1" />
+      <line x1="2.5" y1="10" x2="2.5" y2="14" />
+      <line x1="21.5" y1="10" x2="21.5" y2="14" />
+    </g>
+  ),
+  loto: (
+    <g {...T}>
+      <circle cx="12" cy="5.2" r="2.2" />
+      <line x1="12" y1="7.6" x2="12" y2="11.5" />
+      <path d="M12 11.5c-3.2 0-5.7 1.7-5.7 4.3 0 1.6 1 2.7 2.4 2.7h6.6c1.4 0 2.4-1.1 2.4-2.7 0-2.6-2.5-4.3-5.7-4.3z" />
+      <line x1="6.8" y1="15.5" x2="17.2" y2="15.5" />
+    </g>
+  ),
+  pie: (
+    <g {...T}>
+      <path d="M9 21c-1.7 0-2.8-1.3-2.8-3.2 0-2.7 1.1-3.8 1.1-7 0-3.2 1.3-5.3 3.4-5.3s3.5 1.9 3.5 5.9c0 3.2.5 4.3.5 6.4 0 1.9-1.1 3.2-2.7 3.2z" />
+      <ellipse cx="17" cy="7" rx="1.3" ry="1.7" />
+      <ellipse cx="19" cy="10.5" rx="1.1" ry="1.5" />
+    </g>
+  ),
+  cruz: (
+    <g {...T}>
+      <rect x="3" y="7.5" width="18" height="12" rx="2.5" />
+      <path d="M9 7.5V5.6A1.6 1.6 0 0 1 10.6 4h2.8A1.6 1.6 0 0 1 15 5.6v1.9" />
+      <line x1="12" y1="10.5" x2="12" y2="16.5" />
+      <line x1="9" y1="13.5" x2="15" y2="13.5" />
+    </g>
+  ),
   tijeras: (
     <g {...T}>
       <circle cx="6.2" cy="18" r="2.4" />
@@ -341,8 +503,14 @@ const POR_CATEGORIA = {
   'Desatascos': 'sifon',
   'Reparación de electrodomésticos': 'lavadora',
   'Antenas y televisión': 'antena',
-  'Informática y redes': 'wifi',
   'Placas solares': 'placa',
+
+  'Informática y redes': 'wifi',
+  'Domótica y asistentes de voz': 'altavoz',
+  'Cámaras y videovigilancia': 'camara',
+  'Clases de informática e internet': 'portatil',
+  'Ayuda con trámites online': 'documento',
+  'Clases de inteligencia artificial': 'chip',
 
   'Albañilería': 'ladrillo',
   'Pintura': 'rodillo',
@@ -363,15 +531,43 @@ const POR_CATEGORIA = {
   'Tapicería': 'sillon',
   'Vaciado de pisos': 'caja',
 
+  'Lavado de coche a domicilio': 'coche',
+  'Limpieza de tapicería y interiores': 'sillon',
+  'Pulido y tratamiento de pintura': 'brillo',
+  'Mecánica ligera a domicilio': 'llave',
+  'Cambio de neumáticos o batería': 'rueda',
+  'Lavado de moto, furgoneta o autocaravana': 'furgoneta',
+  'Llevar el coche a la ITV o al taller': 'coche',
+
   'Cuidado de mayores': 'corazon',
   'Cuidado de niños': 'cometa',
+
   'Cuidado de mascotas': 'huella',
+  'Peluquería canina a domicilio': 'tijeras',
+  'Baño y aseo de mascotas': 'banera',
+  'Paseo de perros': 'correa',
+  'Adiestramiento canino': 'hueso',
+  'Alojamiento de mascotas': 'caseta',
 
   'Reparaciones generales': 'destornillador',
   'Costura y arreglos de ropa': 'aguja',
   'Cocina a domicilio': 'olla',
   'Clases particulares': 'libro',
+
   'Peluquería y estética a domicilio': 'tijeras',
+  'Barbería a domicilio': 'tijeras',
+  'Maquillaje y peinado para eventos': 'pintalabios',
+  'Manicura y pedicura': 'esmalte',
+  'Uñas esculpidas y esmaltado semipermanente': 'esmalte',
+  'Cejas y pestañas': 'ceja',
+  'Depilación': 'cera',
+
+  'Fisioterapia a domicilio': 'camilla',
+  'Masaje y relajación': 'camilla',
+  'Entrenador personal a domicilio': 'pesa',
+  'Yoga y pilates a domicilio': 'loto',
+  'Podología a domicilio': 'pie',
+  'Enfermería a domicilio': 'cruz',
 }
 
 /** Red de seguridad por grupo, para categorías que se añadan luego. */
@@ -382,7 +578,12 @@ const POR_GRUPO = {
   'Obra y acabados': 'ladrillo',
   'Exteriores': 'hoja',
   'Muebles y mudanzas': 'caja',
+  'Tecnología en casa': 'wifi',
+  'Vehículos a domicilio': 'coche',
   'Cuidados a domicilio': 'corazon',
+  'Mascotas': 'huella',
+  'Belleza a domicilio': 'tijeras',
+  'Salud y bienestar a domicilio': 'cruz',
   'Otros': 'destornillador',
 }
 

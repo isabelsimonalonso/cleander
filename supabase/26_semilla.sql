@@ -2,12 +2,13 @@
 --  26_semilla.sql — perfiles de muestra para el lanzamiento
 -- ═══════════════════════════════════════════════════════════════════════
 --
---  312 perfiles inventados: las 52 provincias, tres de cada lado en cada
---  una. Así ninguna búsqueda por provincia devuelve el mazo vacío, filtre
---  quien filtre y desde donde filtre.
+--  486 perfiles inventados: las 52 provincias, entre ocho y diez personas
+--  en cada una, mitad y mitad de cada lado. Así ninguna búsqueda por
+--  provincia devuelve el mazo vacío, filtre quien filtre y desde donde
+--  filtre.
 --
---  Están las 53 categorías, y ninguna provincia repite oficio dentro de su
---  terna. Cada categoría sale unas seis veces en toda España.
+--  Están las 82 categorías, y ninguna provincia repite oficio. Cada
+--  categoría sale unas seis veces en toda España, tres por cada lado.
 --
 --  Los resúmenes, y aquí hubo que rehacerlo: el primero de cada categoría
 --  lleva un texto escrito para ese oficio, y el resto sale de una reserva
@@ -16,9 +17,9 @@
 --  «me han dicho que lo haga ya, antes de que vaya a peor» en una tarjeta
 --  de Cuidado de niños.
 --
---  Ahora la reserva es POR GRUPO: seis textos para cada uno de los ocho
---  grupos y cada rol. El registro de un alquiler no es el de un cuidado ni
---  el de una avería, y se nota en cuanto los pones juntos.
+--  Ahora la reserva es POR GRUPO: seis textos para cada grupo y cada rol.
+--  El registro de un alquiler no es el de un cuidado ni el de una avería,
+--  y se nota en cuanto los pones juntos.
 --
 --  Cómo son estos perfiles, y por qué:
 --
@@ -57,7 +58,7 @@
 delete from auth.users where email like '%@semilla.cleander.app';
 
 
--- ── 2 · Los 312 perfiles ───────────────────────────────────────────────
+-- ── 2 · Los 486 perfiles ───────────────────────────────────────────────
 
 with gente (n, rol, nombre, categoria, precio, municipio, resumen) as (values
 
@@ -475,7 +476,290 @@ with gente (n, rol, nombre, categoria, precio, municipio, resumen) as (values
   (309, 'servicio' , 'Emilio A.'   , 'Costura y arreglos de ropa'               ,  17, 'Ávila'                                     , 'Precio cerrado antes de empezar, sin sorpresas al final.'),
   (310, 'cliente'  , 'Arturo A.'   , 'Limpieza de cristales'                    ,  18, 'Ávila'                                     , 'Prefiero que venga siempre la misma persona y no una distinta cada vez.'),
   (311, 'cliente'  , 'Sergio B.'   , 'Limpieza de fin de obra'                  ,  19, 'Ávila'                                     , 'Busco a alguien de confianza, porque no siempre voy a estar en casa.'),
-  (312, 'cliente'  , 'Laura B.'    , 'Planchado y lavandería'                   ,  12, 'Ávila'                                     , 'Es un piso normal, nada del otro mundo. Quiero dejarlo a punto.')
+  (312, 'cliente'  , 'Laura B.'    , 'Planchado y lavandería'                   ,  12, 'Ávila'                                     , 'Es un piso normal, nada del otro mundo. Quiero dejarlo a punto.'),
+
+  -- ═══════════════════════════════════════════════════════════════════
+  --  Los oficios que llegaron después: coches, mascotas, tecnología,
+  --  belleza y salud. Otra vuelta por España, con el mismo criterio.
+  -- ═══════════════════════════════════════════════════════════════════
+
+  -- ── A Coruña ──
+  (313, 'servicio' , 'Adriana R.'  , 'Lavado de coche a domicilio'              ,   15, 'A Coruña'                                  , 'Lavo el coche donde lo tengas aparcado, con agua y equipo propios. Exterior, llantas y aspirado por dentro.'),
+  (314, 'servicio' , 'Álvaro P.'   , 'Fisioterapia a domicilio'                 ,   40, 'A Coruña'                                  , 'Fisioterapeuta colegiada. Voy con camilla a tu casa: lumbares, cervicales y recuperación después de una operación.'),
+  (315, 'cliente'  , 'Amparo C.'   , 'Clases de informática e internet'         ,   17, 'A Coruña'                                  , 'Mi madre quiere aprender a hacer videollamadas y a mí me pierde la paciencia.'),
+  (316, 'cliente'  , 'Andrea L.'   , 'Baño y aseo de mascotas'                  ,   22, 'A Coruña'                                  , 'Es un perro grande y en el piso no hay manera de bañarlo.'),
+
+  -- ── Albacete ──
+  (317, 'servicio' , 'Aroa S.'     , 'Limpieza de tapicería y interiores'       ,   26, 'Albacete'                                  , 'Tapicería, alfombrillas y techo con máquina de inyección. Quito manchas, pelo de mascota y olores.'),
+  (318, 'servicio' , 'Asier G.'    , 'Masaje y relajación'                      ,   36, 'Albacete'                                  , 'Masaje descontracturante y relajante en tu casa, con camilla y toallas propias. Sesiones de una hora.'),
+  (319, 'cliente'  , 'Bárbara T.'  , 'Ayuda con trámites online'                ,   20, 'Albacete'                                  , 'Necesito el certificado digital y pedir una cita, y no me aclaro con la página.'),
+  (320, 'cliente'  , 'Benito N.'   , 'Paseo de perros'                          ,   13, 'Albacete'                                  , 'Necesito que alguien lo saque a mediodía entre semana, que yo no llego.'),
+
+  -- ── Alicante ──
+  (321, 'servicio' , 'Blanca A.'   , 'Pulido y tratamiento de pintura'          ,   34, 'Alicante/Alacant'                          , 'Pulido de arañazos leves y tratamiento de la pintura. Dejo el coche con brillo y protegido unos meses.'),
+  (322, 'servicio' , 'Carmen V.'   , 'Entrenador personal a domicilio'          ,   32, 'Alicante/Alacant'                          , 'Entrenamiento en tu casa o en el parque, con lo que tengas. Planifico según tu edad y tus lesiones.'),
+  (323, 'cliente'  , 'Cayetana D.' , 'Clases de inteligencia artificial'        ,   27, 'Alicante/Alacant'                          , 'Oigo hablar de la inteligencia artificial todo el día y no sé ni por dónde empezar.'),
+  (324, 'cliente'  , 'César B.'    , 'Adiestramiento canino'                    ,   34, 'Alicante/Alacant'                          , 'Tira muchísimo de la correa y con otros perros se pone imposible.'),
+
+  -- ── Almería ──
+  (325, 'servicio' , 'Consuelo F.' , 'Mecánica ligera a domicilio'              ,   38, 'Almería'                                   , 'Cambio de aceite, filtros, pastillas y revisiones en tu garaje. Si hay que ir al taller, te lo digo claro.'),
+  (326, 'servicio' , 'Cristóbal M.', 'Yoga y pilates a domicilio'               ,   31, 'Almería'                                   , 'Clases de yoga y pilates en casa, sola o en pareja. Llevo esterillas y adapto los ejercicios a lo tuyo.'),
+  (327, 'cliente'  , 'Dolores H.'  , 'Barbería a domicilio'                     ,   18, 'Almería'                                   , 'Mi padre ya no sale de casa y necesita que alguien venga a cortarle el pelo.'),
+  (328, 'cliente'  , 'Domingo J.'  , 'Alojamiento de mascotas'                  ,   19, 'Almería'                                   , 'Me voy diez días en agosto y quiero dejarla en una casa, no en una residencia.'),
+
+  -- ── Asturias ──
+  (329, 'servicio' , 'Edurne K.'   , 'Cambio de neumáticos o batería'           ,   33, 'Gijón'                                     , 'Ruedas y baterías en tu calle o en tu garaje. Llevo gato y herramienta, y me llevo lo viejo a reciclar.'),
+  (330, 'servicio' , 'Elisa Q.'    , 'Podología a domicilio'                    ,   32, 'Gijón'                                     , 'Podóloga colegiada a domicilio. Uñas, durezas y pie diabético, con material estéril.'),
+  (331, 'cliente'  , 'Encarna Z.'  , 'Maquillaje y peinado para eventos'        ,   46, 'Gijón'                                     , 'Me caso en junio y busco a alguien que venga a casa a peinarme y maquillarme.'),
+  (332, 'cliente'  , 'Ernesto E.'  , 'Domótica y asistentes de voz'             ,   30, 'Gijón'                                     , 'Compré unas bombillas y un altavoz y no hay manera de que se entiendan entre ellos.'),
+
+  -- ── Badajoz ──
+  (333, 'servicio' , 'Esther X.'   , 'Lavado de moto, furgoneta o autocaravana' ,   27, 'Badajoz'                                   , 'Lavo motos, furgonetas y autocaravanas. Por fuera y por dentro, también antes de guardarlas una temporada.'),
+  (334, 'servicio' , 'Eugenia W.'  , 'Enfermería a domicilio'                   ,   36, 'Badajoz'                                   , 'Enfermera colegiada. Curas, inyectables, sondas y control de constantes en casa, con parte escrito.'),
+  (335, 'cliente'  , 'Fátima Y.'   , 'Manicura y pedicura'                      ,   24, 'Badajoz'                                   , 'Me cuesta agacharme y ya no puedo ocuparme yo de los pies.'),
+  (336, 'cliente'  , 'Federico I.' , 'Cámaras y videovigilancia'                ,   36, 'Badajoz'                                   , 'Quiero ver la puerta desde el móvil cuando no estoy, pero sin liarme con cables.'),
+
+  -- ── Barcelona ──
+  (337, 'servicio' , 'Fermín O.'   , 'Llevar el coche a la ITV o al taller'     ,   23, 'Barcelona'                                 , 'Llevo el coche a la ITV o al taller y te lo devuelvo a casa. Te paso el informe y el resguardo por WhatsApp.'),
+  (338, 'servicio' , 'Gema U.'     , 'Lavado de coche a domicilio'              ,   17, 'Barcelona'                                 , 'Si no queda como esperabas, vuelvo a pasar y no lo cobro.'),
+  (339, 'cliente'  , 'Gerardo R.'  , 'Uñas esculpidas y esmaltado semipermanente',   33, 'Barcelona'                                 , 'Llevo semipermanente y busco a alguien cerca para el relleno cada tres semanas.'),
+  (340, 'cliente'  , 'Gloria P.'   , 'Clases de informática e internet'         ,   19, 'Barcelona'                                 , 'El aparato ya lo tengo comprado, solo necesito que alguien lo deje andando.'),
+
+  -- ── Bizkaia ──
+  (341, 'servicio' , 'Gregorio C.' , 'Peluquería canina a domicilio'            ,   25, 'Bilbao'                                    , 'Peluquería canina en tu casa, sin jaulas ni esperas. Corte de raza o a tu gusto, uñas y oídos incluidos.'),
+  (342, 'servicio' , 'Ignacio L.'  , 'Limpieza de tapicería y interiores'       ,   28, 'Bilbao'                                    , 'Si no queda como esperabas, vuelvo a pasar y no lo cobro.'),
+  (343, 'cliente'  , 'Inés S.'     , 'Cejas y pestañas'                         ,   22, 'Bilbao'                                    , 'Quiero probar el laminado de cejas, pero prefiero que me lo expliquen antes.'),
+  (344, 'cliente'  , 'Irene G.'    , 'Ayuda con trámites online'                ,   22, 'Bilbao'                                    , 'Con un par de tardes creo que me apaño, no busco un curso entero.'),
+
+  -- ── Burgos ──
+  (345, 'servicio' , 'Isidro T.'   , 'Baño y aseo de mascotas'                  ,   20, 'Burgos'                                    , 'Baño, secado y cepillado a domicilio. Llevo bañera propia y agua templada, también para gatos tranquilos.'),
+  (346, 'servicio' , 'Jaime N.'    , 'Pulido y tratamiento de pintura'          ,   36, 'Burgos'                                    , 'Voy yo con todo el equipo: no necesitas ni toma de agua ni enchufe.'),
+  (347, 'cliente'  , 'Jimena A.'   , 'Depilación'                               ,   22, 'Burgos'                                    , 'Busco a alguien que venga a casa, que con el bebé no puedo moverme.'),
+  (348, 'cliente'  , 'Josefa V.'   , 'Clases de inteligencia artificial'        ,   29, 'Burgos'                                    , 'Puedo por las tardes o el fin de semana.'),
+
+  -- ── Cantabria ──
+  (349, 'servicio' , 'Juana D.'    , 'Paseo de perros'                          ,   11, 'Santander'                                 , 'Paseos de una hora, solos o en grupo pequeño. Te mando una foto y la ruta al terminar cada paseo.'),
+  (350, 'servicio' , 'Julia B.'    , 'Mecánica ligera a domicilio'              ,   40, 'Santander'                                 , 'Trabajo también los fines de semana, que es cuando el coche está parado.'),
+  (351, 'cliente'  , 'Leire F.'    , 'Fisioterapia a domicilio'                 ,   39, 'Santander'                                 , 'Salgo de una operación de rodilla y me han mandado rehabilitación en casa.'),
+  (352, 'cliente'  , 'Leo M.'      , 'Barbería a domicilio'                     ,   20, 'Santander'                                 , 'Nunca me lo he hecho y agradecería que me aconsejaran.'),
+
+  -- ── Castellón ──
+  (353, 'servicio' , 'Lidia H.'    , 'Adiestramiento canino'                    ,   32, 'Castellón de la Plana/Castelló de la Plana', 'Adiestramiento en positivo, en casa y en la calle. Trabajo tirones de correa, ladridos y llamada.'),
+  (354, 'servicio' , 'Lourdes J.'  , 'Cambio de neumáticos o batería'           ,   35, 'Castellón de la Plana/Castelló de la Plana', 'Trabajo también los fines de semana, que es cuando el coche está parado.'),
+  (355, 'cliente'  , 'Lucía K.'    , 'Masaje y relajación'                      ,   35, 'Castellón de la Plana/Castelló de la Plana', 'Paso el día sentada delante del ordenador y tengo la espalda hecha polvo.'),
+  (356, 'cliente'  , 'Luis Q.'     , 'Maquillaje y peinado para eventos'        ,   48, 'Castellón de la Plana/Castelló de la Plana', 'Prefiero que sea a domicilio, me viene mucho mejor.'),
+
+  -- ── Ceuta ──
+  (357, 'servicio' , 'Macarena Z.' , 'Alojamiento de mascotas'                  ,   17, 'Ceuta'                                     , 'Se queda en mi casa, con jardín y sin jaulas. Como mucho dos perros a la vez, para poder atenderlos bien.'),
+  (358, 'servicio' , 'Marcelo E.'  , 'Lavado de moto, furgoneta o autocaravana' ,   22, 'Ceuta'                                     , 'Te doy el precio cerrado por foto, antes de moverme de casa.'),
+  (359, 'cliente'  , 'Mariano X.'  , 'Entrenador personal a domicilio'          ,   31, 'Ceuta'                                     , 'Quiero volver a moverme, pero el gimnasio me da una pereza tremenda.'),
+  (360, 'cliente'  , 'Maribel W.'  , 'Manicura y pedicura'                      ,   19, 'Ceuta'                                     , 'Sería una vez al mes, si nos entendemos bien.'),
+
+  -- ── Ciudad Real ──
+  (361, 'servicio' , 'Marisa Y.'   , 'Domótica y asistentes de voz'             ,   35, 'Ciudad Real'                               , 'Instalo y configuro altavoces, enchufes y bombillas inteligentes. Te lo dejo andando y te enseño a usarlo.'),
+  (362, 'servicio' , 'Matilde I.'  , 'Llevar el coche a la ITV o al taller'     ,   18, 'Ciudad Real'                               , 'Voy yo con todo el equipo: no necesitas ni toma de agua ni enchufe.'),
+  (363, 'cliente'  , 'Mercedes O.' , 'Yoga y pilates a domicilio'               ,   30, 'Ciudad Real'                               , 'Busco clases tranquilas en casa, que llevo años sin hacer deporte.'),
+  (364, 'cliente'  , 'Miguel U.'   , 'Uñas esculpidas y esmaltado semipermanente',   28, 'Ciudad Real'                               , 'Nunca me lo he hecho y agradecería que me aconsejaran.'),
+
+  -- ── Cuenca ──
+  (365, 'servicio' , 'Milagros R.' , 'Cámaras y videovigilancia'                ,   41, 'Cuenca'                                    , 'Cámaras para casa, portal o local, con aviso al móvil. Monto, configuro y te explico qué se puede grabar y qué no.'),
+  (366, 'servicio' , 'Nerea P.'    , 'Peluquería canina a domicilio'            ,   27, 'Cuenca'                                    , 'Tengo formación en primeros auxilios para animales.'),
+  (367, 'cliente'  , 'Nieves C.'   , 'Podología a domicilio'                    ,   38, 'Cuenca'                                    , 'Mi madre no puede ir a la consulta y necesita que le corten las uñas.'),
+  (368, 'cliente'  , 'Olalla L.'   , 'Cejas y pestañas'                         ,   24, 'Cuenca'                                    , 'Somos dos en casa y nos vendría bien a las dos.'),
+
+  -- ── Cáceres ──
+  (369, 'servicio' , 'Omar S.'     , 'Clases de informática e internet'         ,   17, 'Cáceres'                                   , 'Clases en tu casa y a tu ritmo: móvil, correo, videollamadas y banca. Sin prisas y sin palabras raras.'),
+  (370, 'servicio' , 'Paco G.'     , 'Baño y aseo de mascotas'                  ,   22, 'Cáceres'                                   , 'Tengo formación en primeros auxilios para animales.'),
+  (371, 'cliente'  , 'Paloma T.'   , 'Enfermería a domicilio'                   ,   35, 'Cáceres'                                   , 'Hay que ponerle una inyección cada semana y no podemos bajar al centro de salud.'),
+  (372, 'cliente'  , 'Pascual N.'  , 'Depilación'                               ,   24, 'Cáceres'                                   , 'Prefiero que sea a domicilio, me viene mucho mejor.'),
+
+  -- ── Cádiz ──
+  (373, 'servicio' , 'Patricio A.' , 'Ayuda con trámites online'                ,   20, 'Jerez de la Frontera'                      , 'Te acompaño con la cita previa, el certificado digital y los trámites del Estado. Tú decides, yo te guío.'),
+  (374, 'servicio' , 'Pepa V.'     , 'Paseo de perros'                          ,   13, 'Jerez de la Frontera'                      , 'Me manejo bien con animales mayores o miedosos, sin forzarlos.'),
+  (375, 'cliente'  , 'Petra D.'    , 'Lavado de coche a domicilio'              ,   16, 'Jerez de la Frontera'                      , 'Lo tengo en un garaje comunitario y no me da la vida para llevarlo al túnel de lavado.'),
+  (376, 'cliente'  , 'Quique B.'   , 'Fisioterapia a domicilio'                 ,   41, 'Jerez de la Frontera'                      , 'Tengo el informe del médico, por si sirve de referencia.'),
+
+  -- ── Córdoba ──
+  (377, 'servicio' , 'Rafael F.'   , 'Clases de inteligencia artificial'        ,   27, 'Córdoba'                                   , 'Te enseño a usar ChatGPT y parecidos en el día a día: escribir, traducir, organizarte. Desde cero.'),
+  (378, 'servicio' , 'Ramiro M.'   , 'Adiestramiento canino'                    ,   34, 'Córdoba'                                   , 'Me gusta conocer antes al animal con una visita corta, sin compromiso.'),
+  (379, 'cliente'  , 'Raquel H.'   , 'Limpieza de tapicería y interiores'       ,   27, 'Córdoba'                                   , 'Los asientos de atrás están imposibles, entre los niños y el perro.'),
+  (380, 'cliente'  , 'Remedios J.' , 'Masaje y relajación'                      ,   37, 'Córdoba'                                   , 'Es para una persona mayor, así que hace falta paciencia.'),
+
+  -- ── Gipuzkoa ──
+  (381, 'servicio' , 'Ricardo K.'  , 'Barbería a domicilio'                     ,   18, 'Donostia/San Sebastián'                    , 'Corte y arreglo de barba en tu casa, con toalla caliente y navaja si te apetece. También para personas mayores.'),
+  (382, 'servicio' , 'Rita Q.'     , 'Alojamiento de mascotas'                  ,   19, 'Donostia/San Sebastián'                    , 'Mando una foto o un mensaje cada día, para que estés tranquila.'),
+  (383, 'cliente'  , 'Roberto Z.'  , 'Pulido y tratamiento de pintura'          ,   35, 'Donostia/San Sebastián'                    , 'Tiene arañazos de aparcar en la calle y quiero verlo decente antes de venderlo.'),
+  (384, 'cliente'  , 'Rosario E.'  , 'Entrenador personal a domicilio'          ,   33, 'Donostia/San Sebastián'                    , 'Tengo el informe del médico, por si sirve de referencia.'),
+
+  -- ── Girona ──
+  (385, 'servicio' , 'Ruth X.'     , 'Maquillaje y peinado para eventos'        ,   46, 'Girona'                                    , 'Maquillaje y peinado para bodas, comuniones y bautizos. Voy a tu casa y salgo con tiempo de sobra.'),
+  (386, 'servicio' , 'Sabina W.'   , 'Domótica y asistentes de voz'             ,   30, 'Girona'                                    , 'Si se puede resolver en remoto, lo hacemos así y sale más barato.'),
+  (387, 'cliente'  , 'Samuel Y.'   , 'Mecánica ligera a domicilio'              ,   39, 'Girona'                                    , 'Le toca el cambio de aceite y entre semana no puedo acercarme al taller.'),
+  (388, 'cliente'  , 'Sandra I.'   , 'Yoga y pilates a domicilio'               ,   25, 'Girona'                                    , 'Tengo el informe del médico, por si sirve de referencia.'),
+
+  -- ── Granada ──
+  (389, 'servicio' , 'Santiago O.' , 'Manicura y pedicura'                      ,   24, 'Granada'                                   , 'Manicura y pedicura en tu casa, con material esterilizado. También durezas y uñas encarnadas.'),
+  (390, 'servicio' , 'Saúl U.'     , 'Cámaras y videovigilancia'                ,   36, 'Granada'                                   , 'No vendo aparatos: uso los que ya tienes siempre que sirvan.'),
+  (391, 'cliente'  , 'Sebastián R.', 'Cambio de neumáticos o batería'           ,   34, 'Granada'                                   , 'Se queda sin batería cada dos por tres y las ruedas ya están para cambiarlas.'),
+  (392, 'cliente'  , 'Susana P.'   , 'Podología a domicilio'                    ,   33, 'Granada'                                   , 'Serían sesiones seguidas, no una cosa suelta.'),
+
+  -- ── Guadalajara ──
+  (393, 'servicio' , 'Tamara C.'   , 'Uñas esculpidas y esmaltado semipermanente',   33, 'Guadalajara'                               , 'Semipermanente, acrílico y gel. Relleno cada tres o cuatro semanas y retirada sin dañar la uña.'),
+  (394, 'servicio' , 'Telmo L.'    , 'Clases de informática e internet'         ,   19, 'Guadalajara'                               , 'No vendo aparatos: uso los que ya tienes siempre que sirvan.'),
+  (395, 'cliente'  , 'Tomasa S.'   , 'Lavado de moto, furgoneta o autocaravana' ,   28, 'Guadalajara'                               , 'Tengo la autocaravana parada desde el verano y hay que dejarla presentable.'),
+  (396, 'cliente'  , 'Ubaldo G.'   , 'Enfermería a domicilio'                   ,   37, 'Guadalajara'                               , 'Es para una persona mayor, así que hace falta paciencia.'),
+
+  -- ── Huelva ──
+  (397, 'servicio' , 'Urbano T.'   , 'Cejas y pestañas'                         ,   22, 'Huelva'                                    , 'Diseño de cejas, laminado y tinte. Extensiones y lifting de pestañas. Te enseño el resultado antes de fijar nada.'),
+  (398, 'servicio' , 'Valeria N.'  , 'Ayuda con trámites online'                ,   22, 'Huelva'                                    , 'Te lo dejo por escrito, para que luego puedas repetirlo tú solo.'),
+  (399, 'cliente'  , 'Vega A.'     , 'Llevar el coche a la ITV o al taller'     ,   17, 'Huelva'                                    , 'Me caduca la ITV y trabajo justo en el horario en que abren.'),
+  (400, 'cliente'  , 'Vicente V.'  , 'Lavado de coche a domicilio'              ,   18, 'Huelva'                                    , 'Lo uso a diario, así que no puede quedarse muchas horas parado.'),
+
+  -- ── Huesca ──
+  (401, 'servicio' , 'Virginia D.' , 'Depilación'                               ,   22, 'Huesca'                                    , 'Depilación con cera tibia o con hilo, a domicilio. Material de un solo uso y cita a la hora que te venga bien.'),
+  (402, 'servicio' , 'Ximena B.'   , 'Clases de inteligencia artificial'        ,   29, 'Huesca'                                    , 'Trabajo a menudo con gente mayor y sé ir despacio.'),
+  (403, 'cliente'  , 'Yaiza F.'    , 'Peluquería canina a domicilio'            ,   26, 'Huesca'                                    , 'Tengo un cocker que se agobia mucho en la peluquería y prefiero que sea en casa.'),
+  (404, 'cliente'  , 'Yeray M.'    , 'Limpieza de tapicería y interiores'       ,   29, 'Huesca'                                    , 'Lo uso a diario, así que no puede quedarse muchas horas parado.'),
+
+  -- ── Illes Balears ──
+  (405, 'servicio' , 'Zaira H.'    , 'Fisioterapia a domicilio'                 ,   39, 'Palma de Mallorca'                         , 'Tengo horario de mañana y de tarde, también fuera de la ciudad.'),
+  (406, 'servicio' , 'Abel J.'     , 'Barbería a domicilio'                     ,   20, 'Palma de Mallorca'                         , 'Te digo con sinceridad lo que te va a favorecer y lo que no.'),
+  (407, 'cliente'  , 'Aurora K.'   , 'Baño y aseo de mascotas'                  ,   21, 'Palma de Mallorca'                         , 'Busco a alguien de confianza y con paciencia, es lo que más valoro.'),
+  (408, 'cliente'  , 'Benjamín Q.' , 'Pulido y tratamiento de pintura'          ,   37, 'Palma de Mallorca'                         , 'Lo tengo aparcado en la puerta de casa, sin problema de acceso.'),
+
+  -- ── Jaén ──
+  (409, 'servicio' , 'Casilda Z.'  , 'Masaje y relajación'                      ,   35, 'Jaén'                                      , 'La primera visita es para valorar, y de ahí sale el plan y el precio.'),
+  (410, 'servicio' , 'Damián E.'   , 'Maquillaje y peinado para eventos'        ,   48, 'Jaén'                                      , 'Voy con todo el material, tú solo necesitas un sitio con luz.'),
+  (411, 'cliente'  , 'Delia X.'    , 'Paseo de perros'                          ,   12, 'Jaén'                                      , 'Me gustaría que nos conociéramos antes de empezar.'),
+  (412, 'cliente'  , 'Eloy W.'     , 'Mecánica ligera a domicilio'              ,   41, 'Jaén'                                      , 'Me viene mejor por la tarde o el fin de semana.'),
+
+  -- ── La Rioja ──
+  (413, 'servicio' , 'Adriana I.'  , 'Entrenador personal a domicilio'          ,   31, 'Logroño'                                   , 'Trabajo mucho con gente mayor y sé ir despacio.'),
+  (414, 'servicio' , 'Álvaro O.'   , 'Manicura y pedicura'                      ,   19, 'Logroño'                                   , 'Trabajo con cita, así que no vas a esperar.'),
+  (415, 'cliente'  , 'Amparo U.'   , 'Adiestramiento canino'                    ,   33, 'Logroño'                                   , 'Es muy buena, pero al principio desconfía de la gente que no conoce.'),
+  (416, 'cliente'  , 'Andrea R.'   , 'Cambio de neumáticos o batería'           ,   29, 'Logroño'                                   , 'Lo uso a diario, así que no puede quedarse muchas horas parado.'),
+
+  -- ── Las Palmas ──
+  (417, 'servicio' , 'Aroa P.'     , 'Yoga y pilates a domicilio'               ,   30, 'Las Palmas de Gran Canaria'                , 'Voy con todo el material, no hace falta que compres nada.'),
+  (418, 'servicio' , 'Asier C.'    , 'Uñas esculpidas y esmaltado semipermanente',   28, 'Las Palmas de Gran Canaria'                , 'Trabajo con cita, así que no vas a esperar.'),
+  (419, 'cliente'  , 'Bárbara L.'  , 'Alojamiento de mascotas'                  ,   18, 'Las Palmas de Gran Canaria'                , 'Me gustaría que nos conociéramos antes de empezar.'),
+  (420, 'cliente'  , 'Benito S.'   , 'Lavado de moto, furgoneta o autocaravana' ,   23, 'Las Palmas de Gran Canaria'                , 'No tengo prisa, pero sí quiero saber el precio por delante.'),
+
+  -- ── León ──
+  (421, 'servicio' , 'Blanca G.'   , 'Podología a domicilio'                    ,   38, 'León'                                      , 'Estoy colegiada y puedo darte el número si lo quieres comprobar.'),
+  (422, 'servicio' , 'Carmen T.'   , 'Cejas y pestañas'                         ,   24, 'León'                                      , 'Material de un solo uso y todo desinfectado delante de ti.'),
+  (423, 'cliente'  , 'Cayetana N.' , 'Domótica y asistentes de voz'             ,   36, 'León'                                      , 'Prefiero que sea en casa, que es donde tengo los aparatos.'),
+  (424, 'cliente'  , 'César A.'    , 'Llevar el coche a la ITV o al taller'     ,   19, 'León'                                      , 'Lo tengo aparcado en la puerta de casa, sin problema de acceso.'),
+
+  -- ── Lleida ──
+  (425, 'servicio' , 'Consuelo V.' , 'Enfermería a domicilio'                   ,   35, 'Lleida'                                    , 'La primera visita es para valorar, y de ahí sale el plan y el precio.'),
+  (426, 'servicio' , 'Cristóbal D.', 'Depilación'                               ,   24, 'Lleida'                                    , 'Voy con todo el material, tú solo necesitas un sitio con luz.'),
+  (427, 'cliente'  , 'Dolores B.'  , 'Cámaras y videovigilancia'                ,   35, 'Lleida'                                    , 'El aparato ya lo tengo comprado, solo necesito que alguien lo deje andando.'),
+  (428, 'cliente'  , 'Domingo F.'  , 'Peluquería canina a domicilio'            ,   28, 'Lleida'                                    , 'Busco a alguien de confianza y con paciencia, es lo que más valoro.'),
+
+  -- ── Lugo ──
+  (429, 'servicio' , 'Edurne M.'   , 'Lavado de coche a domicilio'              ,   16, 'Lugo'                                      , 'Llevo años en esto y tengo el seguro de responsabilidad civil al día.'),
+  (430, 'servicio' , 'Elisa H.'    , 'Fisioterapia a domicilio'                 ,   41, 'Lugo'                                      , 'Voy con todo el material, no hace falta que compres nada.'),
+  (431, 'cliente'  , 'Encarna J.'  , 'Clases de informática e internet'         ,   18, 'Lugo'                                      , 'Puedo por las tardes o el fin de semana.'),
+  (432, 'cliente'  , 'Ernesto K.'  , 'Baño y aseo de mascotas'                  ,   23, 'Lugo'                                      , 'Es muy buena, pero al principio desconfía de la gente que no conoce.'),
+
+  -- ── Madrid ──
+  (433, 'servicio' , 'Esther Q.'   , 'Limpieza de tapicería y interiores'       ,   27, 'Madrid'                                    , 'Llevo años en esto y tengo el seguro de responsabilidad civil al día.'),
+  (434, 'servicio' , 'Eugenia Z.'  , 'Masaje y relajación'                      ,   37, 'Madrid'                                    , 'Estoy colegiada y puedo darte el número si lo quieres comprobar.'),
+  (435, 'cliente'  , 'Fátima E.'   , 'Ayuda con trámites online'                ,   21, 'Madrid'                                    , 'Es para mis padres, así que hace falta paciencia más que prisa.'),
+  (436, 'cliente'  , 'Federico X.' , 'Paseo de perros'                          ,   14, 'Madrid'                                    , 'Serían días fijos entre semana, siempre a la misma hora.'),
+
+  -- ── Melilla ──
+  (437, 'servicio' , 'Fermín W.'   , 'Pulido y tratamiento de pintura'          ,   35, 'Melilla'                                   , 'Si no queda como esperabas, vuelvo a pasar y no lo cobro.'),
+  (438, 'servicio' , 'Gema Y.'     , 'Entrenador personal a domicilio'          ,   33, 'Melilla'                                   , 'Si hace falta hablo con tu médico, para ir todos a una.'),
+  (439, 'cliente'  , 'Gerardo I.'  , 'Clases de inteligencia artificial'        ,   28, 'Melilla'                                   , 'Prefiero que sea en casa, que es donde tengo los aparatos.'),
+  (440, 'cliente'  , 'Gloria O.'   , 'Adiestramiento canino'                    ,   35, 'Melilla'                                   , 'Tiene su edad y necesita que vayan con calma.'),
+
+  -- ── Murcia ──
+  (441, 'servicio' , 'Gregorio U.' , 'Mecánica ligera a domicilio'              ,   39, 'Murcia'                                    , 'Voy yo con todo el equipo: no necesitas ni toma de agua ni enchufe.'),
+  (442, 'servicio' , 'Ignacio R.'  , 'Yoga y pilates a domicilio'               ,   25, 'Murcia'                                    , 'La primera visita es para valorar, y de ahí sale el plan y el precio.'),
+  (443, 'cliente'  , 'Inés P.'     , 'Barbería a domicilio'                     ,   19, 'Murcia'                                    , 'Somos dos en casa y nos vendría bien a las dos.'),
+  (444, 'cliente'  , 'Irene C.'    , 'Alojamiento de mascotas'                  ,   13, 'Murcia'                                    , 'Serían días fijos entre semana, siempre a la misma hora.'),
+
+  -- ── Málaga ──
+  (445, 'servicio' , 'Isidro L.'   , 'Cambio de neumáticos o batería'           ,   34, 'Málaga'                                    , 'Voy yo con todo el equipo: no necesitas ni toma de agua ni enchufe.'),
+  (446, 'servicio' , 'Jaime S.'    , 'Podología a domicilio'                    ,   33, 'Málaga'                                    , 'Trabajo mucho con gente mayor y sé ir despacio.'),
+  (447, 'cliente'  , 'Jimena G.'   , 'Maquillaje y peinado para eventos'        ,   47, 'Málaga'                                    , 'Nunca me lo he hecho y agradecería que me aconsejaran.'),
+  (448, 'cliente'  , 'Josefa T.'   , 'Domótica y asistentes de voz'             ,   31, 'Málaga'                                    , 'Con un par de tardes creo que me apaño, no busco un curso entero.'),
+
+  -- ── Navarra ──
+  (449, 'servicio' , 'Juana N.'    , 'Lavado de moto, furgoneta o autocaravana' ,   28, 'Pamplona/Iruña'                            , 'Trabajo también los fines de semana, que es cuando el coche está parado.'),
+  (450, 'servicio' , 'Julia A.'    , 'Enfermería a domicilio'                   ,   37, 'Pamplona/Iruña'                            , 'Estoy colegiada y puedo darte el número si lo quieres comprobar.'),
+  (451, 'cliente'  , 'Leire V.'    , 'Manicura y pedicura'                      ,   25, 'Pamplona/Iruña'                            , 'Prefiero que sea a domicilio, me viene mucho mejor.'),
+  (452, 'cliente'  , 'Leo D.'      , 'Cámaras y videovigilancia'                ,   37, 'Pamplona/Iruña'                            , 'Puedo por las tardes o el fin de semana.'),
+
+  -- ── Ourense ──
+  (453, 'servicio' , 'Lidia B.'    , 'Llevar el coche a la ITV o al taller'     ,   17, 'Ourense'                                   , 'Si no queda como esperabas, vuelvo a pasar y no lo cobro.'),
+  (454, 'cliente'  , 'Lourdes F.'  , 'Uñas esculpidas y esmaltado semipermanente',   27, 'Ourense'                                   , 'Somos dos en casa y nos vendría bien a las dos.'),
+
+  -- ── Palencia ──
+  (455, 'servicio' , 'Lucía M.'    , 'Peluquería canina a domicilio'            ,   26, 'Palencia'                                  , 'Me gusta conocer antes al animal con una visita corta, sin compromiso.'),
+  (456, 'cliente'  , 'Luis H.'     , 'Cejas y pestañas'                         ,   23, 'Palencia'                                  , 'Es para un día concreto, así que necesito saber si tienes hueco.'),
+
+  -- ── Pontevedra ──
+  (457, 'servicio' , 'Macarena J.' , 'Baño y aseo de mascotas'                  ,   21, 'Vigo'                                      , 'Me gusta conocer antes al animal con una visita corta, sin compromiso.'),
+  (458, 'cliente'  , 'Marcelo K.'  , 'Depilación'                               ,   23, 'Vigo'                                      , 'Nunca me lo he hecho y agradecería que me aconsejaran.'),
+
+  -- ── Salamanca ──
+  (459, 'servicio' , 'Mariano Q.'  , 'Paseo de perros'                          ,   12, 'Salamanca'                                 , 'Mando una foto o un mensaje cada día, para que estés tranquila.'),
+  (460, 'cliente'  , 'Maribel Z.'  , 'Fisioterapia a domicilio'                 ,   40, 'Salamanca'                                 , 'Quiero saber antes el precio por sesión y cuántas harían falta.'),
+
+  -- ── Santa Cruz de Tenerife ──
+  (461, 'servicio' , 'Marisa E.'   , 'Adiestramiento canino'                    ,   33, 'Santa Cruz de Tenerife'                    , 'Si son dos animales de la misma casa, hago precio.'),
+  (462, 'cliente'  , 'Matilde X.'  , 'Masaje y relajación'                      ,   36, 'Santa Cruz de Tenerife'                    , 'Serían sesiones seguidas, no una cosa suelta.'),
+
+  -- ── Segovia ──
+  (463, 'servicio' , 'Mercedes W.' , 'Alojamiento de mascotas'                  ,   18, 'Segovia'                                   , 'Tengo formación en primeros auxilios para animales.'),
+  (464, 'cliente'  , 'Miguel Y.'   , 'Entrenador personal a domicilio'          ,   32, 'Segovia'                                   , 'Quiero saber antes el precio por sesión y cuántas harían falta.'),
+
+  -- ── Sevilla ──
+  (465, 'servicio' , 'Milagros I.' , 'Domótica y asistentes de voz'             ,   36, 'Sevilla'                                   , 'Te lo dejo por escrito, para que luego puedas repetirlo tú solo.'),
+  (466, 'cliente'  , 'Nerea O.'    , 'Yoga y pilates a domicilio'               ,   31, 'Sevilla'                                   , 'Quiero saber antes el precio por sesión y cuántas harían falta.'),
+
+  -- ── Soria ──
+  (467, 'servicio' , 'Nieves U.'   , 'Cámaras y videovigilancia'                ,   35, 'Soria'                                     , 'Trabajo a menudo con gente mayor y sé ir despacio.'),
+  (468, 'cliente'  , 'Olalla R.'   , 'Podología a domicilio'                    ,   32, 'Soria'                                     , 'Tengo el informe del médico, por si sirve de referencia.'),
+
+  -- ── Tarragona ──
+  (469, 'servicio' , 'Omar P.'     , 'Clases de informática e internet'         ,   18, 'Tarragona'                                 , 'Trabajo a menudo con gente mayor y sé ir despacio.'),
+  (470, 'cliente'  , 'Paco C.'     , 'Enfermería a domicilio'                   ,   36, 'Tarragona'                                 , 'Serían sesiones seguidas, no una cosa suelta.'),
+
+  -- ── Teruel ──
+  (471, 'servicio' , 'Paloma L.'   , 'Ayuda con trámites online'                ,   21, 'Teruel'                                    , 'Voy con paciencia: explico las cosas las veces que haga falta.'),
+  (472, 'cliente'  , 'Pascual S.'  , 'Lavado de coche a domicilio'              ,   17, 'Teruel'                                    , 'Es la primera vez que pido algo así, cuéntame cómo funciona.'),
+
+  -- ── Toledo ──
+  (473, 'servicio' , 'Patricio G.' , 'Clases de inteligencia artificial'        ,   28, 'Toledo'                                    , 'Si se puede resolver en remoto, lo hacemos así y sale más barato.'),
+  (474, 'cliente'  , 'Pepa T.'     , 'Limpieza de tapicería y interiores'       ,   28, 'Toledo'                                    , 'Es la primera vez que pido algo así, cuéntame cómo funciona.'),
+
+  -- ── Valencia ──
+  (475, 'servicio' , 'Petra N.'    , 'Barbería a domicilio'                     ,   19, 'Valencia'                                  , 'Material de un solo uso y todo desinfectado delante de ti.'),
+  (476, 'cliente'  , 'Quique A.'   , 'Pulido y tratamiento de pintura'          ,   36, 'Valencia'                                  , 'Lo uso a diario, así que no puede quedarse muchas horas parado.'),
+
+  -- ── Valladolid ──
+  (477, 'servicio' , 'Rafael V.'   , 'Maquillaje y peinado para eventos'        ,   47, 'Valladolid'                                , 'Te digo con sinceridad lo que te va a favorecer y lo que no.'),
+  (478, 'cliente'  , 'Ramiro D.'   , 'Mecánica ligera a domicilio'              ,   40, 'Valladolid'                                , 'Lo tengo aparcado en la puerta de casa, sin problema de acceso.'),
+
+  -- ── Zamora ──
+  (479, 'servicio' , 'Raquel B.'   , 'Manicura y pedicura'                      ,   25, 'Zamora'                                    , 'Voy con todo el material, tú solo necesitas un sitio con luz.'),
+  (480, 'cliente'  , 'Remedios F.' , 'Cambio de neumáticos o batería'           ,   35, 'Zamora'                                    , 'Es la primera vez que pido algo así, cuéntame cómo funciona.'),
+
+  -- ── Zaragoza ──
+  (481, 'servicio' , 'Ricardo M.'  , 'Uñas esculpidas y esmaltado semipermanente',   27, 'Zaragoza'                                  , 'Voy con todo el material, tú solo necesitas un sitio con luz.'),
+  (482, 'cliente'  , 'Rita H.'     , 'Lavado de moto, furgoneta o autocaravana' ,   22, 'Zaragoza'                                  , 'Me viene mejor por la tarde o el fin de semana.'),
+
+  -- ── Álava ──
+  (483, 'servicio' , 'Roberto J.'  , 'Cejas y pestañas'                         ,   23, 'Vitoria-Gasteiz'                           , 'Si sois varias en la misma casa, hago precio.'),
+  (484, 'cliente'  , 'Rosario K.'  , 'Llevar el coche a la ITV o al taller'     ,   18, 'Vitoria-Gasteiz'                           , 'Lo uso a diario, así que no puede quedarse muchas horas parado.'),
+
+  -- ── Ávila ──
+  (485, 'servicio' , 'Ruth Q.'     , 'Depilación'                               ,   23, 'Ávila'                                     , 'Te digo con sinceridad lo que te va a favorecer y lo que no.'),
+  (486, 'cliente'  , 'Sabina Z.'   , 'Peluquería canina a domicilio'            ,   27, 'Ávila'                                     , 'Es muy buena, pero al principio desconfía de la gente que no conoce.')
 )
 
 insert into auth.users (
@@ -584,7 +868,7 @@ update public.perfiles p
        unidad_precio  = case when p.categoria like 'Alquiler de%'
                              then 'dia' else 'hora' end,
        -- La misma fecha que la cuenta, repartida hacia atrás, para que en
-       -- el panel no aparezcan las 312 apiladas en el mismo minuto.
+       -- el panel no aparezcan las 486 apiladas en el mismo minuto.
        creado_en      = u.created_at
   from auth.users u, provincias c
  where u.id = p.id
@@ -605,7 +889,7 @@ update public.perfiles p
 --                where email like '%@semilla.cleander.app')
 --  group by rol;
 --
--- Debe salir, en cada fila: 156 perfiles, 53 categorías y 52 provincias.
+-- Debe salir, en cada fila: 243 perfiles, 82 categorías y 52 provincias.
 
 
 -- ═══════════════════════════════════════════════════════════════════════

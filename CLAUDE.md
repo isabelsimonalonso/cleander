@@ -85,20 +85,27 @@ el frontend:
 - `trg_detectar_match` — si hay `like` en ambos sentidos, crea el match.
 
 ## Opciones predefinidas
-**Servicios:** 53 repartidos en 8 grupos, definidos en `src/lib/constantes.js`
+**Servicios:** 82 repartidos en 13 grupos, definidos en `src/lib/constantes.js`
 (`GRUPOS_SERVICIOS`). El desplegable los muestra agrupados con `optgroup`,
-porque una lista plana de cuarenta es inmanejable.
+porque una lista plana de ochenta es inmanejable.
 
 Grupos: Limpieza y hogar · Robótica y maquinaria en alquiler ·
-Instalaciones y averías · Obra y acabados · Exteriores ·
-Muebles y mudanzas · Cuidados a domicilio · Otros
+Instalaciones y averías · Tecnología en casa · Obra y acabados ·
+Exteriores · Muebles y mudanzas · Vehículos a domicilio ·
+Cuidados a domicilio · Mascotas · Belleza a domicilio ·
+Salud y bienestar a domicilio · Otros
 
 El grupo de alquiler no es mano de obra: quien ofrece presta el aparato y
 quien busca lo necesita unos días. El precio por hora se lee como tarifa
 de alquiler.
 
+El de salud son profesiones sanitarias, donde el titular tiene que estar
+colegiado. La web no lo comprueba: el aviso vive en las condiciones.
+
 En la base de datos se guarda el texto tal cual, así que añadir un servicio
-es escribir una línea en ese archivo. No hay migración.
+es escribir una línea en ese archivo. No hay migración. Conviene acompañarla
+de su traducción en `SERVICIOS_EN` y de un dibujo en `IconoCategoria.jsx`
+(si no, hereda el de su grupo).
 
 **Ubicación:** provincia y municipio de lista cerrada, con el listado oficial
 del INE (52 provincias, 8.124 municipios) en `src/data/municipios.json`. Pesa
