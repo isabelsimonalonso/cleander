@@ -361,6 +361,10 @@
 }
 
 
+.auth-cifras {
+  display: none;
+}
+
 /* ── La portada en dos columnas ───────────────────────────────────────
  *
  * Solo en la portada (por eso la clase aparte: registro, recuperar y
@@ -380,8 +384,9 @@
        acaba a la misma altura que la de entrar. */
     grid-template-areas:
       "cabecera caja"
+      "cifras   caja"
       "reclamo  caja";
-    grid-template-rows: auto auto;
+    grid-template-rows: auto auto auto;
     justify-content: center;
     align-content: center;
     column-gap: 48px;
@@ -399,6 +404,49 @@
     grid-area: reclamo;
     align-self: end;
     max-width: none;
+  }
+
+  /* Tres cifras del catálogo en el hueco que deja cuadrar las dos
+     columnas. No repiten lo que dice el panel: aquello es cómo funciona,
+     esto es cuánto hay. Se cuentan solas de `constantes.js`, así que
+     añadir un servicio las actualiza. */
+  .auth-portada .auth-cifras {
+    grid-area: cifras;
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    gap: clamp(20px, 3vw, 42px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: #9b9b9b;
+    font-size: 11.5px;
+    font-weight: 300;
+    letter-spacing: 0.4px;
+  }
+
+  .auth-portada .auth-cifras li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+  }
+
+  .auth-portada .auth-cifras b {
+    color: var(--turquesa);
+    font-size: 25px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+
+  /* Con sitio de sobra, el logo puede permitirse ser el que manda. */
+  .auth-portada .logo-completo-icono {
+    width: clamp(108px, 9.5vw, 146px);
+  }
+
+  .auth-portada .logo-completo-nombre {
+    font-size: clamp(33px, 3vw, 43px);
   }
 
   .auth-portada .auth-box {

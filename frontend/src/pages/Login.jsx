@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
-import { DOMINIO_INTERNO } from '../lib/constantes'
+import { DOMINIO_INTERNO, CATEGORIAS, GRUPOS_SERVICIOS, PROVINCIAS_ES } from '../lib/constantes'
 import { mensajeError } from '../lib/errores'
 import Logo from '../components/Logo'
 import SelectorIdioma from '../components/SelectorIdioma'
@@ -47,6 +47,12 @@ export default function Login() {
       <header className="auth-cabecera">
         <Logo variante="completo" />
       </header>
+
+      <ul className="auth-cifras">
+        <li><b>{CATEGORIAS.length}</b> {t('cifraServicios')}</li>
+        <li><b>{GRUPOS_SERVICIOS.length}</b> {t('cifraCategorias')}</li>
+        <li><b>{PROVINCIAS_ES}</b> {t('cifraProvincias')}</li>
+      </ul>
 
       <section className="auth-reclamo">
         <p className="auth-reclamo-preguntas">

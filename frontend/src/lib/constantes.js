@@ -169,6 +169,14 @@ export const GRUPOS_SERVICIOS = [
 export const CATEGORIAS = GRUPOS_SERVICIOS.flatMap((g) => g.servicios)
 
 /**
+ * Las provincias del listado del INE (`src/data/municipios.json`). Va a
+ * mano y no contando el archivo porque pesa 124 kB y se carga aparte,
+ * solo al elegir provincia; la portada no lo va a bajar por enseñar un
+ * número.
+ */
+export const PROVINCIAS_ES = 52
+
+/**
  * El alquiler se cobra por día, no por hora: nadie alquila una
  * hidrolimpiadora sesenta minutos.
  *
