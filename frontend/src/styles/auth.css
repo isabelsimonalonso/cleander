@@ -361,101 +361,6 @@
 }
 
 
-/* ── La portada en dos columnas ───────────────────────────────────────
- *
- * Solo en la portada (por eso la clase aparte: el registro y recuperar
- * siguen en una columna) y solo cuando hay ancho de sobra. Apilado en
- * una columna de 440 px, en un monitor se desaprovechaban dos tercios de
- * la pantalla y la página parecía un móvil estirado.
- *
- * A la izquierda, qué es esto. A la derecha, entra aquí. Son dos cosas
- * distintas y ahora se ven como tales.
- */
-@media (min-width: 1060px) {
-  .auth-portada {
-    display: grid;
-    /* La columna de la izquierda se estira con la pantalla; la caja de
-       entrar se queda en 460 como mucho, que unos campos de 700 px de
-       ancho no los quiere nadie. Así no sobra medio monitor a los lados. */
-    grid-template-columns: minmax(320px, 1fr) minmax(340px, 460px);
-    grid-template-areas:
-      "cabecera caja"
-      "reclamo  caja";
-    grid-template-rows: auto auto;
-    align-content: center;
-    column-gap: clamp(32px, 4vw, 64px);
-    row-gap: 16px;
-    width: 100%;
-    padding: 24px clamp(20px, 2.8vw, 60px);
-  }
-
-  /* El logo va centrado sobre el panel que tiene debajo, no pegado al
-     borde: el icono es más estrecho que el nombre y de lado quedaba
-     descolgado. */
-  .auth-portada .auth-cabecera {
-    grid-area: cabecera;
-    align-items: center;
-    text-align: center;
-    gap: 9px;
-  }
-
-  .auth-portada .logo-completo-icono {
-    width: clamp(72px, 8vw, 100px);
-  }
-
-  .auth-portada .logo-completo-nombre {
-    font-size: clamp(27px, 2.6vw, 34px);
-  }
-
-  .auth-portada .auth-reclamo {
-    grid-area: reclamo;
-    max-width: none;
-    padding: clamp(21px, 2.2vw, 32px) clamp(26px, 2.6vw, 38px);
-    text-align: left;
-  }
-
-  /* Las dos preguntas son el titular: en columna y en grande, que es lo
-     primero que tiene que leerse al entrar. */
-  .auth-portada .auth-reclamo-preguntas {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1px;
-    margin-bottom: 11px;
-    font-size: clamp(25px, 2.4vw, 33px);
-    letter-spacing: -0.8px;
-    line-height: 1.15;
-  }
-
-  .auth-portada .auth-reclamo-texto {
-    font-size: clamp(14.5px, 1.15vw, 17px);
-    max-width: 60ch;
-  }
-
-  .auth-portada .auth-reclamo-claves {
-    justify-content: flex-start;
-    margin-top: 14px;
-  }
-
-  /* La caja manda su propio aire: en dos columnas no compite con nada
-     por el alto y no hace falta que sea generosa. */
-  .auth-portada .auth-box {
-    padding: 26px 28px;
-  }
-
-  .auth-portada .auth-alta {
-    margin-top: 19px;
-    padding-top: 17px;
-  }
-
-  /* La caja se centra respecto a la columna de al lado, no respecto al
-     logo, que es más corta. */
-  .auth-portada .auth-box {
-    grid-area: caja;
-    align-self: center;
-    max-width: none;
-  }
-}
-
 /* ── Recuperar la contraseña ─────────────────────────────────────────── */
 .auth-olvido {
   margin-top: -4px;
@@ -567,20 +472,26 @@
 }
 
 /*
- * En el teléfono, para que la portada entre de una vez y no haya que
- * deslizar hasta los enlaces del final. Se recorta de donde no duele:
- * aire, no tamaño de letra ni alto de los campos, que se tocan con el
- * dedo y por debajo de 44 px se fallan.
+ * Para que la portada entre de una vez, sin deslizar: en el teléfono y
+ * también en cualquier ventana baja, que un portátil de 640 px de alto
+ * tiene el mismo problema que un móvil.
+ *
+ * Se recorta de donde no duele: aire, no tamaño de letra ni alto de los
+ * campos y botones, que se tocan con el dedo y por debajo de 44 px se
+ * fallan.
+ *
+ * Va al final del archivo a propósito: antes de las reglas de ventana
+ * baja y de la de 430 px, que vienen después con la misma
+ * especificidad, se lo comían entero.
  */
-@media (max-width: 520px) {
+@media (max-width: 520px), (max-height: 800px) {
   .auth-container {
     padding-top: 16px;
     padding-bottom: 16px;
     gap: 10px;
   }
 
-  .auth-portada .logo-completo-icono,
-  .logo-completo-icono { width: clamp(62px, 17vw, 78px); }
+  .logo-completo-icono { width: clamp(62px, 17vw, 82px); }
   .logo-completo-nombre { font-size: clamp(24px, 6.4vw, 28px); }
   .auth-cabecera { gap: 9px; }
 
@@ -599,4 +510,48 @@
   }
 
   .auth-box a.auth-secundario { padding: 12px; }
+}
+
+/*
+ * Un escalón más para las ventanas bajas de verdad: un portátil de
+ * 1366x768 deja unos 640 px de página una vez descontada la barra del
+ * navegador, y ahí los 705 px de la portada no caben.
+ */
+@media (max-height: 760px) {
+  .auth-container {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    gap: 8px;
+  }
+
+  .auth-cabecera { gap: 6px; }
+  .logo-completo { gap: 3px; }
+  .logo-completo-icono { width: clamp(50px, 13vh, 62px); }
+  .logo-completo-nombre { font-size: clamp(21px, 4.4vh, 25px); }
+
+  .auth-reclamo { padding: 10px 18px; }
+  .auth-reclamo-preguntas { font-size: 16.5px; margin-bottom: 7px; }
+  .auth-reclamo-texto { font-size: 13px; line-height: 1.45; }
+  .auth-reclamo-claves { margin-top: 7px; font-size: 10px; }
+
+  .auth-box { padding: 16px 20px; }
+  .auth-box form { gap: 11px; }
+  .auth-box input { padding: 12px 15px; }
+  .auth-box button[type="submit"] { margin-top: 8px; padding: 13px; }
+
+  .auth-alta { margin-top: 12px; padding-top: 11px; gap: 7px; }
+  .auth-box a.auth-secundario { padding: 11px; }
+  .auth-olvido { margin-top: -7px; }
+}
+
+/* Y el último escalón, para ventanas de 600 px o menos: un portátil con
+   la barra de marcadores abierta, o media pantalla en vertical. */
+@media (max-height: 620px) {
+  .auth-container { padding-top: 8px; padding-bottom: 8px; gap: 7px; }
+  .logo-completo-icono { width: clamp(44px, 11vh, 54px); }
+  .logo-completo-nombre { font-size: clamp(19px, 3.9vh, 22px); }
+  .auth-reclamo { padding: 9px 16px; }
+  .auth-reclamo-preguntas { font-size: 15.5px; margin-bottom: 6px; }
+  .auth-box { padding: 14px 20px; }
+  .auth-alta { margin-top: 10px; padding-top: 9px; }
 }

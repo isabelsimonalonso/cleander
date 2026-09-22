@@ -42,7 +42,7 @@ export default function Login() {
   }
 
   return (
-    <div className="auth-container auth-portada">
+    <div className="auth-container">
       <SelectorIdioma flotante />
       <header className="auth-cabecera">
         <Logo variante="completo" />
