@@ -378,7 +378,9 @@
 @media (min-width: 1040px) {
   .auth-portada {
     display: grid;
-    grid-template-columns: minmax(300px, 480px) minmax(330px, 420px);
+    /* Las dos columnas miden lo mismo: el panel de la izquierda tiene
+       que cuadrar en ancho con la caja de entrar, no solo en alto. */
+    grid-template-columns: repeat(2, minmax(320px, 420px));
     /* Dos filas que se reparten el alto de la caja: el logo se pega
        arriba y el panel abajo, así la columna de la izquierda empieza y
        acaba a la misma altura que la de entrar. */
