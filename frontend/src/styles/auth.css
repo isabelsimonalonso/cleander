@@ -361,6 +361,58 @@
 }
 
 
+/* ── La portada en dos columnas ───────────────────────────────────────
+ *
+ * Solo en la portada (por eso la clase aparte: registro, recuperar y
+ * nueva clave siguen en una columna, que allí no hay panel que poner al
+ * lado). A la izquierda qué es esto, a la derecha entra aquí.
+ *
+ * Las dos columnas tienen tope de ancho a propósito: el panel de las
+ * preguntas va debajo del logo y del tamaño de siempre, no estirado de
+ * lado a lado. Las dos juntas ocupan unos 950 px y se centran.
+ */
+@media (min-width: 1040px) {
+  .auth-portada {
+    display: grid;
+    grid-template-columns: minmax(300px, 480px) minmax(330px, 420px);
+    /* Las dos filas vacías de arriba y abajo se comen el hueco sobrante
+       cuando la caja es más alta que el logo y el panel juntos. Sin
+       ellas, ese hueco se repartía entre el logo y el panel y los
+       separaba media pantalla. */
+    grid-template-areas:
+      "hueco-arriba caja"
+      "cabecera     caja"
+      "reclamo      caja"
+      "hueco-abajo  caja";
+    grid-template-rows: 1fr auto auto 1fr;
+    justify-content: center;
+    align-content: center;
+    column-gap: 48px;
+    row-gap: 14px;
+  }
+
+  /* El logo, centrado sobre el panel que tiene debajo. */
+  .auth-portada .auth-cabecera {
+    grid-area: cabecera;
+  }
+
+  .auth-portada .auth-reclamo {
+    grid-area: reclamo;
+    max-width: none;
+  }
+
+  .auth-portada .auth-box {
+    grid-area: caja;
+    align-self: center;
+    max-width: none;
+  }
+
+  /* Sin subtítulo debajo, el título necesita su propio aire. */
+  .auth-portada .auth-box h1 {
+    margin-bottom: 20px;
+  }
+}
+
 /* ── Recuperar la contraseña ─────────────────────────────────────────── */
 .auth-olvido {
   margin-top: -4px;
@@ -539,19 +591,22 @@
   .auth-box input { padding: 12px 15px; }
   .auth-box button[type="submit"] { margin-top: 8px; padding: 13px; }
 
+  .auth-box h1 { font-size: 22px; margin-bottom: 6px; }
+  .auth-portada .auth-box h1 { margin-bottom: 14px; }
   .auth-alta { margin-top: 12px; padding-top: 11px; gap: 7px; }
   .auth-box a.auth-secundario { padding: 11px; }
   .auth-olvido { margin-top: -7px; }
 }
 
-/* Y el último escalón, para ventanas de 600 px o menos: un portátil con
+/* Y el último escalón, para ventanas de 660 px o menos: un portátil con
    la barra de marcadores abierta, o media pantalla en vertical. */
-@media (max-height: 620px) {
+@media (max-height: 660px) {
   .auth-container { padding-top: 8px; padding-bottom: 8px; gap: 7px; }
   .logo-completo-icono { width: clamp(44px, 11vh, 54px); }
   .logo-completo-nombre { font-size: clamp(19px, 3.9vh, 22px); }
   .auth-reclamo { padding: 9px 16px; }
   .auth-reclamo-preguntas { font-size: 15.5px; margin-bottom: 6px; }
   .auth-box { padding: 14px 20px; }
+  .auth-box h1 { font-size: 20px; margin-bottom: 4px; }
   .auth-alta { margin-top: 10px; padding-top: 9px; }
 }

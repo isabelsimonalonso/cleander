@@ -42,7 +42,7 @@ export default function Login() {
   }
 
   return (
-    <div className="auth-container">
+    <div className="auth-container auth-portada">
       <SelectorIdioma flotante />
       <header className="auth-cabecera">
         <Logo variante="completo" />
@@ -63,6 +63,8 @@ export default function Login() {
       </section>
 
       <div className="auth-box">
+        <h1>{t('accede')}</h1>
+
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit}>
