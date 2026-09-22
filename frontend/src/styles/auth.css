@@ -61,6 +61,72 @@
 }
 
 /* ── Tarjeta ─────────────────────────────────────────────────────────── */
+/* ── La franja de la portada ───────────────────────────────────────────
+ *
+ * Quien llega por primera vez solo veía el logo y una caja pidiendo
+ * contraseña. Esto es lo que le cuenta de qué va, en tres líneas.
+ *
+ * No dice «entre particulares»: del lado servicio hay autónomos y
+ * profesionales, y prometer lo contrario sería falso. Lo que sí es
+ * cierto es que no hay comisiones ni intermediarios.
+ */
+.auth-reclamo {
+  width: 100%;
+  max-width: 440px;
+  padding: 22px 26px;
+  border-radius: 16px;
+  background: rgba(36, 164, 188, 0.06);
+  text-align: center;
+}
+
+.auth-reclamo-preguntas {
+  margin: 0 0 9px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: var(--turquesa);
+}
+
+.auth-reclamo-texto {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  font-weight: 300;
+  color: #6f6f6f;
+}
+
+.auth-reclamo-claves {
+  list-style: none;
+  margin: 15px 0 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 13px;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: #93b4bc;
+}
+
+/* El punto separador solo entre claves, y nunca al empezar una línea
+   nueva cuando la lista se parte en el móvil: por eso va dentro del li. */
+.auth-reclamo-claves li + li::before {
+  content: '·';
+  margin-right: 13px;
+  color: #c6dfe6;
+}
+
+@media (max-width: 420px) {
+  .auth-reclamo { padding: 18px 20px; }
+  .auth-reclamo-preguntas { font-size: 17px; }
+}
+
 .auth-box {
   width: 100%;
   max-width: 440px;

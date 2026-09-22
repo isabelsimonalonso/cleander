@@ -49,6 +49,19 @@ export default function Login() {
         <p>{t('lema')}</p>
       </header>
 
+      <section className="auth-reclamo">
+        <p className="auth-reclamo-preguntas">
+          <span>{t('reclamoNecesitas')}</span>
+          <span>{t('reclamoOfreces')}</span>
+        </p>
+        <p className="auth-reclamo-texto">{t('reclamoTexto')}</p>
+        <ul className="auth-reclamo-claves">
+          <li>{t('reclamoGratis')}</li>
+          <li>{t('reclamoSinComisiones')}</li>
+          <li>{t('reclamoSinIntermediarios')}</li>
+        </ul>
+      </section>
+
       <div className="auth-box">
         <h1>{t('bienvenido')}</h1>
         <h2>{t('entraParaSeguir')}</h2>

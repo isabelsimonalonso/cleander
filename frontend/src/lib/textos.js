@@ -31,6 +31,14 @@ export const TEXTOS = {
 
     // ── Entrar y registrarse ─────────────────────────────────────────
     lema: 'Match de servicios domésticos',
+    // La franja de la portada: es lo único que explica de qué va esto a
+    // quien llega por primera vez y todavía no tiene cuenta.
+    reclamoNecesitas: '¿Qué necesitas?',
+    reclamoOfreces: '¿Qué ofreces?',
+    reclamoTexto: 'Alguien lo busca, alguien lo hace. Cuando el interés es de los dos, se abren los teléfonos y seguís por WhatsApp.',
+    reclamoGratis: 'Gratis',
+    reclamoSinComisiones: 'Sin comisiones',
+    reclamoSinIntermediarios: 'Sin intermediarios',
     bienvenido: 'Bienvenido',
     entraParaSeguir: 'Inicia sesión para continuar',
     email: 'Email',
@@ -335,6 +343,12 @@ export const TEXTOS = {
     navSalir: 'Log out',
 
     lema: 'Home services matchmaking',
+    reclamoNecesitas: 'What do you need?',
+    reclamoOfreces: 'What do you offer?',
+    reclamoTexto: 'Someone is looking for it, someone does it. When both sides are interested, the phone numbers open up and you carry on over WhatsApp.',
+    reclamoGratis: 'Free',
+    reclamoSinComisiones: 'No commission',
+    reclamoSinIntermediarios: 'No middlemen',
     bienvenido: 'Welcome',
     entraParaSeguir: 'Log in to continue',
     email: 'Email',
