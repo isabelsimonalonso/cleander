@@ -665,12 +665,9 @@
   gap: 8px;
 }
 
-.tarjeta-telefono-propio .icono-whatsapp {
-  color: #25d366;
-}
-
+.tarjeta-telefono-propio .icono-whatsapp,
 .tarjeta-telefono-oculto .icono-whatsapp {
-  color: #9aa5a8;
+  color: #25d366;
 }
 
 .tarjeta-telefono-propio small {
