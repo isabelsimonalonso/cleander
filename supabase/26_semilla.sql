@@ -47,13 +47,27 @@
 --  (10_moderacion_fotos.sql:31).
 -- ═══════════════════════════════════════════════════════════════════════
 
-begin;
+-- ── Cómo ejecutarlo ────────────────────────────────────────────────────
+--
+--  De una vez, entero, en Supabase → SQL Editor.
+--
+--  No hay `begin`/`commit` ni tablas temporales a propósito: el editor de
+--  Supabase ejecuta cada instrucción en su propia transacción, así que una
+--  tabla temporal creada en una línea ya no existe en la siguiente. La
+--  lista de ciudades va repetida dentro de cada instrucción que la
+--  necesita, que es feo pero es lo que funciona ahí.
+--
+--  Se puede repetir las veces que haga falta: empieza borrando lo que
+--  hubiera creado antes.
+-- ───────────────────────────────────────────────────────────────────────
+
+delete from auth.users where email like '%@semilla.cleander.app';
 
 -- ↓↓↓ DÓNDE VIVEN. Escritos como el INE, que es como los compara el
 --     filtro: igualdad exacta, no «se parece» (22_unidad_precio.sql:55).
---     Si añades una, se reparte sola. ↓↓↓
-create temp table ciudades on commit drop as
-select * from (values
+--     Si añades una, se reparte sola. Ojo: la misma lista aparece otra
+--     vez en el UPDATE de abajo, y tienen que ir a la par. ↓↓↓
+with ciudades (k, provincia, municipio) as (values
   ( 0, 'Madrid',                  'Madrid'),
   ( 1, 'Barcelona',               'Barcelona'),
   ( 2, 'Valencia',                'Valencia'),
@@ -74,10 +88,10 @@ select * from (values
   (17, 'Santa Cruz de Tenerife',  'Santa Cruz de Tenerife'),
   (18, 'Cádiz',                   'Jerez de la Frontera'),
   (19, 'Navarra',                 'Pamplona/Iruña')
-) as t(k, provincia, municipio);
+),
 -- ↑↑↑ ------------------------------------------------------------- ↑↑↑
 
-with gente (n, rol, nombre, categoria, precio, resumen) as (values
+gente (n, rol, nombre, categoria, precio, resumen) as (values
 
   -- ── Limpieza y hogar ────────────────────────────────────────────────
   (  1, 'servicio', 'Marta R.',   'Limpieza',                              14, 'Limpieza de pisos y comunidades. Productos incluidos. Disponible mañanas de lunes a viernes.'),
@@ -266,6 +280,28 @@ join ciudades c on c.k = (g.n - 1) % (select count(*) from ciudades);
 -- campos que existían entonces: no sabe de `provincia` ni de
 -- `unidad_precio`, que llegaron en migraciones posteriores. Se completan
 -- aquí, junto con la moderación, que estas tarjetas no tienen que pasar.
+with ciudades (provincia, municipio) as (values
+  ('Madrid',                  'Madrid'),
+  ('Barcelona',               'Barcelona'),
+  ('Valencia',                'Valencia'),
+  ('Sevilla',                 'Sevilla'),
+  ('Zaragoza',                'Zaragoza'),
+  ('Málaga',                  'Málaga'),
+  ('Murcia',                  'Murcia'),
+  ('Illes Balears',           'Palma de Mallorca'),
+  ('Las Palmas',              'Las Palmas de Gran Canaria'),
+  ('Bizkaia',                 'Bilbao'),
+  ('Alicante',                'Alicante/Alacant'),
+  ('Córdoba',                 'Córdoba'),
+  ('Valladolid',              'Valladolid'),
+  ('Pontevedra',              'Vigo'),
+  ('Asturias',                'Gijón'),
+  ('A Coruña',                'A Coruña'),
+  ('Granada',                 'Granada'),
+  ('Santa Cruz de Tenerife',  'Santa Cruz de Tenerife'),
+  ('Cádiz',                   'Jerez de la Frontera'),
+  ('Navarra',                 'Pamplona/Iruña')
+)
 update public.perfiles p
    set resumen_estado = 'aprobado',
        foto_estado    = 'aprobada',        -- no hay foto que moderar
@@ -276,12 +312,10 @@ update public.perfiles p
        -- La misma fecha que la cuenta, repartida hacia atrás, para que en
        -- el panel no aparezcan las 106 apiladas en el mismo minuto.
        creado_en      = u.created_at
-  from auth.users u
-  join ciudades c on c.municipio = p.ciudad
+  from auth.users u, ciudades c
  where u.id = p.id
+   and c.municipio = p.ciudad
    and u.email like '%@semilla.cleander.app';
-
-commit;
 
 
 -- ═══════════════════════════════════════════════════════════════════════
