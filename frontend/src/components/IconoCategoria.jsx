@@ -307,10 +307,10 @@ const FIGURAS = {
   ),
   coche: (
     <g {...T}>
-      <path d="M4 16v-3l2.2-4.4A2 2 0 0 1 8 7.5h8a2 2 0 0 1 1.8 1.1L20 13v3z" />
-      <line x1="4" y1="13" x2="20" y2="13" />
-      <circle cx="8" cy="17.5" r="1.6" />
-      <circle cx="16" cy="17.5" r="1.6" />
+      <path d="M2.5 16.3v-2.9a2 2 0 0 1 1.5-1.9l1.7-.45 1.9-3.05A2 2 0 0 1 9.3 7h5.4a2 2 0 0 1 1.7.95l1.9 3.05 1.7.45a2 2 0 0 1 1.5 1.9v2.9z" />
+      <line x1="5.7" y1="11.05" x2="18.3" y2="11.05" />
+      <circle cx="7" cy="17.2" r="1.8" />
+      <circle cx="17" cy="17.2" r="1.8" />
     </g>
   ),
   rueda: (
@@ -337,11 +337,12 @@ const FIGURAS = {
       <line x1="17.5" y1="18.5" x2="18.5" y2="20.5" />
     </g>
   ),
-  correa: (
+  perro: (
     <g {...T}>
-      <circle cx="5" cy="4.2" r="1.7" />
-      <path d="M5 6c0 4 2.5 5.5 5 7s3.2 3.2 3.2 5.2" />
-      <circle cx="16" cy="17.5" r="3.4" />
+      <path d="M2.5 16.5v-4.2a2.8 2.8 0 0 1 2.8-2.8h6.4l2.1-2.6a1 1 0 0 1 1.8.6v2h1.6a2.8 2.8 0 0 1 2.8 2.8v4.2" />
+      <path d="M5 16.5v3.6M9.2 16.5v3.6M15.4 16.5v3.6M19.8 16.5v3.6" />
+      <path d="M2.5 12.6c-1-.7-1.4-2-1-3.2" />
+      <circle cx="16.4" cy="9.6" r="0.6" fill="currentColor" stroke="none" />
     </g>
   ),
   hueso: (
@@ -421,9 +422,17 @@ const FIGURAS = {
   ),
   cera: (
     <g {...T}>
-      <path d="M5 11.5h10.5v6A3.5 3.5 0 0 1 12 21H8.5A3.5 3.5 0 0 1 5 17.5z" />
-      <path d="M8 8.8c0-1.2 1-1.2 1-2.4M12.5 8.8c0-1.2 1-1.2 1-2.4" />
-      <path d="M18.2 21 20.5 6.5l-2-.4L17 21z" />
+      <path d="M4 11.5h11l-1.2 7.6a2 2 0 0 1-2 1.7H7.2a2 2 0 0 1-2-1.7z" />
+      <line x1="3" y1="11.5" x2="16" y2="11.5" />
+      <path d="M7.4 8.9c0-1.3 1.1-1.3 1.1-2.6M11 8.9c0-1.3 1.1-1.3 1.1-2.6" />
+      <path d="M17.6 20.8 20.8 5.6l1.7.4-2.1 15z" />
+    </g>
+  ),
+  maquinilla: (
+    <g {...T}>
+      <path d="M7.5 10.5h9v8.8a1.7 1.7 0 0 1-1.7 1.7H9.2a1.7 1.7 0 0 1-1.7-1.7z" />
+      <path d="M6.2 10.5h11.6V7.8H6.2z" />
+      <path d="M7.8 7.8V5.2M10.4 7.8V5.2M13.6 7.8V5.2M16.2 7.8V5.2" />
     </g>
   ),
   camilla: (
@@ -545,7 +554,7 @@ const POR_CATEGORIA = {
   'Cuidado de mascotas': 'huella',
   'Peluquería canina a domicilio': 'tijeras',
   'Baño y aseo de mascotas': 'banera',
-  'Paseo de perros': 'correa',
+  'Paseo de perros': 'perro',
   'Adiestramiento canino': 'hueso',
   'Alojamiento de mascotas': 'caseta',
 
@@ -555,7 +564,7 @@ const POR_CATEGORIA = {
   'Clases particulares': 'libro',
 
   'Peluquería y estética a domicilio': 'tijeras',
-  'Barbería a domicilio': 'tijeras',
+  'Barbería a domicilio': 'maquinilla',
   'Maquillaje y peinado para eventos': 'pintalabios',
   'Manicura y pedicura': 'esmalte',
   'Uñas esculpidas y esmaltado semipermanente': 'esmalte',
