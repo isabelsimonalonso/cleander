@@ -16,6 +16,18 @@ import '../styles/admin.css'
 // que entrar en Supabase y hacerlo por SQL, a propósito.
 const ROLES_ASIGNABLES = ['cliente', 'servicio']
 
+/**
+ * Las cuentas que creamos nosotros para que la web no saliera vacía.
+ * Los dos scripts que las crean usan estos dominios, y son los mismos por
+ * los que se borran, así que con mirar el correo basta.
+ */
+const DOMINIOS_DE_MUESTRA = ['@semilla.cleander.app', '@demo.cleander.app']
+
+function esDeMuestra(u) {
+  const correo = (u.email || '').toLowerCase()
+  return DOMINIOS_DE_MUESTRA.some((d) => correo.endsWith(d))
+}
+
 /** Los estados llegan en español desde la base de datos. */
 const CLAVE_ESTADO = {
   pendiente: 'estadoPendiente',
@@ -39,6 +51,7 @@ export default function Admin() {
   const [busqueda, setBusqueda] = useState('')
   const [filtroRol, setFiltroRol] = useState('')
   const [soloPendientes, setSoloPendientes] = useState(false)
+  const [ocultarMuestra, setOcultarMuestra] = useState(false)
   const [denuncias, setDenuncias] = useState([])
   const [vista, setVista] = useState('usuarios')   // usuarios | denuncias
   const [pagina, setPagina] = useState(0)
@@ -109,6 +122,15 @@ export default function Admin() {
     cargar()
   }
 
+  // Las cuentas inventadas de 26_semilla.sql y 27_usuario_demo.sql. Se
+  // reconocen por el dominio del correo, que es también por donde las
+  // borra su propio script. Mientras estén, el panel las lista como a
+  // cualquiera; esta casilla las aparta para ver solo gente de verdad.
+  const deMuestra = useMemo(
+    () => usuarios.filter((u) => u.id !== usuario.id && esDeMuestra(u)).length,
+    [usuarios, usuario.id]
+  )
+
   // Cuántos textos esperan revisión, contando solo las filas que se listan.
   // Va en la etiqueta de la casilla para que se vea qué hará al marcarla.
   const fotosPendientes = useMemo(
@@ -131,6 +153,7 @@ export default function Admin() {
       // Tu propia fila no pinta nada aquí: no puedes moderarte ni borrarte.
       if (u.id === usuario.id) return false
       if (filtroRol && u.rol !== filtroRol) return false
+      if (ocultarMuestra && esDeMuestra(u)) return false
       if (soloPendientes) {
         const textoPend = u.resumen && u.resumen_estado === 'pendiente'
         const fotoPend = u.foto_url && u.foto_estado === 'pendiente'
@@ -141,7 +164,14 @@ export default function Admin() {
         .filter(Boolean)
         .some((campo) => campo.toLowerCase().includes(texto))
     })
-  }, [usuarios, busqueda, filtroRol, soloPendientes, usuario.id])
+  }, [usuarios, busqueda, filtroRol, soloPendientes, ocultarMuestra, usuario.id])
+
+  // `admin_estadisticas()` cuenta en la base de datos y no sabe de cuentas
+  // de muestra. Con la casilla marcada, estos dos se recuentan aquí.
+  const reales = useMemo(() => ({
+    cliente:  usuarios.filter((u) => u.rol === 'cliente'  && !esDeMuestra(u)).length,
+    servicio: usuarios.filter((u) => u.rol === 'servicio' && !esDeMuestra(u)).length,
+  }), [usuarios])
 
   const nombrePorId = useMemo(
     () => Object.fromEntries(usuarios.map((u) => [u.id, u.nombre])),
@@ -168,8 +198,8 @@ export default function Admin() {
         {error && <div className="aviso aviso--error">{error}</div>}
 
         <div className="stats">
-          <Stat etiqueta={t('statClientes')} valor={stats.clientes} />
-          <Stat etiqueta={t('statServicios')} valor={stats.servicios} />
+          <Stat etiqueta={t('statClientes')} valor={ocultarMuestra ? reales.cliente : stats.clientes} />
+          <Stat etiqueta={t('statServicios')} valor={ocultarMuestra ? reales.servicio : stats.servicios} />
           <Stat etiqueta={t('statMatches')} valor={stats.matches} />
           <Stat etiqueta={t('statLikes')} valor={stats.likes} />
           <Stat etiqueta={t('statBloqueados')} valor={stats.bloqueados} />
@@ -270,6 +300,16 @@ export default function Admin() {
             />
             {t('soloPendientes')}
             <span className="contador-filtro">{pendientes + fotosPendientes}</span>
+          </label>
+          <label className={`campo-interruptor ${deMuestra === 0 ? 'campo-interruptor--vacio' : ''}`}>
+            <input
+              type="checkbox"
+              checked={ocultarMuestra}
+              disabled={deMuestra === 0}
+              onChange={(e) => setOcultarMuestra(e.target.checked)}
+            />
+            {t('ocultarMuestra')}
+            <span className="contador-filtro">{deMuestra}</span>
           </label>
           <button onClick={cargar}>{t('recargar')}</button>
         </div>
