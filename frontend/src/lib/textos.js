@@ -36,7 +36,7 @@ export const TEXTOS = {
     reclamoNecesitas: '¿Qué necesitas?',
     reclamoOfreces: '¿Qué ofreces?',
     reclamoQueEs: 'Alguien lo busca, alguien lo hace.',
-    reclamoComoVa: 'Cuando el interés es de los dos, se abren los teléfonos y seguís por WhatsApp.',
+    reclamoComoVa: 'Cuando el interés es mutuo, se abren los teléfonos y seguís por WhatsApp.',
     reclamoGratis: 'Gratis',
     reclamoSinComisiones: 'Sin comisiones',
     reclamoSinIntermediarios: 'Sin intermediarios',
