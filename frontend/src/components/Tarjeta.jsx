@@ -94,9 +94,9 @@ export default function Tarjeta({ perfil, telefono = null, propio = false, child
             </a>
           ) : (
             <span className="tarjeta-telefono-oculto" aria-label={t('visibleAlMatch')}>
-              <span className="tarjeta-telefono-linea pixelado">
+              <span className="tarjeta-telefono-linea">
                 <IconoWhatsApp size={17} />
-                +34 600 000 000
+                <span className="pixelado">+34 600 000 000</span>
               </span>
               <small>{t('visibleAlMatch')}</small>
             </span>
