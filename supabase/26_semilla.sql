@@ -274,7 +274,7 @@ select
 -- rotar sobre las ciudades deja en cada una oficios distintos y de los
 -- dos lados, en vez de veinte fontaneros en Bilbao.
 from gente g
-join ciudades c on c.k = (g.n - 1) % (select count(*) from ciudades);
+join ciudades c on c.k = (g.n - 1) % (select count(*)::int from ciudades);
 
 -- `trg_nuevo_usuario` sigue siendo el de 01_esquema.sql y solo rellena los
 -- campos que existían entonces: no sabe de `provincia` ni de
