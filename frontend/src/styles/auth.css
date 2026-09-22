@@ -373,16 +373,21 @@
 @media (min-width: 1060px) {
   .auth-portada {
     display: grid;
-    grid-template-columns: minmax(340px, 560px) minmax(380px, 440px);
+    /* La columna de la izquierda se estira con la pantalla; la caja de
+       entrar se queda en 460 como mucho, que unos campos de 700 px de
+       ancho no los quiere nadie. Así no sobra medio monitor a los lados. */
+    grid-template-columns: minmax(320px, 1fr) minmax(340px, 460px);
     grid-template-areas:
       "cabecera caja"
       "reclamo  caja";
     grid-template-rows: auto auto;
-    justify-content: center;
     align-content: center;
-    column-gap: 52px;
+    column-gap: clamp(32px, 4vw, 64px);
     row-gap: 16px;
-    padding: 24px 28px;
+    width: 100%;
+    max-width: 1340px;
+    margin: 0 auto;
+    padding: 24px clamp(20px, 2.8vw, 44px);
   }
 
   /* El logo va centrado sobre el panel que tiene debajo, no pegado al
@@ -406,7 +411,7 @@
   .auth-portada .auth-reclamo {
     grid-area: reclamo;
     max-width: none;
-    padding: 21px 26px;
+    padding: clamp(21px, 2.2vw, 32px) clamp(26px, 2.6vw, 38px);
     text-align: left;
   }
 
@@ -417,14 +422,13 @@
     align-items: flex-start;
     gap: 1px;
     margin-bottom: 11px;
-    font-size: 25px;
+    font-size: clamp(25px, 2.4vw, 33px);
     letter-spacing: -0.8px;
     line-height: 1.15;
   }
 
   .auth-portada .auth-reclamo-texto {
-    font-size: 14.5px;
-    max-width: 38ch;
+    font-size: clamp(14.5px, 1.15vw, 16.5px);
   }
 
   .auth-portada .auth-reclamo-claves {
