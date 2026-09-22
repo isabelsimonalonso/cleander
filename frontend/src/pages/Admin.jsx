@@ -18,14 +18,18 @@ const ROLES_ASIGNABLES = ['cliente', 'servicio']
 
 /**
  * Las cuentas que creamos nosotros para que la web no saliera vacía.
- * Los dos scripts que las crean usan estos dominios, y son los mismos por
- * los que se borran, así que con mirar el correo basta.
+ *
+ * Las 106 de la semilla se reconocen por su dominio. Las dos de prueba no
+ * pueden: viven en @cleander.app para poder entrar escribiendo solo
+ * «democliente», y ahí vive también la cuenta de administración. Por eso
+ * van escritas enteras, igual que en 27_usuario_demo.sql.
  */
-const DOMINIOS_DE_MUESTRA = ['@semilla.cleander.app', '@demo.cleander.app']
+const DOMINIO_DE_MUESTRA = '@semilla.cleander.app'
+const CORREOS_DE_PRUEBA = ['democliente@cleander.app', 'demoservicio@cleander.app']
 
 function esDeMuestra(u) {
   const correo = (u.email || '').toLowerCase()
-  return DOMINIOS_DE_MUESTRA.some((d) => correo.endsWith(d))
+  return correo.endsWith(DOMINIO_DE_MUESTRA) || CORREOS_DE_PRUEBA.includes(correo)
 }
 
 /** Los estados llegan en español desde la base de datos. */
