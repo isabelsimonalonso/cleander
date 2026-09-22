@@ -2,7 +2,7 @@
 --  28_valoraciones_muestra.sql — estrellas para los perfiles de muestra
 -- ═══════════════════════════════════════════════════════════════════════
 --
---  Pone valoraciones de 4 y 5 estrellas a los 106 perfiles de la semilla,
+--  Pone valoraciones de 4 y 5 estrellas a los 312 perfiles de la semilla,
 --  repartidas de forma que no canten:
 --
 --   · Uno de cada cinco se queda SIN NINGUNA. Un mercado donde todo el
@@ -50,13 +50,21 @@ delete from public.valoraciones v
 -- ── 2 · Las estrellas ──────────────────────────────────────────────────
 
 with muestra as (
-  -- Los 106, numerados del 1 al 53 dentro de cada rol.
+  -- Los 312, numerados del 1 al 156 dentro de cada rol.
   select p.id,
          p.rol,
          row_number() over (partition by p.rol order by u.email) as n
     from public.perfiles p
     join auth.users u on u.id = p.id
    where u.email like '%@semilla.cleander.app'
+),
+
+cuantos as (
+  -- Cuántos hay de cada rol. Sale de la propia tabla en vez de escribirlo,
+  -- para que esto siga valiendo si la semilla cambia de tamaño.
+  select count(*)::int as por_rol
+    from muestra
+   where rol = 'servicio'
 ),
 
 cuantas as (
@@ -83,13 +91,14 @@ cuantas as (
 
 insert into public.valoraciones (autor, destinatario, estrellas, creado_en)
 select
-  -- Quien vota: alguien del rol contrario. El salto de 7 en 7 sobre 53,
-  -- que es primo, garantiza que a un mismo destinatario no le vote dos
-  -- veces la misma persona; si no, saltaría el unique (autor, destinatario).
+  -- Quien vota: alguien del rol contrario. El salto va de 7 en 7 sobre el
+  -- total de cada rol; como 7 no comparte divisores con 156, a un mismo
+  -- destinatario no le vota dos veces la misma persona. Si no, saltaría el
+  -- unique (autor, destinatario).
   (select a.id
      from muestra a
     where a.rol <> c.rol
-      and a.n = ((c.n + v.i * 7) % 53) + 1),
+      and a.n = ((c.n + v.i * 7) % (select por_rol from cuantos)) + 1),
   c.destinatario,
 
   -- Cada persona tiene su propio porcentaje de cuatros, de 0 a 89, y cada
@@ -127,7 +136,7 @@ where c.total > 0;
 --  group by round(t.valoracion_media, 1)
 --  order by media;
 --
--- Tiene que salir una escalera: unas cuantas con media 0 (las que no han
+-- Tiene que salir una escalera: unas sesenta con media 0 (las que no han
 -- recibido ninguna) y el resto repartidas entre 4,0 y 5,0.
 
 
