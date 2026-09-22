@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { encogerFoto } from './imagen'
+import { TAM_MAX_ALMACEN } from './constantes'
 
 const url = import.meta.env.VITE_SUPABASE_URL
 const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -34,6 +35,11 @@ export const supabase = createClient(
  */
 export async function subirFoto(file, usuarioId) {
   const foto = await encogerFoto(file)
+
+  // Si sigue pasada de peso es que el navegador no supo abrirla y se ha
+  // devuelto la original. Avisamos aquí, que el almacén la rechazaría con
+  // un error en inglés y sin explicar nada.
+  if (foto.size > TAM_MAX_ALMACEN) throw new Error('foto-sin-encoger')
 
   const extension = (foto.name.split('.').pop() || 'jpg').toLowerCase()
   const ruta = `${usuarioId}/perfil-${Date.now()}.${extension}`

@@ -281,7 +281,19 @@ export const traducirDato = (texto, idioma) =>
   idioma === 'en' ? (SERVICIOS_EN[texto] ?? MOTIVOS_EN[texto] ?? texto) : texto
 
 export const LIMITE_RESUMEN = 150
-export const TAM_MAX_FOTO = 5 * 1024 * 1024 // 5 MB
+/**
+ * Lo que aceptamos al elegir la foto. Es grande a propósito: el navegador
+ * la encoge a unos 150 KB antes de subirla (`lib/imagen.js`), así que no
+ * tiene sentido rechazar la foto de una cámara buena.
+ */
+export const TAM_MAX_FOTO = 25 * 1024 * 1024 // 25 MB
+
+/**
+ * Lo que aguanta el almacén de Supabase (24_almacen_fotos.sql:38). Solo
+ * importa cuando el encogido no ha podido hacerse —un HEIC de iPhone en un
+ * navegador que no sea Safari— y se sube el original.
+ */
+export const TAM_MAX_ALMACEN = 5 * 1024 * 1024 // 5 MB
 
 /**
  * Reglas de contraseña. Tienen que ser LAS MISMAS que en Supabase

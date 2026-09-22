@@ -9,6 +9,9 @@
  * mensaje original: si es un fallo nuestro, no es asunto de quien lo sufre.
  */
 const PATRONES = [
+  // Este no viene de Supabase: lo lanzamos nosotros al subir una foto que
+  // el navegador no ha sabido encoger y que el almacén va a rechazar.
+  [/foto-sin-encoger/,                  'errFotoNoEncoge'],
   [/invalid login credentials/i,        'credencialesMal'],
   [/email not confirmed/i,              'errSinConfirmar'],
   [/already registered|already exists/i,'errCorreoUsado'],
