@@ -46,7 +46,6 @@ export default function Login() {
       <SelectorIdioma flotante />
       <header className="auth-cabecera">
         <Logo variante="completo" />
-        <p>{t('lema')}</p>
       </header>
 
       <section className="auth-reclamo">
@@ -64,9 +63,6 @@ export default function Login() {
       </section>
 
       <div className="auth-box">
-        <h1>{t('bienvenido')}</h1>
-        <h2>{t('entraParaSeguir')}</h2>
-
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit}>
@@ -93,7 +89,10 @@ export default function Login() {
           <Link to="/recuperar">{t('olvidoContrasena')}</Link>
         </p>
 
-        <p>{t('sinCuenta')} <Link to="/registro">{t('registrate')}</Link></p>
+        <div className="auth-alta">
+          <span>{t('sinCuenta')}</span>
+          <Link className="auth-secundario" to="/registro">{t('registrate')}</Link>
+        </div>
       </div>
     </div>
   )
