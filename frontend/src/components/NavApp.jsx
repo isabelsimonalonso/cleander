@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import Logo from './Logo'
 import SelectorIdioma from './SelectorIdioma'
 import { useIdioma } from '../lib/i18n'
+import IconoApagar from './IconoApagar'
 
 export default function NavApp() {
   const { rol, logout, matchesNuevos, valoracionesPendientes, denunciasResueltas } = useAuth()
@@ -61,7 +62,9 @@ export default function NavApp() {
       </div>
 
       <SelectorIdioma />
-      <button className="nav-salir" onClick={salir}>{t('navSalir')}</button>
+      <button className="nav-salir" onClick={salir} title={t('navSalir')}>
+        <IconoApagar />
+      </button>
     </nav>
   )
 }

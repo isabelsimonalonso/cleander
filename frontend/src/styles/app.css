@@ -80,12 +80,18 @@
 .nav-salir {
   background: transparent;
   color: #999;
-  font-size: 14px;
-  padding: 8px 12px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  line-height: 0;
 }
 
-.nav-salir:hover {
+.nav-salir:hover,
+.nav-salir:focus-visible {
   color: #c33;
+  background: #fdeced;
 }
 
 /* ── Estructura de página ────────────────────────────────────────────── */
