@@ -337,14 +337,6 @@ const FIGURAS = {
       <line x1="17.5" y1="18.5" x2="18.5" y2="20.5" />
     </g>
   ),
-  perro: (
-    <g {...T}>
-      <path d="M2.5 16.5v-4.2a2.8 2.8 0 0 1 2.8-2.8h6.4l2.1-2.6a1 1 0 0 1 1.8.6v2h1.6a2.8 2.8 0 0 1 2.8 2.8v4.2" />
-      <path d="M5 16.5v3.6M9.2 16.5v3.6M15.4 16.5v3.6M19.8 16.5v3.6" />
-      <path d="M2.5 12.6c-1-.7-1.4-2-1-3.2" />
-      <circle cx="16.4" cy="9.6" r="0.6" fill="currentColor" stroke="none" />
-    </g>
-  ),
   hueso: (
     <g {...T}>
       <path d="M7.8 8.2a2.3 2.3 0 1 0-2.1 3.4l6.6 6.6a2.3 2.3 0 1 0 3.4 2.1 2.3 2.3 0 1 0 2.1-3.4L11.2 6.1a2.3 2.3 0 1 0-3.4 2.1z" />
@@ -554,7 +546,10 @@ const POR_CATEGORIA = {
   'Cuidado de mascotas': 'huella',
   'Peluquería canina a domicilio': 'tijeras',
   'Baño y aseo de mascotas': 'banera',
-  'Paseo de perros': 'perro',
+  // Comparte la huella con «Cuidado de mascotas»: en el mazo las tarjetas
+  // salen de una en una y nunca se ven juntas, y el perro dibujado no
+  // acababa de leerse.
+  'Paseo de perros': 'huella',
   'Adiestramiento canino': 'hueso',
   'Alojamiento de mascotas': 'caseta',
 
