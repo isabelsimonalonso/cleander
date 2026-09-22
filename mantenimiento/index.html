@@ -3,14 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CleanDerApp · En construcción</title>
-  <meta name="description" content="CleanDerApp · Match de servicios domésticos. En construcción." />
+  <title>CleanDerApp · Volvemos enseguida</title>
+  <meta name="description" content="CleanDerApp está en mantenimiento. Volvemos enseguida." />
   <meta name="theme-color" content="#24a4bc" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 
-  <!-- Mientras la web no esté abierta, que no salga en las búsquedas. -->
-  <meta name="robots" content="noindex, nofollow" />
+  <!-- A propósito SIN `noindex`, al revés que el viejo cartel de obras.
+       Aquel tenía que quedarse fuera de Google porque la web aún no
+       existía. Este se pone unas horas sobre una web que Google ya conoce,
+       y un `noindex` en ese momento puede hacer que la deje de listar. Es
+       peor desaparecer de las búsquedas que enseñar este cartel un rato. -->
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -67,6 +70,8 @@
     }
 
     /* ── El mensaje ──────────────────────────────────────────────────── */
+    .aviso { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+
     h1 {
       max-width: 430px;
       font-size: clamp(20px, 5vw, 24px);
@@ -74,6 +79,22 @@
       color: #2c2c2c;
       letter-spacing: -0.3px;
     }
+
+    .aviso p {
+      max-width: 400px;
+      font-size: clamp(14px, 3.6vw, 15.5px);
+      font-weight: 300;
+      color: #7d7d7d;
+      line-height: 1.6;
+    }
+
+    .aviso a {
+      color: var(--turquesa);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(36, 164, 188, 0.35);
+    }
+
+    .aviso a:hover { border-bottom-color: var(--turquesa); }
 
     .copyright {
       font-size: 11px;
@@ -91,7 +112,17 @@
     <span class="marca-lema">Match de servicios domésticos</span>
   </div>
 
-  <h1>Estamos terminándola</h1>
+  <div class="aviso">
+    <h1>Volvemos enseguida</h1>
+    <p>
+      Estamos haciendo unas tareas de mantenimiento. Disculpa las molestias:
+      en un rato todo vuelve a funcionar con normalidad.
+    </p>
+    <p>
+      Si necesitas algo, escríbenos a
+      <a href="mailto:info@cleanderapp.com">info@cleanderapp.com</a>.
+    </p>
+  </div>
 
   <p class="copyright">© <span id="anyo">2026</span> CleanDerApp. Todos los derechos reservados.</p>
 

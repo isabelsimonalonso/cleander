@@ -1,12 +1,12 @@
 # Publica la aplicación completa en GitHub Pages.
 #
-# ⚠️ PUBLICACIÓN AUTOMÁTICA DESACTIVADA mientras el proyecto está en pruebas.
+# ⚠️ PUBLICACIÓN AUTOMÁTICA DESACTIVADA a propósito.
 #    Solo se lanza a mano desde la pestaña Actions de GitHub («Run workflow»),
 #    así que hacer push NO republica nada.
 #
-#    OJO: lanzar esto SUSTITUYE la página de «en construcción» por la
-#    aplicación de verdad, abierta a cualquiera. Es el botón de abrir.
-#    Para volver atrás, lanza «Publicar · página en construcción».
+#    Es el botón de abrir, y también el de volver: lánzalo para publicar la
+#    web y lánzalo otra vez para recuperarla después de un mantenimiento.
+#    Para cerrarla un rato, usa «Publicar · página de mantenimiento».
 #
 #    Para publicar en cada push, descomenta las tres líneas de `push:`.
 #
