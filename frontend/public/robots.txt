@@ -1,0 +1,15 @@
+# CleanDerApp — https://cleanderapp.com
+#
+# No hay nada que prohibir aquí. Lo que es privado (perfiles, teléfonos,
+# matches) no está en ninguna dirección que un buscador pueda pedir: vive
+# detrás de la sesión y de RLS. Este archivo no protege nada, solo indica
+# dónde está el mapa del sitio.
+#
+# Ojo: la web usa rutas con # (HashRouter), así que para un buscador la
+# única dirección que existe es la portada. Lo que va detrás del # nunca
+# llega al servidor.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://cleanderapp.com/sitemap.xml
