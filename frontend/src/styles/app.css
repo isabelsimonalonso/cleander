@@ -644,9 +644,27 @@
 }
 
 @media (max-width: 520px) {
-  .nav-marca span { display: none; }
-  .nav-enlaces a { padding: 8px 10px; font-size: 14px; }
   .app-main { padding: 16px 12px 40px; }
+
+  /* Los cuatro enlaces no caben al lado de la marca, así que bajan a su
+     propia línea en vez de apilarse de uno en uno. Al liberarse el sitio,
+     el nombre vuelve a caber junto al logo. */
+  .nav-app { flex-wrap: wrap; gap: 10px 12px; padding-bottom: 10px; }
+  .nav-marca { margin-right: auto; }
+  .nav-enlaces {
+    order: 3;
+    width: 100%;
+    margin-left: 0;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+  .nav-enlaces a { padding: 8px 9px; font-size: 14px; white-space: nowrap; }
+}
+
+/* Pantallas muy estrechas (iPhone SE y parecidos): los cuatro enlaces
+   siguen en una línea, pero apretados. Medido, no supuesto. */
+@media (max-width: 380px) {
+  .nav-enlaces a { padding: 7px 5px; font-size: 13px; }
 }
 
 /* Tu propio teléfono en «Mi perfil»: se ve entero, sin enlace a WhatsApp */
