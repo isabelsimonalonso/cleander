@@ -249,11 +249,17 @@ export const DOMINIO_INTERNO = '@cleander.app'
 /**
  * Redes sociales del pie.
  *
- * Una dirección vacía oculta ese icono.
+ * Quitar la línea quita el icono. Dejarla con la dirección vacía es otra
+ * cosa: el icono sigue saliendo, apagado, como un «pendiente».
+ *
+ * Instagram y TikTok están fuera por decisión suya mientras la web no está
+ * anunciada: un icono que lleva a una cuenta sin nada promete algo que aún
+ * no hay. Vuelven descomentando sus dos líneas, y los dibujos siguen
+ * esperando en `Footer.jsx`.
  */
 export const REDES = [
-  { id: 'instagram', nombre: 'Instagram', url: 'https://www.instagram.com/_cleanderapp_/' },
-  { id: 'tiktok', nombre: 'TikTok', url: 'https://www.tiktok.com/@cleanderapp' },
+  // { id: 'instagram', nombre: 'Instagram', url: 'https://www.instagram.com/_cleanderapp_/' },
+  // { id: 'tiktok', nombre: 'TikTok', url: 'https://www.tiktok.com/@cleanderapp' },
   { id: 'correo', nombre: CONTACTO, url: `mailto:${CONTACTO}` },
 ]
 
