@@ -30,8 +30,10 @@ No hay pagos ni chat integrados.
 cleanderapp/
 ├── .github/workflows/deploy.yml   # build + publicación automática en Pages
 ├── supabase/
-│   ├── 01_esquema.sql             # tablas, RLS, triggers, funciones, storage
-│   └── 02_admin.sql               # convierte una cuenta en administradora
+│   ├── README.md                  # EL ORDEN en que se ejecutan. Empezar aquí.
+│   ├── 01_esquema.sql             # las 4 tablas, RLS, triggers, storage
+│   ├── 02_admin.sql               # convierte una cuenta en administradora
+│   └── 04 … 25                    # denuncias, auditoría, moderación, bloqueo…
 └── frontend/
     ├── public/                    # favicon y logo
     └── src/
@@ -137,10 +139,12 @@ cd frontend
 cp .env.example .env     # y rellenar VITE_SUPABASE_ANON_KEY
 npm install
 npm run dev              # http://localhost:3000
+npm test                 # las pruebas; también las pasa el despliegue
 ```
 
-En Supabase hay que ejecutar `supabase/01_esquema.sql` una vez, y activar
-*Authentication → Providers → Email* con la confirmación por correo desactivada.
+En Supabase hay que ejecutar los SQL **en el orden que indica
+`supabase/README.md`** (el `01` solo crea cuatro de las seis tablas), y activar
+*Authentication → Providers → Email*.
 
 Ver `README.md` para los pasos completos de despliegue.
 

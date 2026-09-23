@@ -30,8 +30,14 @@ Entra en tu proyecto: `https://supabase.com/dashboard/project/ldsaeokmzadlsqzqan
 *SQL Editor → New query* → pega entero el archivo
 [`supabase/01_esquema.sql`](supabase/01_esquema.sql) → **Run**.
 
-Crea las tablas, la seguridad por filas (RLS), los triggers del match y el
-almacén de fotos. Puedes ejecutarlo varias veces sin romper nada.
+Crea las cuatro tablas originales, la seguridad por filas (RLS), los triggers
+del match y el almacén de fotos. Puedes ejecutarlo varias veces sin romper nada.
+
+> ⚠ **Con esto solo tienes media base de datos.** Las denuncias, la auditoría,
+> la moderación de fotos y el bloqueo viven en los archivos siguientes, y hay
+> que ejecutarlos en orden. La lista completa está en
+> [`supabase/README.md`](supabase/README.md). Si te quedas aquí, la web arranca
+> pero se rompe al entrar en el panel o al denunciar a alguien.
 
 **1.3 · Copiar la clave pública**
 
