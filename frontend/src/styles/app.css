@@ -655,8 +655,8 @@
     order: 3;
     width: 100%;
     margin-left: 0;
-    flex-wrap: nowrap;
-    justify-content: space-between;
+    justify-content: center;
+    row-gap: 4px;
   }
   .nav-enlaces a { padding: 8px 9px; font-size: 14px; white-space: nowrap; }
 }
