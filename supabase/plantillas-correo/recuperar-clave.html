@@ -1,0 +1,72 @@
+<!--
+  Asunto: Cambia tu contraseña de CleanDerApp
+  Se pega en: Supabase → Authentication → Emails → Templates → Reset Password
+-->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;margin:0;padding:0;">
+  <tr>
+    <td align="center" style="padding:40px 20px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:480px;">
+
+        <tr>
+          <td align="center" style="padding-bottom:14px;">
+            <img src="https://cleanderapp.com/isotipo.png" width="60" height="60" alt="" style="display:block;border:0;">
+          </td>
+        </tr>
+        <tr>
+          <td align="center" style="padding-bottom:6px;font-size:22px;font-weight:400;color:#24a4bc;letter-spacing:0.5px;">
+            CleanDerApp
+          </td>
+        </tr>
+        <tr>
+          <td align="center" style="padding-bottom:34px;font-size:10px;font-weight:400;color:#adadad;letter-spacing:2px;text-transform:uppercase;">
+            Match de servicios domésticos
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding-bottom:16px;font-size:20px;font-weight:400;color:#2c2c2c;line-height:1.4;">
+            Vuelve a entrar
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-bottom:28px;font-size:15px;font-weight:400;color:#2c2c2c;line-height:1.7;">
+            Has pedido cambiar la contraseña de tu cuenta. Pulsa el botón y
+            elige una nueva. El enlace vale una sola vez.
+          </td>
+        </tr>
+
+        <tr>
+          <td align="center" style="padding-bottom:28px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td align="center" style="background:#24a4bc;border-radius:12px;">
+                  <a href="{{ .SiteURL }}/?token_hash={{ .TokenHash }}&type=recovery"
+                     style="display:inline-block;padding:14px 30px;font-size:15px;font-weight:500;color:#ffffff;text-decoration:none;">
+                    Poner una contraseña nueva
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding-bottom:30px;font-size:13px;font-weight:400;color:#7d7d7d;line-height:1.7;">
+            Si el botón no funciona, copia esta dirección en tu navegador:<br>
+            <span style="color:#24a4bc;word-break:break-all;">{{ .SiteURL }}/?token_hash={{ .TokenHash }}&type=recovery</span>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="border-top:1px solid #e8e8e8;padding-top:22px;font-size:12px;font-weight:400;color:#adadad;line-height:1.7;">
+            Si no has pedido cambiarla, puedes olvidarte de este correo: tu
+            contraseña sigue siendo la de siempre mientras no uses el enlace.
+            <br><br>
+            CleanDerApp · <a href="https://cleanderapp.com/#/privacidad" style="color:#adadad;">Política de privacidad</a>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
