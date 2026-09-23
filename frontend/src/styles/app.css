@@ -1651,4 +1651,8 @@
 
 .zona-clave .boton-retirar {
   align-self: flex-start;
+  /* Sin sangría lateral: así el enlace arranca justo debajo del título,
+     en vez de once píxeles a su derecha. */
+  padding-left: 0;
+  padding-right: 0;
 }
