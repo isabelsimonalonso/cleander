@@ -111,6 +111,20 @@ de su traducción en `SERVICIOS_EN` y de un dibujo en `IconoCategoria.jsx`
 del INE (52 provincias, 8.124 municipios) en `src/data/municipios.json`. Pesa
 124 kB y se carga aparte, solo al elegir provincia.
 
+## Correo
+Sale por **Resend** con SMTP propio (`smtp.resend.com`, usuario `resend`),
+firmado con DKIM desde `cleanderapp.com`. Antes iba por el correo de
+demostración de Supabase, limitado a dos envíos por hora.
+
+Las tres plantillas están en `supabase/plantillas-correo/` y se pegan a mano
+en el panel. Su enlace apunta a **cleanderapp.com**, no a `supabase.co`: un
+correo firmado por un dominio que empuja a pinchar en otro tiene la forma de
+un phishing y acaba en no deseado. El vale se canjea con `verifyOtp` en
+`lib/arranque.js`, antes de montar React.
+
+> Por eso **estos correos necesitan la web publicada**. Con la página de
+> mantenimiento puesta, el enlace no confirma nada.
+
 ## Moderación
 El único texto libre es el **resumen** (máx. 150 caracteres). Nace como
 `pendiente` y no se muestra en la tarjeta hasta que un admin lo aprueba.
